@@ -14,25 +14,36 @@ public class OIInputHash extends Hash {
 		
 		for (int i = 0; i < messages.length; i++) {
 			Message message = messages[i];
-			String key = message.getKey();
 			
 			if (message instanceof BooleanMessage) {
-				BooleanMessage booleanMessage = (BooleanMessage) message;
-				boolean value = booleanMessage.toBoolean();
-				hashtable.put(key, new Boolean(value));
+				update((BooleanMessage) message);
 			} else if (message instanceof NumberMessage) {
-				NumberMessage numberMessage = (NumberMessage) message;
-				double value = numberMessage.toDouble();
-				hashtable.put(key, new Double(value));
+				update((NumberMessage) message);
 			} else if (message instanceof StringMessage) {
-				StringMessage stringMessage = (StringMessage) message;
-				String value = stringMessage.toString();
-				hashtable.put(key, value);
+				update((StringMessage) message);
 			} else {
 				throw new OIException("Unknown message type.");
 			}
 		}
 		
 		mutex.unlock();
+	}
+	
+	private void update(BooleanMessage message) {
+		String key = message.getKey();
+		boolean value = message.toBoolean();
+		hashtable.put(key, new Boolean(value));
+	}
+	
+	private void update(NumberMessage message) {
+		String key = message.getKey();
+		double value = message.toDouble();
+		hashtable.put(key, new Double(value));
+	}
+	
+	private void update(StringMessage message) {
+		String key = message.getKey();
+		String value = message.toString();
+		hashtable.put(key, value);
 	}
 }
