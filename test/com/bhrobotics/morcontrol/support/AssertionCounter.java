@@ -1,6 +1,6 @@
 package com.bhrobotics.morcontrol.support;
 
-import com.bhrobotics.morcontrol.util.Condition;
+import com.bhrobotics.morcontrol.util.concurrent.Condition;
 
 public class AssertionCounter {
 	private Condition done = new Condition();

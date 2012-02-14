@@ -3,7 +3,7 @@ package com.bhrobotics.morcontrol.oi;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-import com.bhrobotics.morcontrol.util.Connection;
+import com.bhrobotics.morcontrol.util.io.ConcurrentByteConnection;
 
 public class OIServer {
 	private int port;
@@ -16,10 +16,10 @@ public class OIServer {
 		return port;
 	}
 
-	public OIConnection accept() {
+	public MessageConnection accept() {
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[] {});
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		Connection connection = new Connection(inputStream, outputStream);
-		return new OIConnection(connection);
+		ConcurrentByteConnection connection = new ConcurrentByteConnection(inputStream, outputStream);
+		return new ConcurrentMessageConnection(connection);
 	}
 }

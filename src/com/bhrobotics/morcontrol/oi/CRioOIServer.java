@@ -8,7 +8,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.ServerSocketConnection;
 import javax.microedition.io.StreamConnection;
 
-import com.bhrobotics.morcontrol.util.Connection;
+import com.bhrobotics.morcontrol.util.io.ConcurrentByteConnection;
 
 public class CRioOIServer extends OIServer {
 	private ServerSocketConnection socket;
@@ -24,13 +24,13 @@ public class CRioOIServer extends OIServer {
 		}
 	}
 	
-	public OIConnection accept() {
+	public ConcurrentMessageConnection accept() {
 		try {
 			StreamConnection streamConnection = socket.acceptAndOpen();
 			InputStream inputStream = streamConnection.openInputStream();
 			OutputStream outputStream = streamConnection.openOutputStream();
-			Connection connection = new Connection(inputStream, outputStream);
-			return new OIConnection(connection);
+			ConcurrentByteConnection connection = new ConcurrentByteConnection(inputStream, outputStream);
+			return new ConcurrentMessageConnection(connection);
 		} catch (IOException e) {
 			throw new OIException(e);
 		}

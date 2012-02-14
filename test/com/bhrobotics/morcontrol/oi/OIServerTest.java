@@ -16,7 +16,7 @@ public class OIServerTest extends TestCase {
 	
 	@Test
 	public void testAccept() {
-		OIConnection connection = server.accept();
+		MessageConnection connection = server.accept();
 		assertThat(connection.isClosed(), is(false));
 	}
 }
