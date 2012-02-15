@@ -6,46 +6,47 @@ import com.bhrobotics.morcontrol.util.RuntimeInterruptedException;
 
 public class ReentrantMutex {
 	private Vector waitingThreads = new Vector();
-	private Object lock = new Object();
+	private int acquires = 0;
 	private boolean locked = false;
+	private Object mutex = new Object();
 	private Thread currentThread; 
 	
 	public boolean isLocked() {
-		synchronized (lock) {
+		synchronized (mutex) {
 			return locked;
 		}
 	}
 	
 	public void unlock() {
-		synchronized (lock) {
+		synchronized (mutex) {
 			if (!locked) {
 				throw new IllegalMutexUnlocking("Cannot unlock mutex that is not locked.");
 			}
 			
-			if (getThread() != currentThread) {
+			if (!ownsLock()) {
 				throw new IllegalMutexUnlocking("Cannot unlock mutex from another thread.");
 			}
 
-			if (waitingThreads.isEmpty()) {
-				locked = false;
-				currentThread = null;
-			} else {
-				lock.notify();
+			acquires--;
+			if (acquires == 0) {
+				relinquishLock();
 			}
 		}
 	}
 	
 	public void lock() {
-		synchronized (lock) {
+		synchronized (mutex) {
 			try {
-				if (locked) {
-					waitingThreads.addElement(getThread());
-					lock.wait();
-					waitingThreads.removeElement(getThread());
+				if (!locked) {
+					giveLock(Thread.currentThread());
+				} else if (ownsLock()) {
+					acquires++;
+				} else {
+					waitingThreads.addElement(Thread.currentThread());
+					while (!ownsLock()) {
+						mutex.wait();
+					}
 				}
-	
-				locked = true;
-				currentThread = getThread();
 			} catch (InterruptedException e) {
 				throw new RuntimeInterruptedException(e);
 			}
@@ -53,16 +54,46 @@ public class ReentrantMutex {
 	}
 
 	public int getWaitingThreads() {
-		synchronized (lock) {
+		synchronized (mutex) {
 			return waitingThreads.size();			
 		}
 	}
 	
-	public boolean ownsLock(Thread thread) {
-		return currentThread == thread;
+	private boolean ownsLock() {
+		return ownsLock(Thread.currentThread());
 	}
 	
-	private Thread getThread() {
-		return Thread.currentThread();
+	public boolean ownsLock(Thread thread) {
+		synchronized (mutex) {
+			return currentThread != null && currentThread.equals(thread);
+		}
+	}
+	
+	private Thread takeThread() {
+		synchronized (mutex) {
+			Thread result = (Thread) waitingThreads.firstElement();
+			waitingThreads.removeElementAt(0);
+			return result;
+		}
+	}
+	
+	private void giveLock(Thread thread) {
+		synchronized (mutex) {
+			acquires = 1;
+			currentThread = thread;
+			locked = true;
+		}
+	}
+	
+	private void relinquishLock() {
+		synchronized (mutex) {
+			if (waitingThreads.isEmpty()) {
+				currentThread = null;
+				locked = false;
+			} else {
+				giveLock(takeThread());
+				mutex.notifyAll();
+			}
+		}
 	}
 }

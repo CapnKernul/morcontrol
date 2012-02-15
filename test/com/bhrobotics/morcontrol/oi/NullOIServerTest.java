@@ -6,8 +6,8 @@ import com.bhrobotics.morcontrol.support.TestCase;
 
 import static org.hamcrest.CoreMatchers.is;
 
-public class OIServerTest extends TestCase {
-	private OIServer server = new OIServer(1234);
+public class NullOIServerTest extends TestCase {
+	private NullOIServer server = new NullOIServer(1234);
 	
 	@Test
 	public void testPort() {

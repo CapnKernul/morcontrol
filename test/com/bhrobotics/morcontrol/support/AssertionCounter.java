@@ -1,9 +1,9 @@
 package com.bhrobotics.morcontrol.support;
 
-import com.bhrobotics.morcontrol.util.concurrent.Condition;
+import com.bhrobotics.morcontrol.util.concurrent.SingleUseCondition;
 
 public class AssertionCounter {
-	private Condition done = new Condition();
+	private SingleUseCondition condition = new SingleUseCondition();
 	private Counter counter;
 	
 	public AssertionCounter(int count) {
@@ -15,11 +15,7 @@ public class AssertionCounter {
 	}
 	
 	public void await() {
-		if (counter.isDone()) {
-			return;
-		}
-		
-		done.await();
+		condition.await();
 	}
 	
 	private class Counter {
@@ -37,7 +33,7 @@ public class AssertionCounter {
 			count--;
 			
 			if (isDone()) {
-				done.signal();
+				condition.signal();
 			}
 		}
 	}

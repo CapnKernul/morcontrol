@@ -13,7 +13,7 @@ public class OIServerFactory {
 		if (OperatingSystem.isCRio()) {
 			return new CRioOIServer(port);
 		} else {
-			return new OIServer(port);
+			return new NullOIServer(port);
 		}
 	}
 }

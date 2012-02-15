@@ -10,11 +10,12 @@ import javax.microedition.io.StreamConnection;
 
 import com.bhrobotics.morcontrol.util.io.ConcurrentByteConnection;
 
-public class CRioOIServer extends OIServer {
+public class CRioOIServer implements OIServer {
 	private ServerSocketConnection socket;
+	private int port;
 	
 	public CRioOIServer(int port) {
-		super(port);
+		this.port = port;
 		
 		try {
 			String url = "socket://:" + port;
@@ -22,6 +23,10 @@ public class CRioOIServer extends OIServer {
 		} catch (IOException e) {
 			throw new OIException(e);
 		}
+	}
+	
+	public int getPort() {
+		return port;
 	}
 	
 	public ConcurrentMessageConnection accept() {

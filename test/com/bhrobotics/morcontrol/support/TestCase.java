@@ -4,7 +4,13 @@ import org.junit.Assert;
 
 public class TestCase extends Assert {
 	public void doAsync(Runnable runnable) {
-		AsynchronousUtils.doAsync(runnable);
+		Thread thread = new Thread(runnable);
+		thread.start();
+	}
+	
+	public void doAsync(String name, Runnable runnable) {
+		Thread thread = new Thread(runnable, name);
+		thread.start();
 	}
 	
 	public AssertionCounter newCounter(int count) {
@@ -15,7 +21,7 @@ public class TestCase extends Assert {
 		try {
 			Thread.sleep(length);
 		} catch (InterruptedException e) {
-			// Ignore.
+			System.err.println("Delay interrupted! " + e.getMessage());
 		}
 	}
 }

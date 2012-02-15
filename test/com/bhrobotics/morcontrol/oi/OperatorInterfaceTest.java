@@ -22,32 +22,37 @@ import com.bhrobotics.morcontrol.support.TestCase;
 import com.bhrobotics.morcontrol.util.concurrent.Condition;
 
 public class OperatorInterfaceTest extends TestCase {
-	private OIServer server = mock(OIServer.class);
+	private QueuedOIServer server = new QueuedOIServer(1234);
+	private QueuedMessageConnection connection = new QueuedMessageConnection();
 	private InputHashMap inputHash = mock(InputHashMap.class);
 	private OutputHashMap outputHash = mock(OutputHashMap.class);
-	private MessageConnection connection = mock(MessageConnection.class);
 	private OperatorInterface oi = new OperatorInterface(server, inputHash, outputHash);
 	
 	@Test
 	public void testConnection() {
 		connect();
-		assertThat(oi.getConnection(), is(connection));
+		oi.updateConnection();
+		assertThat(oi.getConnection(), is((MessageConnection) connection));
 		
 		disconnect();
+		oi.updateConnection();
 		assertThat(oi.getConnection(), is(nullValue()));
 		
 		connect();
-		assertThat(oi.getConnection(), is(connection));
+		oi.updateConnection();
+		assertThat(oi.getConnection(), is((MessageConnection) connection));
 	}
 
 	@Test
 	public void testClearInputHashAfterLostConnection() {
+		System.out.println("-------- BEGIN --------");
 		connect();
 		disconnect();
 		verify(inputHash).clear();
 		
 		connect();
 		disconnect();
+		System.out.println("-------- END --------");
 		verify(inputHash, times(2)).clear();
 	}
 
@@ -57,33 +62,25 @@ public class OperatorInterfaceTest extends TestCase {
 		Message message2 = mock(Message.class);
 		Message[] messages1 = new Message[] { message1 };
 		Message[] messages2 = new Message[] { message2 };
-		when(connection.read()).thenReturn(messages1, messages2, null);
+		connection.putReadMessages(messages1);
+		connection.putReadMessages(messages2);
 		connect();
 		
+		oi.forceUpdate();
 		InOrder inOrder = inOrder(inputHash);
-		inOrder.verify(inputHash).update(messages1);
-		inOrder.verify(inputHash).update(messages2);
+		System.out.println("VERIFYING");
+		verify(inputHash).update(messages1);
+		verify(inputHash).update(messages2);
 	}
 	
 	private void connect() {
-		oi.pause();
-		delay(20);
-
-		when(connection.isClosed()).thenReturn(false);
-		when(server.accept()).thenReturn(connection);
-		
-		oi.resume();
-		delay(20);
+		connection.reopen();
+		server.putConnection(connection);
+		delay(10);
 	}
 	
 	private void disconnect() {
-		oi.pause();
-		delay(20);
-
-		when(server.accept()).thenReturn(null);
-		when(connection.isClosed()).thenReturn(true);
-		
-		oi.resume();
-		delay(20);
+		connection.close();
+		delay(10);
 	}
 }
