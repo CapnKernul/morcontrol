@@ -30,30 +30,37 @@ public class OperatorInterfaceTest extends TestCase {
 	
 	@Test
 	public void testConnection() {
+		assertThat(oi.isClosed(), is(true));
+
 		connect();
-		oi.updateConnection();
-		assertThat(oi.getConnection(), is((MessageConnection) connection));
+		assertThat(oi.isClosed(), is(false));
 		
 		disconnect();
-		oi.updateConnection();
-		assertThat(oi.getConnection(), is(nullValue()));
+		assertThat(oi.isClosed(), is(true));
 		
 		connect();
-		oi.updateConnection();
-		assertThat(oi.getConnection(), is((MessageConnection) connection));
+		assertThat(oi.isClosed(), is(false));
 	}
 
 	@Test
 	public void testClearInputHashAfterLostConnection() {
-		System.out.println("-------- BEGIN --------");
 		connect();
 		disconnect();
 		verify(inputHash).clear();
 		
 		connect();
 		disconnect();
-		System.out.println("-------- END --------");
 		verify(inputHash, times(2)).clear();
+	}
+
+	@Test
+	public void testResendOutputHashAfterConnection() {
+		connect();
+		verify(outputHash).resend();
+		
+		disconnect();		
+		connect();
+		verify(outputHash, times(2)).resend();
 	}
 
 	@Test
@@ -64,23 +71,24 @@ public class OperatorInterfaceTest extends TestCase {
 		Message[] messages2 = new Message[] { message2 };
 		connection.putReadMessages(messages1);
 		connection.putReadMessages(messages2);
-		connect();
 		
-		oi.forceUpdate();
+		connect();
+		oi.update();
+		oi.update();
+		
 		InOrder inOrder = inOrder(inputHash);
-		System.out.println("VERIFYING");
-		verify(inputHash).update(messages1);
-		verify(inputHash).update(messages2);
+		inOrder.verify(inputHash).update(messages1);
+		inOrder.verify(inputHash).update(messages2);
 	}
 	
 	private void connect() {
 		connection.reopen();
 		server.putConnection(connection);
-		delay(10);
+		oi.requireConnection();
 	}
 	
 	private void disconnect() {
 		connection.close();
-		delay(10);
+		oi.verifyConnection();
 	}
 }
