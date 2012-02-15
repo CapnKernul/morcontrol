@@ -1,10 +1,10 @@
 package com.bhrobotics.morcontrol.oi;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.TestCase;
-
-import static org.hamcrest.CoreMatchers.is;
 
 public class NullOIServerTest extends TestCase {
 	private NullOIServer server = new NullOIServer(1234);

@@ -10,7 +10,6 @@ import java.io.InputStream;
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.io.ConcurrentByteReader;
 
 public class ConcurrentByteReaderTest extends TestCase {
 	private InputStream stream = mock(InputStream.class);

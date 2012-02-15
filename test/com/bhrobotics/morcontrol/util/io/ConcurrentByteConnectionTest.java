@@ -12,9 +12,6 @@ import java.io.OutputStream;
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.io.ConcurrentByteReader;
-import com.bhrobotics.morcontrol.util.io.ConcurrentByteWriter;
-import com.bhrobotics.morcontrol.util.io.ConcurrentByteConnection;
 
 public class ConcurrentByteConnectionTest extends TestCase {
 	private InputStream inputStream = mock(InputStream.class);

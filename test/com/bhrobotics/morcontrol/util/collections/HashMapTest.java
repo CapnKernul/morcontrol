@@ -1,13 +1,11 @@
 package com.bhrobotics.morcontrol.util.collections;
 
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
+import org.junit.Test;
+
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.collections.HashMap;
-import com.bhrobotics.morcontrol.util.collections.UnknownKeyException;
 
 public class HashMapTest extends TestCase {
 	@Test

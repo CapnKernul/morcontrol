@@ -7,14 +7,6 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.oi.OIException;
-import com.bhrobotics.morcontrol.oi.messages.BooleanMessage;
-import com.bhrobotics.morcontrol.oi.messages.BooleanMessageSerializer;
-import com.bhrobotics.morcontrol.oi.messages.Message;
-import com.bhrobotics.morcontrol.oi.messages.MessageSerializer;
-import com.bhrobotics.morcontrol.oi.messages.NumberMessage;
-import com.bhrobotics.morcontrol.oi.messages.NumberMessageSerializer;
-import com.bhrobotics.morcontrol.oi.messages.StringMessage;
-import com.bhrobotics.morcontrol.oi.messages.StringMessageSerializer;
 import com.bhrobotics.morcontrol.support.TestCase;
 
 public class MessageSerializerTest extends TestCase {

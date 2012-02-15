@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 import org.junit.Test;
 
-import com.bhrobotics.morcontrol.oi.messages.StringMessage;
 import com.bhrobotics.morcontrol.support.TestCase;
 
 public class StringMessageTest extends TestCase {

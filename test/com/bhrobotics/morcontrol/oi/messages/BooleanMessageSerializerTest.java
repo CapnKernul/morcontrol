@@ -5,8 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.oi.OIException;
-import com.bhrobotics.morcontrol.oi.messages.BooleanMessage;
-import com.bhrobotics.morcontrol.oi.messages.BooleanMessageSerializer;
 import com.bhrobotics.morcontrol.support.TestCase;
 
 public class BooleanMessageSerializerTest extends TestCase {

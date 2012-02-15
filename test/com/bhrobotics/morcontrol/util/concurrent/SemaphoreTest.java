@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.AssertionCounter;
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.concurrent.Semaphore;
 
 public class SemaphoreTest extends TestCase {
 	private Semaphore semaphore = new Semaphore();

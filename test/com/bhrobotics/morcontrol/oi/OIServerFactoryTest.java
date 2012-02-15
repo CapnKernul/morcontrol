@@ -1,6 +1,7 @@
 package com.bhrobotics.morcontrol.oi;
 
 import static org.hamcrest.CoreMatchers.is;
+
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.TestCase;

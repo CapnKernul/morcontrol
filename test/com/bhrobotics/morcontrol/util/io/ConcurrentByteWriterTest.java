@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.mockito.InOrder;
 
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.io.ConcurrentByteWriter;
 
 public class ConcurrentByteWriterTest extends TestCase {
 	private OutputStream stream = mock(OutputStream.class);

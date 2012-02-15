@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.AssertionCounter;
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.concurrent.BlockingQueue;
 
 public class BlockingQueueTest extends TestCase {
 	private Object obj = new Object();

@@ -1,7 +1,8 @@
 package com.bhrobotics.morcontrol.util.concurrent;
 
-import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
+
+import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.TestCase;
 

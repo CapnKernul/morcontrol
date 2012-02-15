@@ -5,8 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.support.TestCase;
-import com.bhrobotics.morcontrol.util.concurrent.IllegalMutexUnlocking;
-import com.bhrobotics.morcontrol.util.concurrent.ReentrantMutex;
 
 public class ReentrantMutexTest extends TestCase {
 	private ReentrantMutex mutex = new ReentrantMutex();

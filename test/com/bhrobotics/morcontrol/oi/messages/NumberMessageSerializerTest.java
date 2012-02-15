@@ -5,8 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
 
 import com.bhrobotics.morcontrol.oi.OIException;
-import com.bhrobotics.morcontrol.oi.messages.NumberMessage;
-import com.bhrobotics.morcontrol.oi.messages.NumberMessageSerializer;
 import com.bhrobotics.morcontrol.support.TestCase;
 
 public class NumberMessageSerializerTest extends TestCase {
