@@ -36,6 +36,12 @@ public class SolenoidDevice extends SingleChannelDevice {
 	public boolean reset() {
 		return update(DEFAULT_STATE);
 	}
+
+	public void reapply() {
+		if (OperatingSystem.isCRio()) {
+			solenoid.set(state.toBoolean());
+		}
+	}
 	
 	public DigitalState getState() {
 		return state;

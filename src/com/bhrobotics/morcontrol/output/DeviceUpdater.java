@@ -99,6 +99,30 @@ public class DeviceUpdater {
 		mutex.unlock();
 	}
 	
+	public void reapply() {
+		mutex.lock();
+		
+		Enumeration enumeration = motors.values();
+		while (enumeration.hasMoreElements()) {
+			MotorDevice device = (MotorDevice) enumeration.nextElement();
+			device.reapply();
+		}
+
+		enumeration = relays.values();
+		while (enumeration.hasMoreElements()) {
+			RelayDevice device = (RelayDevice) enumeration.nextElement();
+			device.reapply();
+		}
+
+		enumeration = solenoids.values();
+		while (enumeration.hasMoreElements()) {
+			SolenoidDevice device = (SolenoidDevice) enumeration.nextElement();
+			device.reapply();
+		}
+		
+		mutex.unlock();
+	}
+	
 	private String toString(int slot, int channel) {
 		return slot + ":" + channel;
 	}

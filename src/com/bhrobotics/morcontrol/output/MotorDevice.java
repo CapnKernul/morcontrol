@@ -37,6 +37,12 @@ public class MotorDevice extends SingleChannelDevice {
 		return update(DEFAULT_STATE);
 	}
 	
+	public void reapply() {
+		if (OperatingSystem.isCRio()) {
+			victor.set(state.toDouble());
+		}
+	}
+	
 	public AnalogState getState() {
 		return state;
 	}

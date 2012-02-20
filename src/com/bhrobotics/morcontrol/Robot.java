@@ -1,34 +1,36 @@
 package com.bhrobotics.morcontrol;
 
-import com.bhrobotics.morcontrol.output.DeviceUpdater;
+import com.bhrobotics.morcontrol.oi.OIConnection;
+import com.bhrobotics.morcontrol.oi.OIConnectionObserver;
+import com.bhrobotics.morcontrol.oi.messages.Message;
 
-public class Robot {
-	public static class Mode {
-		public static final Mode DISABLED = new Mode();
-		public static final Mode AUTONOMOUS = new Mode();
-		public static final Mode OPERATOR_CONTROL = new Mode();
-		
-		private Mode() {
-		}
-	}
-	
-	private DeviceUpdater updater;
-	private Mode mode;
+public class Robot implements OIConnectionObserver {
+	private OutputUpdatingThread outputUpdatingThread = new OutputUpdatingThread();
+	private OIConnection connection;
+	private OutputMessageAdapter adapter;
+	private RobotMode mode;
 	
 	public Robot() {
-		this(new DeviceUpdater());
+		this(new OIConnection(), new OutputMessageAdapter());
 	}
 
-	public Robot(DeviceUpdater updater) {
-		this.updater = updater;
-		switchMode(Mode.DISABLED);
+	public Robot(OIConnection connection, OutputMessageAdapter adapter) {
+		this.connection = connection;
+		this.adapter = adapter;
+		
+		connection.registerObserver(this);
+		switchMode(RobotMode.DISABLED);
 	}
 	
-	public Mode getMode() {
+	public void start() {
+		outputUpdatingThread.start();
+	}
+	
+	public RobotMode getMode() {
 		return mode;
 	}
 	
-	public void switchMode(Mode mode) {
+	public void switchMode(RobotMode mode) {
 		if (mode == null) {
 			throw new NullPointerException("Mode cannot be null.");
 		}
@@ -39,17 +41,24 @@ public class Robot {
 			startCurrentMode();
 		}
 	}
+
+	public void connectionOpened() {
+	}
+
+	public void connectionClosed() {
+		adapter.reset();
+	}
 	
 	private void startCurrentMode() {
 		if (mode == null) {
 			return;
 		}
 		
-		if (mode.equals(Mode.DISABLED)) {
+		if (mode.equals(RobotMode.DISABLED)) {
 			startDisabled();
-		} else if (mode.equals(Mode.AUTONOMOUS)) {
+		} else if (mode.equals(RobotMode.AUTONOMOUS)) {
 			startAutonomous();
-		} else if (mode.equals(Mode.OPERATOR_CONTROL)) {
+		} else if (mode.equals(RobotMode.OPERATOR_CONTROL)) {
 			startOperatorControl();
 		}
 	}
@@ -59,31 +68,56 @@ public class Robot {
 			return;
 		}
 		
-		if (mode.equals(Mode.DISABLED)) {
+		if (mode.equals(RobotMode.DISABLED)) {
 			stopDisabled();
-		} else if (mode.equals(Mode.AUTONOMOUS)) {
+		} else if (mode.equals(RobotMode.AUTONOMOUS)) {
 			stopAutonomous();
-		} else if (mode.equals(Mode.OPERATOR_CONTROL)) {
+		} else if (mode.equals(RobotMode.OPERATOR_CONTROL)) {
 			stopOperatorControl();
 		}
 	}
 	
-	public void startDisabled() {
+	private void startDisabled() {
+		System.out.println("[MorControl] Entered disabled mode.");
 	}
 	
-	public void stopDisabled() {
+	private void stopDisabled() {
+		System.out.println("[MorControl] Exited disabled mode.");
 	}
 
-	public void startOperatorControl() {
-		updater.reset();
+	private void startOperatorControl() {
+		System.out.println("[MorControl] Entered operator control mode.");
+		adapter.reapply();
 	}
 	
-	public void stopOperatorControl() {
+	private void stopOperatorControl() {
+		System.out.println("[MorControl] Exited operator control mode.");
 	}
 	
-	public void startAutonomous() {
+	private void startAutonomous() {
+		System.out.println("[MorControl] Entered autonomous mode.");
 	}
 	
-	public void stopAutonomous() {
+	private void stopAutonomous() {
+		System.out.println("[MorControl] Exited autonomous mode.");
+	}
+	
+	
+	
+	public void updateOutputs() {
+		Message[] messages = connection.read();
+		for (int i = 0; i < messages.length; i++) {
+			Message message = messages[i];
+			adapter.update(message);
+		}
+	}
+	
+	private class OutputUpdatingThread extends Thread {
+		public void run() {
+			System.out.println("[MorControl] Started output updating thread.");
+			while (true) {
+				updateOutputs();
+			}
+		}
 	}
 }

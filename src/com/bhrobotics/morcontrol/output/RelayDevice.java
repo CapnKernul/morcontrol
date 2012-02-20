@@ -36,6 +36,12 @@ public class RelayDevice extends SingleChannelDevice {
 	public boolean reset() {
 		return update(DEFAULT_STATE);
 	}
+
+	public void reapply() {
+		if (OperatingSystem.isCRio()) {
+			relay.set(state.toRelayValue());
+		}
+	}
 	
 	public RelayState getState() {
 		return state;

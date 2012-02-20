@@ -7,17 +7,18 @@ public class RobotMIDlet extends IterativeRobot {
 	
     public void robotInit() {
     	robot = new Robot();
+    	robot.start();
     }
     
     public void disabledInit() {
-    	robot.switchMode(Robot.Mode.DISABLED);
+    	robot.switchMode(RobotMode.DISABLED);
     }
     
     public void autonomousInit() {
-    	robot.switchMode(Robot.Mode.AUTONOMOUS);
+    	robot.switchMode(RobotMode.AUTONOMOUS);
     }
     
     public void teleopInit() {
-    	robot.switchMode(Robot.Mode.OPERATOR_CONTROL);
+    	robot.switchMode(RobotMode.OPERATOR_CONTROL);
     }
 }

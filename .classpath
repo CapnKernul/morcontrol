@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Applications/Eclipse/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.7.1/sunspotfrcsdk/lib/WPILibJ/classes.jar"/>
 	<classpathentry kind="lib" path="/Applications/Eclipse/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.7.1/sunspotfrcsdk/lib/squawk_device.jar"/>
+	<classpathentry kind="lib" path="lib/json-me.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

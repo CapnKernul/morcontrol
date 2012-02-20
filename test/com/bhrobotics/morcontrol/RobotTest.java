@@ -4,30 +4,50 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.bhrobotics.morcontrol.output.DeviceUpdater;
+import com.bhrobotics.morcontrol.oi.OIConnection;
+import com.bhrobotics.morcontrol.oi.messages.Message;
 import com.bhrobotics.morcontrol.support.TestCase;
 
 public class RobotTest extends TestCase {
-	private DeviceUpdater updater = mock(DeviceUpdater.class);
-	private Robot robot = new Robot(updater);
+	private OIConnection connection = mock(OIConnection.class);
+	private OutputMessageAdapter adapter = mock(OutputMessageAdapter.class);
+	private Robot robot = new Robot(connection, adapter);
 	
 	@Test
-	public void testSwitchMode() {
-		assertEquals(Robot.Mode.DISABLED, robot.getMode());
-		robot.switchMode(Robot.Mode.AUTONOMOUS);
-		assertEquals(Robot.Mode.AUTONOMOUS, robot.getMode());
-		robot.switchMode(Robot.Mode.OPERATOR_CONTROL);
-		assertEquals(Robot.Mode.OPERATOR_CONTROL, robot.getMode());
-		robot.switchMode(Robot.Mode.OPERATOR_CONTROL);
-		assertEquals(Robot.Mode.OPERATOR_CONTROL, robot.getMode());
-		robot.switchMode(Robot.Mode.DISABLED);
-		assertEquals(Robot.Mode.DISABLED, robot.getMode());
+	public void testConnectionObserver() {
+		verify(connection).registerObserver(robot);
 	}
 	
 	@Test
-	public void testUpdate() {
-		robot.switchMode(Robot.Mode.OPERATOR_CONTROL);
-		verify(updater).reset();
+	public void testSwitchMode() {
+		assertEquals(RobotMode.DISABLED, robot.getMode());
+		robot.switchMode(RobotMode.AUTONOMOUS);
+		assertEquals(RobotMode.AUTONOMOUS, robot.getMode());
+		robot.switchMode(RobotMode.OPERATOR_CONTROL);
+		assertEquals(RobotMode.OPERATOR_CONTROL, robot.getMode());
+		robot.switchMode(RobotMode.OPERATOR_CONTROL);
+		assertEquals(RobotMode.OPERATOR_CONTROL, robot.getMode());
+		robot.switchMode(RobotMode.DISABLED);
+		assertEquals(RobotMode.DISABLED, robot.getMode());
+	}
+	
+	@Test
+	public void testReset() {
+		robot.connectionClosed();
+		verify(adapter).reset();
+	}
+
+	@Test
+	public void testUpdateOutputs() {
+		Message message1 = mock(Message.class);
+		Message message2 = mock(Message.class);
+		
+		robot.switchMode(RobotMode.OPERATOR_CONTROL);
+		when(connection.read()).thenReturn(new Message[] { message1, message2 });
+		robot.updateOutputs();
+		verify(adapter).update(message1);
+		verify(adapter).update(message2);
 	}
 }
