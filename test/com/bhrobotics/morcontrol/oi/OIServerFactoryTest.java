@@ -11,13 +11,13 @@ public class OIServerFactoryTest extends TestCase {
 	
 	@Test
 	public void testCreateWithoutPort() {
-		OIServer server = factory.create();
+		OIServer server = factory.newServer();
 		assertThat(server.getPort(), is(2576));
 	}
 	
 	@Test
 	public void testCreateWithPort() {
-		OIServer server = factory.create(1234);
+		OIServer server = factory.newServer(1234);
 		assertThat(server.getPort(), is(1234));
 	}
 }

@@ -1,6 +1,7 @@
 package com.bhrobotics.morcontrol.oi;
 
 import com.bhrobotics.morcontrol.util.concurrent.BlockingQueue;
+import com.bhrobotics.morcontrol.util.io.ByteConnection;
 
 public class QueuedOIServer implements OIServer {
 	private BlockingQueue queue = new BlockingQueue();
@@ -14,11 +15,11 @@ public class QueuedOIServer implements OIServer {
 		return port;
 	}
 	
-	public void putConnection(MessageConnection connection) {
+	public void putConnection(ByteConnection connection) {
 		queue.put(connection);
 	}
 
-	public MessageConnection accept() {
-		return (MessageConnection) queue.take();
+	public ByteConnection accept() {
+		return (ByteConnection) queue.take();
 	}
 }

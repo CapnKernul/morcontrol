@@ -2,22 +2,28 @@ package com.bhrobotics.morcontrol.oi;
 
 import java.util.Enumeration;
 import java.util.Vector;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import com.bhrobotics.morcontrol.oi.messages.Message;
+import com.bhrobotics.morcontrol.protobuf.InputUpdates;
+import com.bhrobotics.morcontrol.protobuf.OutputUpdates;
 import com.bhrobotics.morcontrol.util.concurrent.ReentrantMutex;
+import com.bhrobotics.morcontrol.util.io.ByteConnection;
 
-public class OIConnection implements MessageConnection {
+public class OIConnection {
 	private ReentrantMutex mutex = new ReentrantMutex();
 	private Vector observers = new Vector();
+	private boolean connecting = false;
 	private OIServer server;
-	private MessageConnection connection;
+	private ByteConnection connection;
 	
 	public OIConnection() {
-		this(new OIServerFactory().create());
+		this(new OIServerFactory().newServer());
 	}
 
 	public OIConnection(int port) {
-		this(new OIServerFactory().create(port));
+		this(new OIServerFactory().newServer(port));
 	}
 	
 	public OIConnection(OIServer server) {
@@ -31,52 +37,103 @@ public class OIConnection implements MessageConnection {
 	public void unregisterObserver(OIConnectionObserver observer) {
 		observers.removeElement(observer);
 	}
-
-	public void verifyConnection() {
+	
+	public void requireConnection() {
 		mutex.lock();
-		if (connection != null && connection.isClosed()) {
-			connection = null;
-			closedConnection();
+		if (!connecting) {
+			connecting = true;
+			
+			if (isClosed()) {
+				do {
+					mutex.unlock();
+					ByteConnection c = server.accept();
+					mutex.lock();
+					connection = c;
+				} while (isClosed());
+				
+				openedConnection();
+			}
+			
+			connecting = false;
 		}
 		mutex.unlock();
+	}
+
+	public InputStream getInputStream() {
+		ByteConnection c = connection;
+		
+		if (c == null) {
+			return null;
+		} else {
+			return c.getInputStream();
+		}
+	}
+
+	public OutputStream getOutputStream() {
+		ByteConnection c = connection;
+		
+		if (c == null) {
+			return null;
+		} else {
+			return c.getOutputStream();
+		}
 	}
 	
-	public MessageConnection requireConnection() {
-		mutex.lock();
-		
-		if (isClosed()) {
-			do {
-				connection = server.accept();
-			} while (isClosed());
-			
-			openedConnection();
+	public void close() {
+		ByteConnection c = connection;
+		if (c == null) {
+			return;
 		}
 		
-		MessageConnection result = connection;
-		mutex.unlock();
-		return result;
-	}
-
-	public void close() {
 		mutex.lock();
-		connection.close();
-		mutex.unlock();
+		if (c == connection) {
+			try {
+				connection.close();
+			} catch (IOException e) {
+				// Ignore.
+			} finally {
+				connection = null;
+				closedConnection();
+				mutex.unlock();
+			}
+		} else {
+			mutex.unlock();
+		}
 	}
 
 	public boolean isClosed() {
-		mutex.lock();
-		verifyConnection();
-		boolean result = connection == null;
-		mutex.unlock();
-		return result;
+		return connection == null;
 	}
 	
-	public Message[] read() {
-		return requireConnection().read();
+	public OutputUpdates read() {
+		try {
+			InputStream inputStream = getInputStream();
+			
+			if (inputStream == null) {
+				return null;
+			} else {
+				return OutputUpdates.parseDelimitedFrom(inputStream);
+			}
+		} catch (IOException e) {
+			close();
+			throw new OIException(e);
+		}
 	}
-	
-	public void write(Message[] messages) {
-		requireConnection().write(messages);
+
+	public boolean write(InputUpdates updates) {
+		try {
+			OutputStream outputStream = getOutputStream();
+			
+			if (outputStream == null) {
+				return false;
+			} else {
+				updates.writeDelimitedTo(outputStream);
+				return true;
+			}
+		} catch (IOException e) {
+			close();
+			throw new OIException(e);
+		}
 	}
 	
 	private void openedConnection() {

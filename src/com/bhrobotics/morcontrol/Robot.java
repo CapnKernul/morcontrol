@@ -2,27 +2,39 @@ package com.bhrobotics.morcontrol;
 
 import com.bhrobotics.morcontrol.oi.OIConnection;
 import com.bhrobotics.morcontrol.oi.OIConnectionObserver;
-import com.bhrobotics.morcontrol.oi.messages.Message;
+import com.bhrobotics.morcontrol.oi.OIException;
+import com.bhrobotics.morcontrol.protobuf.InputUpdates;
+import com.bhrobotics.morcontrol.protobuf.OutputUpdates;
+import com.bhrobotics.morcontrol.util.io.Logger;
+import com.bhrobotics.morcontrol.util.io.StdOutLogger;
 
 public class Robot implements OIConnectionObserver {
+	private ConnectionThread connectionThread = new ConnectionThread();
+	private InputUpdatingThread inputUpdatingThread = new InputUpdatingThread();
 	private OutputUpdatingThread outputUpdatingThread = new OutputUpdatingThread();
 	private OIConnection connection;
-	private OutputMessageAdapter adapter;
+	private InputUpdatesAdapter inputAdapter;
+	private OutputUpdatesAdapter outputAdapter;
+	private Logger logger;
 	private RobotMode mode;
 	
 	public Robot() {
-		this(new OIConnection(), new OutputMessageAdapter());
+		this(new OIConnection(), new InputUpdatesAdapter(), new OutputUpdatesAdapter(), new StdOutLogger());
 	}
 
-	public Robot(OIConnection connection, OutputMessageAdapter adapter) {
+	public Robot(OIConnection connection, InputUpdatesAdapter inputAdapter, OutputUpdatesAdapter outputAdapter, Logger logger) {
 		this.connection = connection;
-		this.adapter = adapter;
+		this.inputAdapter = inputAdapter;
+		this.outputAdapter = outputAdapter;
+		this.logger = logger;
 		
 		connection.registerObserver(this);
 		switchMode(RobotMode.DISABLED);
 	}
 	
 	public void start() {
+		connectionThread.start();
+		inputUpdatingThread.start();
 		outputUpdatingThread.start();
 	}
 	
@@ -43,10 +55,13 @@ public class Robot implements OIConnectionObserver {
 	}
 
 	public void connectionOpened() {
+		logger.info("Connection opened.");
+		connection.write(inputAdapter.getAllInputs());
 	}
 
 	public void connectionClosed() {
-		adapter.reset();
+		logger.info("Connection closed.");
+		outputAdapter.reset();
 	}
 	
 	private void startCurrentMode() {
@@ -78,43 +93,72 @@ public class Robot implements OIConnectionObserver {
 	}
 	
 	private void startDisabled() {
-		System.out.println("[MorControl] Entered disabled mode.");
+		logger.info("Entered disabled mode.");
 	}
 	
 	private void stopDisabled() {
-		System.out.println("[MorControl] Exited disabled mode.");
+		logger.info("Exited disabled mode.");
 	}
 
 	private void startOperatorControl() {
-		System.out.println("[MorControl] Entered operator control mode.");
-		adapter.reapply();
+		logger.info("Entered operator control mode.");
+		outputAdapter.apply();
 	}
 	
 	private void stopOperatorControl() {
-		System.out.println("[MorControl] Exited operator control mode.");
+		logger.info("Exited operator control mode.");
 	}
 	
 	private void startAutonomous() {
-		System.out.println("[MorControl] Entered autonomous mode.");
+		logger.info("Entered autonomous mode.");
 	}
 	
 	private void stopAutonomous() {
-		System.out.println("[MorControl] Exited autonomous mode.");
+		logger.info("Exited autonomous mode.");
+	}
+
+	public void updateInputs() {
+		try {
+			InputUpdates updates = inputAdapter.getUpdatedInputs();
+			connection.write(updates);
+		} catch (OIException e) {
+			logger.warn("Error while writing to stream: " + e.getMessage());
+		}
 	}
 	
-	
-	
 	public void updateOutputs() {
-		Message[] messages = connection.read();
-		for (int i = 0; i < messages.length; i++) {
-			Message message = messages[i];
-			adapter.update(message);
+		try {
+			OutputUpdates updates = connection.read();
+			
+			if (updates != null) {
+				outputAdapter.update(updates);
+			}
+		} catch (OIException e) {
+			logger.warn("Error while reading from stream: " + e.getMessage());
+		}
+	}
+	
+	private class ConnectionThread extends Thread {
+		public void run() {
+			logger.info("Started connection thread.");
+			while (true) {
+				connection.requireConnection();
+			}
+		}
+	}
+
+	private class InputUpdatingThread extends Thread {
+		public void run() {
+			logger.info("Started input updating thread.");
+			while (true) {
+				updateInputs();
+			}
 		}
 	}
 	
 	private class OutputUpdatingThread extends Thread {
 		public void run() {
-			System.out.println("[MorControl] Started output updating thread.");
+			logger.info("Started output updating thread.");
 			while (true) {
 				updateOutputs();
 			}

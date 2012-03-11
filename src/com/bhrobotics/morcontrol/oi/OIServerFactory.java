@@ -5,15 +5,15 @@ import com.bhrobotics.morcontrol.util.OperatingSystem;
 public class OIServerFactory {
 	public static final int DEFAULT_PORT = 2576;
 	
-	public OIServer create() {
-		return create(DEFAULT_PORT);
+	public OIServer newServer() {
+		return newServer(DEFAULT_PORT);
 	}
 	
-	public OIServer create(int port) {
+	public OIServer newServer(int port) {
 		if (OperatingSystem.isCRio()) {
 			return new CRioOIServer(port);
 		} else {
-			return new NullOIServer(port);
+			return new QueuedOIServer(port);
 		}
 	}
 }

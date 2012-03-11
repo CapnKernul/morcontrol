@@ -7,13 +7,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.bhrobotics.morcontrol.oi.OIConnection;
-import com.bhrobotics.morcontrol.oi.messages.Message;
+import com.bhrobotics.morcontrol.protobuf.InputUpdates;
+import com.bhrobotics.morcontrol.protobuf.OutputUpdates;
 import com.bhrobotics.morcontrol.support.TestCase;
+import com.bhrobotics.morcontrol.util.io.Logger;
 
 public class RobotTest extends TestCase {
 	private OIConnection connection = mock(OIConnection.class);
-	private OutputMessageAdapter adapter = mock(OutputMessageAdapter.class);
-	private Robot robot = new Robot(connection, adapter);
+	private InputUpdatesAdapter inputAdapter = mock(InputUpdatesAdapter.class);
+	private OutputUpdatesAdapter outputAdapter = mock(OutputUpdatesAdapter.class);
+	private Logger logger = mock(Logger.class);
+	private Robot robot = new Robot(connection, inputAdapter, outputAdapter, logger);
 	
 	@Test
 	public void testConnectionObserver() {
@@ -34,20 +38,32 @@ public class RobotTest extends TestCase {
 	}
 	
 	@Test
-	public void testReset() {
-		robot.connectionClosed();
-		verify(adapter).reset();
+	public void testConnectionOpened() {
+		InputUpdates updates = mock(InputUpdates.class);
+		when(inputAdapter.getAllInputs()).thenReturn(updates);
+		robot.connectionOpened();
+		verify(connection).write(updates);
 	}
 
 	@Test
+	public void testConnectionClosed() {
+		robot.connectionClosed();
+		verify(outputAdapter).reset();
+	}
+	
+	@Test
 	public void testUpdateOutputs() {
-		Message message1 = mock(Message.class);
-		Message message2 = mock(Message.class);
-		
-		robot.switchMode(RobotMode.OPERATOR_CONTROL);
-		when(connection.read()).thenReturn(new Message[] { message1, message2 });
+		OutputUpdates updates = mock(OutputUpdates.class);
+		when(connection.read()).thenReturn(updates);
 		robot.updateOutputs();
-		verify(adapter).update(message1);
-		verify(adapter).update(message2);
+		verify(outputAdapter).update(updates);
+	}
+
+	@Test
+	public void testUpdateInputs() {
+		InputUpdates updates = mock(InputUpdates.class);
+		when(inputAdapter.getUpdatedInputs()).thenReturn(updates);
+		robot.updateInputs();
+		verify(connection).write(updates);
 	}
 }

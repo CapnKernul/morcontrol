@@ -1,0 +1,47 @@
+message OutputUpdates {
+  repeated MotorUpdate motor_updates = 1;
+  repeated RelayUpdate relay_updates = 2;
+  repeated SolenoidUpdate solenoid_updates = 3;
+}
+
+message InputUpdates {
+  repeated DigitalInputUpdate digital_input_updates = 1;
+  repeated AnalogInputUpdate analog_input_updates = 2;
+}
+
+message MotorUpdate {
+  required int32 module = 1;
+  required int32 channel = 2;
+  required double value = 3;
+}
+
+message RelayUpdate {
+  required int32 module = 1;
+  required int32 channel = 2;
+
+  enum RelayValue {
+    OFF = 0;
+    FORWARD = 1;
+    REVERSE = 2;
+  }
+
+  required RelayValue value = 3;
+}
+
+message SolenoidUpdate {
+  required int32 module = 1;
+  required int32 channel = 2;
+  required bool value = 3;
+}
+
+message DigitalInputUpdate {
+  required int32 module = 1;
+  required int32 channel = 2;
+  required bool value = 3;
+}
+
+message AnalogInputUpdate {
+  required int32 module = 1;
+  required int32 channel = 2;
+  required double value = 3;
+}
