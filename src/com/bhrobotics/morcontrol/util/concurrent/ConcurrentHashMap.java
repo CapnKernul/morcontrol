@@ -241,7 +241,7 @@ public class ConcurrentHashMap implements Map {
 	
 	public long fetchAsLong(Object key, long defaultValue) {
 		mutex.lock();
-		Long result = hash.fetchAsLong(key, defaultValue);
+		long result = hash.fetchAsLong(key, defaultValue);
 		mutex.unlock();
 		return result;
 	}

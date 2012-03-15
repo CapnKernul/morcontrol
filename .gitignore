@@ -1,4 +1,6 @@
 *.class
+suite
+j2meclasses
 
 # Package Files #
 *.jar
