@@ -8,9 +8,10 @@ import com.bhrobotics.morcontrol.util.PrimitiveUtils;
 import edu.wpi.first.wpilibj.communication.ModulePresence;
 
 public class InputDeviceAccessor {
-	private static final int MAX_MODULES = 4;
+	private static final int MAX_MODULES = 2;
 	private static final int DIGITAL_CHANNELS_PER_MODULE = 14;
-	private static final int ANALOG_CHANNELS_PER_MODULE = 8;
+	private static final int ANALOG_CHANNELS_FOR_MODULE_1 = 7;
+	private static final int ANALOG_CHANNELS_FOR_OTHER_MODULES = 8;
 	private static final int[] DEFAULT_DIGITAL_MODULES = new int[] { 2, 4 };
 	private static final int[] DEFAULT_ANALOG_MODULES = new int[] { 1 };
 	
@@ -23,7 +24,7 @@ public class InputDeviceAccessor {
 			Vector vector = new Vector();
 			for (int i = 0; i < MAX_MODULES; i++) {
 				if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kDigital, i)) {
-					vector.addElement(new Integer(i));
+					vector.addElement(new Integer(i + 1));
 				}
 			}
 			
@@ -38,7 +39,7 @@ public class InputDeviceAccessor {
 			Vector vector = new Vector();
 			for (int i = 0; i < MAX_MODULES; i++) {
 				if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kAnalog, i)) {
-					vector.addElement(new Integer(i));
+					vector.addElement(new Integer(i + 1));
 				}
 			}
 			
@@ -75,7 +76,9 @@ public class InputDeviceAccessor {
 			
 			for (int i = 0; i < analogModules.length; i++) {
 				int module = analogModules[i];
-				for (int channel = 1; channel <= ANALOG_CHANNELS_PER_MODULE; channel++) {
+				int channels = module == 1 ? ANALOG_CHANNELS_FOR_MODULE_1 : ANALOG_CHANNELS_FOR_OTHER_MODULES;
+				
+				for (int channel = 1; channel <= channels; channel++) {
 					AnalogInputDevice device = factory.newAnalogInput(module, channel);
 					devices.addElement(device);
 				}

@@ -14,11 +14,20 @@ public class RobotMIDlet extends IterativeRobot {
     	robot.switchMode(RobotMode.DISABLED);
     }
     
+    public void disabledContinuous() {
+    }
+    
     public void autonomousInit() {
     	robot.switchMode(RobotMode.AUTONOMOUS);
     }
     
+    public void autonomousContinuous() {
+    }
+    
     public void teleopInit() {
     	robot.switchMode(RobotMode.OPERATOR_CONTROL);
+    }
+
+    public void teleopContinuous() {
     }
 }
