@@ -13,10 +13,6 @@ public class TestCase extends Assert {
 		thread.start();
 	}
 	
-	public AssertionCounter newCounter(int count) {
-		return new AssertionCounter(count);
-	}
-	
 	public void delay(long length) {
 		try {
 			Thread.sleep(length);

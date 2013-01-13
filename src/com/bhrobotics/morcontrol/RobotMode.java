@@ -5,6 +5,5 @@ public class RobotMode {
 	public static final RobotMode AUTONOMOUS = new RobotMode();
 	public static final RobotMode OPERATOR_CONTROL = new RobotMode();
 	
-	private RobotMode() {
-	}
+	private RobotMode() {}
 }

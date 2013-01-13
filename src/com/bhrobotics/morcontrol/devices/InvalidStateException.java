@@ -1,8 +1,8 @@
 package com.bhrobotics.morcontrol.devices;
 
-import com.bhrobotics.morcontrol.util.CausableRuntimeException;
+import com.bhrobotics.morcontrol.util.CausableException;
 
-public class InvalidStateException extends CausableRuntimeException {
+public class InvalidStateException extends CausableException {
 	public InvalidStateException() {
 		super();
 	}

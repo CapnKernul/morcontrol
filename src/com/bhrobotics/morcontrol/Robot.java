@@ -1,74 +1,48 @@
 package com.bhrobotics.morcontrol;
 
-import com.bhrobotics.morcontrol.oi.OIConnection;
-import com.bhrobotics.morcontrol.oi.OIConnectionObserver;
-import com.bhrobotics.morcontrol.oi.OIException;
-import com.bhrobotics.morcontrol.protobuf.InputUpdates;
-import com.bhrobotics.morcontrol.protobuf.OutputUpdates;
-import com.bhrobotics.morcontrol.util.io.Logger;
-import com.bhrobotics.morcontrol.util.io.StdOutLogger;
+import com.bhrobotics.morcontrol.devices.output.OutputDevices;
+import com.bhrobotics.morcontrol.util.logger.Logger;
 
-public class Robot implements OIConnectionObserver {
-	private ConnectionThread connectionThread = new ConnectionThread();
-	private InputUpdatingThread inputUpdatingThread = new InputUpdatingThread();
-	private OutputUpdatingThread outputUpdatingThread = new OutputUpdatingThread();
-	private OIConnection connection;
-	private InputUpdatesAdapter inputAdapter;
-	private OutputUpdatesAdapter outputAdapter;
-	private Logger logger;
-	private RobotMode mode;
+public class Robot implements OIServerObserver {
+	private final Logger logger = Logger.defaultLogger;
+	private final OutputDevices outputDevices = OutputDevices.getInstance();
+	private RobotMode mode = RobotMode.DISABLED;
 	
-	public Robot() {
-		this(new OIConnection(), new InputUpdatesAdapter(), new OutputUpdatesAdapter(), new StdOutLogger());
-	}
-
-	public Robot(OIConnection connection, InputUpdatesAdapter inputAdapter, OutputUpdatesAdapter outputAdapter, Logger logger) {
-		this.connection = connection;
-		this.inputAdapter = inputAdapter;
-		this.outputAdapter = outputAdapter;
-		this.logger = logger;
+	private static Robot instance;
+	public static Robot getInstance() {
+		if (instance == null) {
+			instance = new Robot();
+		}
 		
-		connection.registerObserver(this);
-		switchMode(RobotMode.DISABLED);
+		return instance;
 	}
-	
-	public void start() {
-		connectionThread.start();
-		inputUpdatingThread.start();
-		outputUpdatingThread.start();
+
+	private Robot() {
+		startDisabled();
 	}
-	
+
 	public RobotMode getMode() {
 		return mode;
 	}
 	
 	public void switchMode(RobotMode mode) {
-		if (mode == null) {
-			throw new NullPointerException("Mode cannot be null.");
-		}
-		
 		if (!mode.equals(this.mode)) {
 			stopCurrentMode();
 			this.mode = mode;
 			startCurrentMode();
 		}
 	}
-
-	public void connectionOpened() {
-		logger.info("Connection opened.");
-		connection.write(inputAdapter.getAllInputs());
+	
+	public void oiConnected() {
+		logger.info("OI connected.");
 	}
 
-	public void connectionClosed() {
-		logger.info("Connection closed.");
-		outputAdapter.reset();
+	public void oiDisconnected() {
+		logger.info("OI disconnected.");
+		outputDevices.reset();
 	}
 	
 	private void startCurrentMode() {
-		if (mode == null) {
-			return;
-		}
-		
 		if (mode.equals(RobotMode.DISABLED)) {
 			startDisabled();
 		} else if (mode.equals(RobotMode.AUTONOMOUS)) {
@@ -79,10 +53,6 @@ public class Robot implements OIConnectionObserver {
 	}
 	
 	private void stopCurrentMode() {
-		if (mode == null) {
-			return;
-		}
-		
 		if (mode.equals(RobotMode.DISABLED)) {
 			stopDisabled();
 		} else if (mode.equals(RobotMode.AUTONOMOUS)) {
@@ -102,7 +72,6 @@ public class Robot implements OIConnectionObserver {
 
 	private void startOperatorControl() {
 		logger.info("Entered operator control mode.");
-		outputAdapter.apply();
 	}
 	
 	private void stopOperatorControl() {
@@ -115,53 +84,5 @@ public class Robot implements OIConnectionObserver {
 	
 	private void stopAutonomous() {
 		logger.info("Exited autonomous mode.");
-	}
-
-	public void updateInputs() {
-		try {
-			InputUpdates updates = inputAdapter.getUpdatedInputs();
-			connection.write(updates);
-		} catch (OIException e) {
-			logger.warn("Error while writing to stream: " + e.getMessage());
-		}
-	}
-	
-	public void updateOutputs() {
-		try {
-			OutputUpdates updates = connection.read();
-			
-			if (updates != null) {
-				outputAdapter.update(updates);
-			}
-		} catch (OIException e) {
-			logger.warn("Error while reading from stream: " + e.getMessage());
-		}
-	}
-	
-	private class ConnectionThread extends Thread {
-		public void run() {
-			logger.info("Started connection thread.");
-			while (true) {
-				connection.requireConnection();
-			}
-		}
-	}
-
-	private class InputUpdatingThread extends Thread {
-		public void run() {
-			logger.info("Started input updating thread.");
-			while (true) {
-				updateInputs();
-			}
-		}
-	}
-	
-	private class OutputUpdatingThread extends Thread {
-		public void run() {
-			logger.info("Started output updating thread.");
-			while (true) {
-				updateOutputs();
-			}
-		}
 	}
 }

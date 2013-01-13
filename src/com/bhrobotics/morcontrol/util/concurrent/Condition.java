@@ -1,7 +1,5 @@
 package com.bhrobotics.morcontrol.util.concurrent;
 
-import com.bhrobotics.morcontrol.util.RuntimeInterruptedException;
-
 public class Condition {
 	private Object obj = new Object();
 	
@@ -11,13 +9,9 @@ public class Condition {
 		}
 	}
 	
-	public void await() {
+	public void await() throws InterruptedException {
 		synchronized (obj) {
-			try {
-				obj.wait();
-			} catch (InterruptedException e) {
-				throw new RuntimeInterruptedException(e);
-			}
+			obj.wait();
 		}
 	}
 }
