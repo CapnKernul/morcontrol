@@ -5,10 +5,12 @@ import java.util.Enumeration;
 import com.bhrobotics.morcontrol.devices.output.Solenoid;
 import com.bhrobotics.morcontrol.util.collections.HashMap;
 import com.bhrobotics.morcontrol.util.collections.Map;
+import com.bhrobotics.morcontrol.util.logger.Logger;
 
 import edu.wpi.first.wpilibj.communication.ModulePresence;
 
 public class SolenoidModules {
+	private static final Logger logger = Logger.defaultLogger;
 	private static final int MAX_MODULES = 2;
 	private static final int SOLENOIDS = 8;
 
@@ -28,6 +30,7 @@ public class SolenoidModules {
 		for (int i = 0; i < MAX_MODULES; i++) {
 			if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kSolenoid, i)) {
 				initializeSolenoids(i + 1);
+				logger.info("Initialized solenoid module " + (i + 1) + ".");
 			}
 		}
 	}
