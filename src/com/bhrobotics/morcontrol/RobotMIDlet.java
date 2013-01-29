@@ -4,41 +4,33 @@ import java.io.IOException;
 
 import com.bhrobotics.morcontrol.io.RuntimeIOException;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.SimpleRobot;
 
-public class RobotMIDlet extends IterativeRobot {
-	private OIServer server;
-	private Robot robot;
-	
+public class RobotMIDlet extends SimpleRobot {
+    private OIServer oIServer;
+    private CompetitionRobot competitionRobot;
+
     public void robotInit() {
-    	try {
-			server = new OIServer();
-		} catch (IOException e) {
-			throw new RuntimeIOException(e);
-		}
-    	
-    	robot = Robot.getInstance();
-    	server.addObserver(robot);
-    	server.start();
+	competitionRobot = CompetitionRobot.getInstance();
+	try {
+	    oIServer = new SimpleOIServer(competitionRobot);
+	} catch (IOException e) {
+	    throw new RuntimeIOException(e);
+	}
+	
+	oIServer.addObserver(competitionRobot);
+	oIServer.start();
     }
-    
-    public void disabledInit() {
-    	robot.switchMode(RobotMode.DISABLED);
+
+    public void disabled() {
+	competitionRobot.switchMode(RobotMode.DISABLED);
     }
-    
-    public void autonomousInit() {
-    	robot.switchMode(RobotMode.AUTONOMOUS);
+
+    public void autonomous() {
+	competitionRobot.switchMode(RobotMode.AUTONOMOUS);
     }
-    
-    public void teleopInit() {
-    	robot.switchMode(RobotMode.OPERATOR_CONTROL);
+
+    public void operatorControl() {
+	competitionRobot.switchMode(RobotMode.OPERATOR_CONTROL);
     }
-    
-    public void disabledContinuous() {}
-    public void autonomousContinuous() {}
-    public void teleopContinuous() {}
-    
-    public void disabledPeriodic() {}
-    public void autonomousPeriodic() {}
-    public void teleopPeriodic() {}
 }
