@@ -8,12 +8,9 @@ package com.bhrobotics.morcontrol.io;
 
 public class DeviceType implements org.apache.thrift.TEnum {
 
-  public static final DeviceType PWM = new DeviceType(0);
-  public static final DeviceType SOLENOID = new DeviceType(1);
-  public static final DeviceType RELAY = new DeviceType(2);
-  public static final DeviceType DIGITAL_INPUT = new DeviceType(3);
-  public static final DeviceType ANALOG_INPUT = new DeviceType(4);
-  public static final DeviceType ENCODER = new DeviceType(5);
+  public static final DeviceType DIGITAL_INPUT = new DeviceType(0);
+  public static final DeviceType ANALOG_INPUT = new DeviceType(1);
+  public static final DeviceType ENCODER = new DeviceType(2);
 
   private final int value;
 
@@ -35,16 +32,10 @@ public class DeviceType implements org.apache.thrift.TEnum {
   public static DeviceType findByValue(int value) { 
     switch (value) {
       case 0:
-        return PWM;
-      case 1:
-        return SOLENOID;
-      case 2:
-        return RELAY;
-      case 3:
         return DIGITAL_INPUT;
-      case 4:
+      case 1:
         return ANALOG_INPUT;
-      case 5:
+      case 2:
         return ENCODER;
       default:
         return null;

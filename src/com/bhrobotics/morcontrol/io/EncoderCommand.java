@@ -11,6 +11,7 @@ public class EncoderCommand implements org.apache.thrift.TEnum {
   public static final EncoderCommand COUNT = new EncoderCommand(0);
   public static final EncoderCommand RATE = new EncoderCommand(1);
   public static final EncoderCommand DISTANCE = new EncoderCommand(2);
+  public static final EncoderCommand RESET = new EncoderCommand(3);
 
   private final int value;
 
@@ -37,6 +38,8 @@ public class EncoderCommand implements org.apache.thrift.TEnum {
         return RATE;
       case 2:
         return DISTANCE;
+      case 3:
+        return RESET;
       default:
         return null;
     }
