@@ -43,7 +43,7 @@ public class SolenoidModules {
     public Enumeration solenoids() {
 	return solenoids.values();
     }
-
+    
     private void initializeSolenoids(int module) {
 	for (int channel = 1; channel <= SOLENOIDS; channel++) {
 	    Address address = new Address(module, channel);

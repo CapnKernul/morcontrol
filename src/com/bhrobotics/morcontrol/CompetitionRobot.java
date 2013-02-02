@@ -1,7 +1,7 @@
 package com.bhrobotics.morcontrol;
 
 import com.bhrobotics.morcontrol.devices.DeviceRegistry;
-import com.bhrobotics.morcontrol.devices.input.InputDevices;
+import com.bhrobotics.morcontrol.devices.RobotDeviceRegistry;
 import com.bhrobotics.morcontrol.devices.output.OutputDevices;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
@@ -89,7 +89,6 @@ public class CompetitionRobot implements Robot {
     }
 
     public DeviceRegistry getDeviceRegistry() {
-	// TODO Auto-generated method stub
-	return null;
+	return new RobotDeviceRegistry();
     }
 }

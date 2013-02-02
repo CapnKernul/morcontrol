@@ -2,7 +2,7 @@ package com.bhrobotics.morcontrol.devices;
 
 import java.util.Enumeration;
 
-import com.bhrobotics.morcontrol.devices.input.Digitalnput;
+import com.bhrobotics.morcontrol.devices.input.DigitalInput;
 import com.bhrobotics.morcontrol.devices.input.RobotDigitalInput;
 import com.bhrobotics.morcontrol.devices.output.PWM;
 import com.bhrobotics.morcontrol.devices.output.Relay;
@@ -46,8 +46,8 @@ public class DigitalModules {
 	}
     }
 
-    public Digitalnput getDigitalInput(Address address) {
-	return (Digitalnput) digitalInputs.fetch(address);
+    public DigitalInput getDigitalInput(Address address) {
+	return (DigitalInput) digitalInputs.fetch(address);
     }
 
     public PWM getMotor(Address address) {
@@ -73,7 +73,7 @@ public class DigitalModules {
     private void initializeDigitalInputs(int module) {
 	for (int channel = 1; channel <= DIGITAL_INPUTS; channel++) {
 	    Address address = new Address(module, channel);
-	    Digitalnput device = new RobotDigitalInput(address);
+	    DigitalInput device = new RobotDigitalInput(address);
 	    digitalInputs.put(address, device);
 	}
     }

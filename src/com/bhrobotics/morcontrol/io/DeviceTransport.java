@@ -21,25 +21,25 @@ public class DeviceTransport {
 
     public RobotMode getMode() throws TException;
 
-    public void initializeEncoder(Address addressOne, Address addressTwo) throws TException;
+    public void initializeEncoder(Address address, Address addressOne, Address addressTwo) throws InvalidAddressException, TException;
 
-    public void updatePWM(Address address, int state) throws InvalidStateException, TException;
+    public void updatePWM(Address address, int state) throws InvalidAddressException, InvalidStateException, TException;
 
-    public void updateRelay(Address address, RelayState state) throws TException;
+    public void updateRelay(Address address, RelayState state) throws InvalidAddressException, TException;
 
-    public void updateSolenoid(Address address, boolean state) throws TException;
+    public void updateSolenoid(Address address, boolean state) throws InvalidAddressException, TException;
 
-    public int getPWM(Address address) throws TException;
+    public int getPWM(Address address) throws InvalidAddressException, TException;
 
-    public RelayState getRelay(Address address) throws TException;
+    public RelayState getRelay(Address address) throws InvalidAddressException, TException;
 
-    public boolean getSolenid(Address address) throws TException;
+    public boolean getSolenid(Address address) throws InvalidAddressException, TException;
 
-    public boolean getDigitalInput(Address address) throws TException;
+    public boolean getDigitalInput(Address address) throws InvalidAddressException, TException;
 
-    public double getAnalogInput(Address address) throws TException;
+    public double getAnalogInput(Address address) throws InvalidAddressException, TException;
 
-    public double getEncoder(Address addressOne, EncoderCommand command) throws TException;
+    public double getEncoder(Address addressOne, EncoderCommand command) throws InvalidAddressException, TException;
 
   }
 
@@ -105,16 +105,17 @@ public class DeviceTransport {
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getMode failed: unknown result");
     }
 
-    public void initializeEncoder(Address addressOne, Address addressTwo) throws TException
+    public void initializeEncoder(Address address, Address addressOne, Address addressTwo) throws InvalidAddressException, TException
     {
-      send_initializeEncoder(addressOne, addressTwo);
+      send_initializeEncoder(address, addressOne, addressTwo);
       recv_initializeEncoder();
     }
 
-    public void send_initializeEncoder(Address addressOne, Address addressTwo) throws TException
+    public void send_initializeEncoder(Address address, Address addressOne, Address addressTwo) throws TException
     {
       oprot_.writeMessageBegin(new TMessage("initializeEncoder", TMessageType.CALL, ++seqid_));
       initializeEncoder_args args = new initializeEncoder_args();
+      args.setAddress(address);
       args.setAddressOne(addressOne);
       args.setAddressTwo(addressTwo);
       args.write(oprot_);
@@ -122,7 +123,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public void recv_initializeEncoder() throws TException
+    public void recv_initializeEncoder() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -136,10 +137,13 @@ public class DeviceTransport {
       initializeEncoder_result result = new initializeEncoder_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
+      if (result.error != null) {
+        throw result.error;
+      }
       return;
     }
 
-    public void updatePWM(Address address, int state) throws InvalidStateException, TException
+    public void updatePWM(Address address, int state) throws InvalidAddressException, InvalidStateException, TException
     {
       send_updatePWM(address, state);
       recv_updatePWM();
@@ -156,7 +160,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public void recv_updatePWM() throws InvalidStateException, TException
+    public void recv_updatePWM() throws InvalidAddressException, InvalidStateException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -170,13 +174,16 @@ public class DeviceTransport {
       updatePWM_result result = new updatePWM_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
-      if (result.error != null) {
-        throw result.error;
+      if (result.errorLocation != null) {
+        throw result.errorLocation;
+      }
+      if (result.errorState != null) {
+        throw result.errorState;
       }
       return;
     }
 
-    public void updateRelay(Address address, RelayState state) throws TException
+    public void updateRelay(Address address, RelayState state) throws InvalidAddressException, TException
     {
       send_updateRelay(address, state);
       recv_updateRelay();
@@ -193,7 +200,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public void recv_updateRelay() throws TException
+    public void recv_updateRelay() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -207,10 +214,13 @@ public class DeviceTransport {
       updateRelay_result result = new updateRelay_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
+      if (result.error != null) {
+        throw result.error;
+      }
       return;
     }
 
-    public void updateSolenoid(Address address, boolean state) throws TException
+    public void updateSolenoid(Address address, boolean state) throws InvalidAddressException, TException
     {
       send_updateSolenoid(address, state);
       recv_updateSolenoid();
@@ -227,7 +237,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public void recv_updateSolenoid() throws TException
+    public void recv_updateSolenoid() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -241,10 +251,13 @@ public class DeviceTransport {
       updateSolenoid_result result = new updateSolenoid_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
+      if (result.error != null) {
+        throw result.error;
+      }
       return;
     }
 
-    public int getPWM(Address address) throws TException
+    public int getPWM(Address address) throws InvalidAddressException, TException
     {
       send_getPWM(address);
       return recv_getPWM();
@@ -260,7 +273,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public int recv_getPWM() throws TException
+    public int recv_getPWM() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -277,10 +290,13 @@ public class DeviceTransport {
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.error != null) {
+        throw result.error;
+      }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getPWM failed: unknown result");
     }
 
-    public RelayState getRelay(Address address) throws TException
+    public RelayState getRelay(Address address) throws InvalidAddressException, TException
     {
       send_getRelay(address);
       return recv_getRelay();
@@ -296,7 +312,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public RelayState recv_getRelay() throws TException
+    public RelayState recv_getRelay() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -313,10 +329,13 @@ public class DeviceTransport {
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.error != null) {
+        throw result.error;
+      }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getRelay failed: unknown result");
     }
 
-    public boolean getSolenid(Address address) throws TException
+    public boolean getSolenid(Address address) throws InvalidAddressException, TException
     {
       send_getSolenid(address);
       return recv_getSolenid();
@@ -332,7 +351,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public boolean recv_getSolenid() throws TException
+    public boolean recv_getSolenid() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -349,10 +368,13 @@ public class DeviceTransport {
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.error != null) {
+        throw result.error;
+      }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getSolenid failed: unknown result");
     }
 
-    public boolean getDigitalInput(Address address) throws TException
+    public boolean getDigitalInput(Address address) throws InvalidAddressException, TException
     {
       send_getDigitalInput(address);
       return recv_getDigitalInput();
@@ -368,7 +390,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public boolean recv_getDigitalInput() throws TException
+    public boolean recv_getDigitalInput() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -385,10 +407,13 @@ public class DeviceTransport {
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.error != null) {
+        throw result.error;
+      }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getDigitalInput failed: unknown result");
     }
 
-    public double getAnalogInput(Address address) throws TException
+    public double getAnalogInput(Address address) throws InvalidAddressException, TException
     {
       send_getAnalogInput(address);
       return recv_getAnalogInput();
@@ -404,7 +429,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public double recv_getAnalogInput() throws TException
+    public double recv_getAnalogInput() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -421,10 +446,13 @@ public class DeviceTransport {
       if (result.isSetSuccess()) {
         return result.success;
       }
+      if (result.error != null) {
+        throw result.error;
+      }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getAnalogInput failed: unknown result");
     }
 
-    public double getEncoder(Address addressOne, EncoderCommand command) throws TException
+    public double getEncoder(Address addressOne, EncoderCommand command) throws InvalidAddressException, TException
     {
       send_getEncoder(addressOne, command);
       return recv_getEncoder();
@@ -441,7 +469,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public double recv_getEncoder() throws TException
+    public double recv_getEncoder() throws InvalidAddressException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -457,6 +485,9 @@ public class DeviceTransport {
       iprot_.readMessageEnd();
       if (result.isSetSuccess()) {
         return result.success;
+      }
+      if (result.error != null) {
+        throw result.error;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getEncoder failed: unknown result");
     }
@@ -547,7 +578,18 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         initializeEncoder_result result = new initializeEncoder_result();
-        iface_.initializeEncoder(args.addressOne, args.addressTwo);
+        try {
+          iface_.initializeEncoder(args.address, args.addressOne, args.addressTwo);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing initializeEncoder");
+          oprot.writeMessageBegin(new TMessage("initializeEncoder", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("initializeEncoder", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -575,8 +617,10 @@ public class DeviceTransport {
         updatePWM_result result = new updatePWM_result();
         try {
           iface_.updatePWM(args.address, args.state);
-        } catch (InvalidStateException error) {
-          result.error = error;
+        } catch (InvalidAddressException errorLocation) {
+          result.errorLocation = errorLocation;
+        } catch (InvalidStateException errorState) {
+          result.errorState = errorState;
         } catch (Throwable th) {
           TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing updatePWM");
           oprot.writeMessageBegin(new TMessage("updatePWM", TMessageType.EXCEPTION, seqid));
@@ -610,7 +654,18 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         updateRelay_result result = new updateRelay_result();
-        iface_.updateRelay(args.address, args.state);
+        try {
+          iface_.updateRelay(args.address, args.state);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing updateRelay");
+          oprot.writeMessageBegin(new TMessage("updateRelay", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("updateRelay", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -636,7 +691,18 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         updateSolenoid_result result = new updateSolenoid_result();
-        iface_.updateSolenoid(args.address, args.state);
+        try {
+          iface_.updateSolenoid(args.address, args.state);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing updateSolenoid");
+          oprot.writeMessageBegin(new TMessage("updateSolenoid", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("updateSolenoid", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -662,8 +728,19 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         getPWM_result result = new getPWM_result();
-        result.success = iface_.getPWM(args.address);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface_.getPWM(args.address);
+          result.setSuccessIsSet(true);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getPWM");
+          oprot.writeMessageBegin(new TMessage("getPWM", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("getPWM", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -689,7 +766,18 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         getRelay_result result = new getRelay_result();
-        result.success = iface_.getRelay(args.address);
+        try {
+          result.success = iface_.getRelay(args.address);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getRelay");
+          oprot.writeMessageBegin(new TMessage("getRelay", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("getRelay", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -715,8 +803,19 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         getSolenid_result result = new getSolenid_result();
-        result.success = iface_.getSolenid(args.address);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface_.getSolenid(args.address);
+          result.setSuccessIsSet(true);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getSolenid");
+          oprot.writeMessageBegin(new TMessage("getSolenid", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("getSolenid", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -742,8 +841,19 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         getDigitalInput_result result = new getDigitalInput_result();
-        result.success = iface_.getDigitalInput(args.address);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface_.getDigitalInput(args.address);
+          result.setSuccessIsSet(true);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getDigitalInput");
+          oprot.writeMessageBegin(new TMessage("getDigitalInput", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("getDigitalInput", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -769,8 +879,19 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         getAnalogInput_result result = new getAnalogInput_result();
-        result.success = iface_.getAnalogInput(args.address);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface_.getAnalogInput(args.address);
+          result.setSuccessIsSet(true);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getAnalogInput");
+          oprot.writeMessageBegin(new TMessage("getAnalogInput", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("getAnalogInput", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -796,8 +917,19 @@ public class DeviceTransport {
         }
         iprot.readMessageEnd();
         getEncoder_result result = new getEncoder_result();
-        result.success = iface_.getEncoder(args.addressOne, args.command);
-        result.setSuccessIsSet(true);
+        try {
+          result.success = iface_.getEncoder(args.addressOne, args.command);
+          result.setSuccessIsSet(true);
+        } catch (InvalidAddressException error) {
+          result.error = error;
+        } catch (Throwable th) {
+          TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getEncoder");
+          oprot.writeMessageBegin(new TMessage("getEncoder", TMessageType.EXCEPTION, seqid));
+          x.write(oprot);
+          oprot.writeMessageEnd();
+          oprot.getTransport().flush();
+          return;
+        }
         oprot.writeMessageBegin(new TMessage("getEncoder", TMessageType.REPLY, seqid));
         result.write(oprot);
         oprot.writeMessageEnd();
@@ -1075,9 +1207,11 @@ public class DeviceTransport {
   public static class initializeEncoder_args implements TBase   {
     private static final TStruct STRUCT_DESC = new TStruct("initializeEncoder_args");
 
-    private static final TField ADDRESS_ONE_FIELD_DESC = new TField("addressOne", TType.STRUCT, (short)1);
-    private static final TField ADDRESS_TWO_FIELD_DESC = new TField("addressTwo", TType.STRUCT, (short)2);
+    private static final TField ADDRESS_FIELD_DESC = new TField("address", TType.STRUCT, (short)1);
+    private static final TField ADDRESS_ONE_FIELD_DESC = new TField("addressOne", TType.STRUCT, (short)2);
+    private static final TField ADDRESS_TWO_FIELD_DESC = new TField("addressTwo", TType.STRUCT, (short)3);
 
+    private Address address;
     private Address addressOne;
     private Address addressTwo;
 
@@ -1087,10 +1221,12 @@ public class DeviceTransport {
     }
 
     public initializeEncoder_args(
+      Address address,
       Address addressOne,
       Address addressTwo)
     {
       this();
+      this.address = address;
       this.addressOne = addressOne;
       this.addressTwo = addressTwo;
     }
@@ -1099,6 +1235,9 @@ public class DeviceTransport {
      * Performs a deep copy on <i>other</i>.
      */
     public initializeEncoder_args(initializeEncoder_args other) {
+      if (other.isSetAddress()) {
+        this.address = new Address(other.address);
+      }
       if (other.isSetAddressOne()) {
         this.addressOne = new Address(other.addressOne);
       }
@@ -1112,8 +1251,32 @@ public class DeviceTransport {
     }
 
     public void clear() {
+      this.address = null;
       this.addressOne = null;
       this.addressTwo = null;
+    }
+
+    public Address getAddress() {
+      return this.address;
+    }
+
+    public void setAddress(Address address) {
+      this.address = address;
+    }
+
+    public void unsetAddress() {
+      this.address = null;
+    }
+
+    /** Returns true if field address is set (has been assigned a value) and false otherwise */
+    public boolean isSetAddress() {
+      return this.address != null;
+    }
+
+    public void setAddressIsSet(boolean value) {
+      if (!value) {
+        this.address = null;
+      }
     }
 
     public Address getAddressOne() {
@@ -1174,6 +1337,15 @@ public class DeviceTransport {
       if (that == null)
         return false;
 
+      boolean this_present_address = true && this.isSetAddress();
+      boolean that_present_address = true && that.isSetAddress();
+      if (this_present_address || that_present_address) {
+        if (!(this_present_address && that_present_address))
+          return false;
+        if (!this.address.equals(that.address))
+          return false;
+      }
+
       boolean this_present_addressOne = true && this.isSetAddressOne();
       boolean that_present_addressOne = true && that.isSetAddressOne();
       if (this_present_addressOne || that_present_addressOne) {
@@ -1206,6 +1378,16 @@ public class DeviceTransport {
 
       initializeEncoder_args other = (initializeEncoder_args)otherObject;      int lastComparison = 0;
 
+      lastComparison = TBaseHelper.compareTo(isSetAddress(), other.isSetAddress());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetAddress()) {
+        lastComparison = this.address.compareTo(other.address);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       lastComparison = TBaseHelper.compareTo(isSetAddressOne(), other.isSetAddressOne());
       if (lastComparison != 0) {
         return lastComparison;
@@ -1239,7 +1421,15 @@ public class DeviceTransport {
           break;
         }
         switch (field.id) {
-          case 1: // ADDRESS_ONE
+          case 1: // ADDRESS
+            if (field.type == TType.STRUCT) {
+              this.address = new Address();
+              this.address.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // ADDRESS_ONE
             if (field.type == TType.STRUCT) {
               this.addressOne = new Address();
               this.addressOne.read(iprot);
@@ -1247,7 +1437,7 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case 2: // ADDRESS_TWO
+          case 3: // ADDRESS_TWO
             if (field.type == TType.STRUCT) {
               this.addressTwo = new Address();
               this.addressTwo.read(iprot);
@@ -1268,6 +1458,11 @@ public class DeviceTransport {
       validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
+      if (this.address != null) {
+        oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
+        this.address.write(oprot);
+        oprot.writeFieldEnd();
+      }
       if (this.addressOne != null) {
         oprot.writeFieldBegin(ADDRESS_ONE_FIELD_DESC);
         this.addressOne.write(oprot);
@@ -1286,6 +1481,14 @@ public class DeviceTransport {
       StringBuffer sb = new StringBuffer("initializeEncoder_args(");
       boolean first = true;
 
+      sb.append("address:");
+      if (this.address == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.address);
+      }
+      first = false;
+      if (!first) sb.append(", ");
       sb.append("addressOne:");
       if (this.addressOne == null) {
         sb.append("null");
@@ -1314,14 +1517,29 @@ public class DeviceTransport {
   public static class initializeEncoder_result implements TBase   {
     private static final TStruct STRUCT_DESC = new TStruct("initializeEncoder_result");
 
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
+
+    private InvalidAddressException error;
+
+    // isset id assignments
 
     public initializeEncoder_result() {
+    }
+
+    public initializeEncoder_result(
+      InvalidAddressException error)
+    {
+      this();
+      this.error = error;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public initializeEncoder_result(initializeEncoder_result other) {
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public initializeEncoder_result deepCopy() {
@@ -1329,6 +1547,30 @@ public class DeviceTransport {
     }
 
     public void clear() {
+      this.error = null;
+    }
+
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
     }
 
     public boolean equals(Object that) {
@@ -1342,6 +1584,15 @@ public class DeviceTransport {
     public boolean equals(initializeEncoder_result that) {
       if (that == null)
         return false;
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
+          return false;
+      }
 
       return true;
     }
@@ -1357,6 +1608,16 @@ public class DeviceTransport {
 
       initializeEncoder_result other = (initializeEncoder_result)otherObject;      int lastComparison = 0;
 
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -1370,6 +1631,14 @@ public class DeviceTransport {
           break;
         }
         switch (field.id) {
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -1382,6 +1651,11 @@ public class DeviceTransport {
     public void write(TProtocol oprot) throws TException {
       oprot.writeStructBegin(STRUCT_DESC);
 
+      if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -1390,6 +1664,13 @@ public class DeviceTransport {
       StringBuffer sb = new StringBuffer("initializeEncoder_result(");
       boolean first = true;
 
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -1638,9 +1919,11 @@ public class DeviceTransport {
   public static class updatePWM_result implements TBase   {
     private static final TStruct STRUCT_DESC = new TStruct("updatePWM_result");
 
-    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
+    private static final TField ERROR_LOCATION_FIELD_DESC = new TField("errorLocation", TType.STRUCT, (short)1);
+    private static final TField ERROR_STATE_FIELD_DESC = new TField("errorState", TType.STRUCT, (short)2);
 
-    private InvalidStateException error;
+    private InvalidAddressException errorLocation;
+    private InvalidStateException errorState;
 
     // isset id assignments
 
@@ -1648,18 +1931,23 @@ public class DeviceTransport {
     }
 
     public updatePWM_result(
-      InvalidStateException error)
+      InvalidAddressException errorLocation,
+      InvalidStateException errorState)
     {
       this();
-      this.error = error;
+      this.errorLocation = errorLocation;
+      this.errorState = errorState;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public updatePWM_result(updatePWM_result other) {
-      if (other.isSetError()) {
-        this.error = new InvalidStateException(other.error);
+      if (other.isSetErrorLocation()) {
+        this.errorLocation = new InvalidAddressException(other.errorLocation);
+      }
+      if (other.isSetErrorState()) {
+        this.errorState = new InvalidStateException(other.errorState);
       }
     }
 
@@ -1668,29 +1956,53 @@ public class DeviceTransport {
     }
 
     public void clear() {
-      this.error = null;
+      this.errorLocation = null;
+      this.errorState = null;
     }
 
-    public InvalidStateException getError() {
-      return this.error;
+    public InvalidAddressException getErrorLocation() {
+      return this.errorLocation;
     }
 
-    public void setError(InvalidStateException error) {
-      this.error = error;
+    public void setErrorLocation(InvalidAddressException errorLocation) {
+      this.errorLocation = errorLocation;
     }
 
-    public void unsetError() {
-      this.error = null;
+    public void unsetErrorLocation() {
+      this.errorLocation = null;
     }
 
-    /** Returns true if field error is set (has been assigned a value) and false otherwise */
-    public boolean isSetError() {
-      return this.error != null;
+    /** Returns true if field errorLocation is set (has been assigned a value) and false otherwise */
+    public boolean isSetErrorLocation() {
+      return this.errorLocation != null;
     }
 
-    public void setErrorIsSet(boolean value) {
+    public void setErrorLocationIsSet(boolean value) {
       if (!value) {
-        this.error = null;
+        this.errorLocation = null;
+      }
+    }
+
+    public InvalidStateException getErrorState() {
+      return this.errorState;
+    }
+
+    public void setErrorState(InvalidStateException errorState) {
+      this.errorState = errorState;
+    }
+
+    public void unsetErrorState() {
+      this.errorState = null;
+    }
+
+    /** Returns true if field errorState is set (has been assigned a value) and false otherwise */
+    public boolean isSetErrorState() {
+      return this.errorState != null;
+    }
+
+    public void setErrorStateIsSet(boolean value) {
+      if (!value) {
+        this.errorState = null;
       }
     }
 
@@ -1706,12 +2018,21 @@ public class DeviceTransport {
       if (that == null)
         return false;
 
-      boolean this_present_error = true && this.isSetError();
-      boolean that_present_error = true && that.isSetError();
-      if (this_present_error || that_present_error) {
-        if (!(this_present_error && that_present_error))
+      boolean this_present_errorLocation = true && this.isSetErrorLocation();
+      boolean that_present_errorLocation = true && that.isSetErrorLocation();
+      if (this_present_errorLocation || that_present_errorLocation) {
+        if (!(this_present_errorLocation && that_present_errorLocation))
           return false;
-        if (!this.error.equals(that.error))
+        if (!this.errorLocation.equals(that.errorLocation))
+          return false;
+      }
+
+      boolean this_present_errorState = true && this.isSetErrorState();
+      boolean that_present_errorState = true && that.isSetErrorState();
+      if (this_present_errorState || that_present_errorState) {
+        if (!(this_present_errorState && that_present_errorState))
+          return false;
+        if (!this.errorState.equals(that.errorState))
           return false;
       }
 
@@ -1729,12 +2050,22 @@ public class DeviceTransport {
 
       updatePWM_result other = (updatePWM_result)otherObject;      int lastComparison = 0;
 
-      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      lastComparison = TBaseHelper.compareTo(isSetErrorLocation(), other.isSetErrorLocation());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetError()) {
-        lastComparison = this.error.compareTo(other.error);
+      if (isSetErrorLocation()) {
+        lastComparison = this.errorLocation.compareTo(other.errorLocation);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = TBaseHelper.compareTo(isSetErrorState(), other.isSetErrorState());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetErrorState()) {
+        lastComparison = this.errorState.compareTo(other.errorState);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -1752,10 +2083,18 @@ public class DeviceTransport {
           break;
         }
         switch (field.id) {
-          case 1: // ERROR
+          case 1: // ERROR_LOCATION
             if (field.type == TType.STRUCT) {
-              this.error = new InvalidStateException();
-              this.error.read(iprot);
+              this.errorLocation = new InvalidAddressException();
+              this.errorLocation.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // ERROR_STATE
+            if (field.type == TType.STRUCT) {
+              this.errorState = new InvalidStateException();
+              this.errorState.read(iprot);
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -1772,9 +2111,13 @@ public class DeviceTransport {
     public void write(TProtocol oprot) throws TException {
       oprot.writeStructBegin(STRUCT_DESC);
 
-      if (this.isSetError()) {
-        oprot.writeFieldBegin(ERROR_FIELD_DESC);
-        this.error.write(oprot);
+      if (this.isSetErrorLocation()) {
+        oprot.writeFieldBegin(ERROR_LOCATION_FIELD_DESC);
+        this.errorLocation.write(oprot);
+        oprot.writeFieldEnd();
+      } else if (this.isSetErrorState()) {
+        oprot.writeFieldBegin(ERROR_STATE_FIELD_DESC);
+        this.errorState.write(oprot);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -1785,11 +2128,19 @@ public class DeviceTransport {
       StringBuffer sb = new StringBuffer("updatePWM_result(");
       boolean first = true;
 
-      sb.append("error:");
-      if (this.error == null) {
+      sb.append("errorLocation:");
+      if (this.errorLocation == null) {
         sb.append("null");
       } else {
-        sb.append(this.error);
+        sb.append(this.errorLocation);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("errorState:");
+      if (this.errorState == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.errorState);
       }
       first = false;
       sb.append(")");
@@ -2051,14 +2402,29 @@ public class DeviceTransport {
   public static class updateRelay_result implements TBase   {
     private static final TStruct STRUCT_DESC = new TStruct("updateRelay_result");
 
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
+
+    private InvalidAddressException error;
+
+    // isset id assignments
 
     public updateRelay_result() {
+    }
+
+    public updateRelay_result(
+      InvalidAddressException error)
+    {
+      this();
+      this.error = error;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public updateRelay_result(updateRelay_result other) {
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public updateRelay_result deepCopy() {
@@ -2066,6 +2432,30 @@ public class DeviceTransport {
     }
 
     public void clear() {
+      this.error = null;
+    }
+
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
     }
 
     public boolean equals(Object that) {
@@ -2079,6 +2469,15 @@ public class DeviceTransport {
     public boolean equals(updateRelay_result that) {
       if (that == null)
         return false;
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
+          return false;
+      }
 
       return true;
     }
@@ -2094,6 +2493,16 @@ public class DeviceTransport {
 
       updateRelay_result other = (updateRelay_result)otherObject;      int lastComparison = 0;
 
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -2107,6 +2516,14 @@ public class DeviceTransport {
           break;
         }
         switch (field.id) {
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -2119,6 +2536,11 @@ public class DeviceTransport {
     public void write(TProtocol oprot) throws TException {
       oprot.writeStructBegin(STRUCT_DESC);
 
+      if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -2127,6 +2549,13 @@ public class DeviceTransport {
       StringBuffer sb = new StringBuffer("updateRelay_result(");
       boolean first = true;
 
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -2375,14 +2804,29 @@ public class DeviceTransport {
   public static class updateSolenoid_result implements TBase   {
     private static final TStruct STRUCT_DESC = new TStruct("updateSolenoid_result");
 
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
+
+    private InvalidAddressException error;
+
+    // isset id assignments
 
     public updateSolenoid_result() {
+    }
+
+    public updateSolenoid_result(
+      InvalidAddressException error)
+    {
+      this();
+      this.error = error;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public updateSolenoid_result(updateSolenoid_result other) {
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public updateSolenoid_result deepCopy() {
@@ -2390,6 +2834,30 @@ public class DeviceTransport {
     }
 
     public void clear() {
+      this.error = null;
+    }
+
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
     }
 
     public boolean equals(Object that) {
@@ -2403,6 +2871,15 @@ public class DeviceTransport {
     public boolean equals(updateSolenoid_result that) {
       if (that == null)
         return false;
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
+          return false;
+      }
 
       return true;
     }
@@ -2418,6 +2895,16 @@ public class DeviceTransport {
 
       updateSolenoid_result other = (updateSolenoid_result)otherObject;      int lastComparison = 0;
 
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -2431,6 +2918,14 @@ public class DeviceTransport {
           break;
         }
         switch (field.id) {
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -2443,6 +2938,11 @@ public class DeviceTransport {
     public void write(TProtocol oprot) throws TException {
       oprot.writeStructBegin(STRUCT_DESC);
 
+      if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -2451,6 +2951,13 @@ public class DeviceTransport {
       StringBuffer sb = new StringBuffer("updateSolenoid_result(");
       boolean first = true;
 
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -2633,8 +3140,10 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getPWM_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.I32, (short)0);
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
 
     private int success;
+    private InvalidAddressException error;
 
     // isset id assignments
     private static final int __SUCCESS_ISSET_ID = 0;
@@ -2644,11 +3153,13 @@ public class DeviceTransport {
     }
 
     public getPWM_result(
-      int success)
+      int success,
+      InvalidAddressException error)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.error = error;
     }
 
     /**
@@ -2657,6 +3168,9 @@ public class DeviceTransport {
     public getPWM_result(getPWM_result other) {
       System.arraycopy(other.__isset_vector, 0, __isset_vector, 0, other.__isset_vector.length);
       this.success = other.success;
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public getPWM_result deepCopy() {
@@ -2666,6 +3180,7 @@ public class DeviceTransport {
     public void clear() {
       setSuccessIsSet(false);
       this.success = 0;
+      this.error = null;
     }
 
     public int getSuccess() {
@@ -2690,6 +3205,29 @@ public class DeviceTransport {
       __isset_vector[__SUCCESS_ISSET_ID] = value;
     }
 
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
     public boolean equals(Object that) {
       if (that == null)
         return false;
@@ -2708,6 +3246,15 @@ public class DeviceTransport {
         if (!(this_present_success && that_present_success))
           return false;
         if (this.success != that.success)
+          return false;
+      }
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
           return false;
       }
 
@@ -2735,6 +3282,16 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -2756,6 +3313,14 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -2772,6 +3337,10 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeI32(this.success);
         oprot.writeFieldEnd();
+      } else if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -2783,6 +3352,14 @@ public class DeviceTransport {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -2966,8 +3543,10 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getRelay_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.I32, (short)0);
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
 
     private RelayState success;
+    private InvalidAddressException error;
 
     // isset id assignments
 
@@ -2975,10 +3554,12 @@ public class DeviceTransport {
     }
 
     public getRelay_result(
-      RelayState success)
+      RelayState success,
+      InvalidAddressException error)
     {
       this();
       this.success = success;
+      this.error = error;
     }
 
     /**
@@ -2988,6 +3569,9 @@ public class DeviceTransport {
       if (other.isSetSuccess()) {
         this.success = other.success;
       }
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public getRelay_result deepCopy() {
@@ -2996,6 +3580,7 @@ public class DeviceTransport {
 
     public void clear() {
       this.success = null;
+      this.error = null;
     }
 
     /**
@@ -3029,6 +3614,29 @@ public class DeviceTransport {
       }
     }
 
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
     public boolean equals(Object that) {
       if (that == null)
         return false;
@@ -3047,6 +3655,15 @@ public class DeviceTransport {
         if (!(this_present_success && that_present_success))
           return false;
         if (!this.success.equals(that.success))
+          return false;
+      }
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
           return false;
       }
 
@@ -3074,6 +3691,16 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -3094,6 +3721,14 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -3110,6 +3745,10 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeI32(this.success.getValue());
         oprot.writeFieldEnd();
+      } else if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -3124,6 +3763,14 @@ public class DeviceTransport {
         sb.append("null");
       } else {
         sb.append(this.success);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
       }
       first = false;
       sb.append(")");
@@ -3308,8 +3955,10 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getSolenid_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.BOOL, (short)0);
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
 
     private boolean success;
+    private InvalidAddressException error;
 
     // isset id assignments
     private static final int __SUCCESS_ISSET_ID = 0;
@@ -3319,11 +3968,13 @@ public class DeviceTransport {
     }
 
     public getSolenid_result(
-      boolean success)
+      boolean success,
+      InvalidAddressException error)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.error = error;
     }
 
     /**
@@ -3332,6 +3983,9 @@ public class DeviceTransport {
     public getSolenid_result(getSolenid_result other) {
       System.arraycopy(other.__isset_vector, 0, __isset_vector, 0, other.__isset_vector.length);
       this.success = other.success;
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public getSolenid_result deepCopy() {
@@ -3341,6 +3995,7 @@ public class DeviceTransport {
     public void clear() {
       setSuccessIsSet(false);
       this.success = false;
+      this.error = null;
     }
 
     public boolean isSuccess() {
@@ -3365,6 +4020,29 @@ public class DeviceTransport {
       __isset_vector[__SUCCESS_ISSET_ID] = value;
     }
 
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
     public boolean equals(Object that) {
       if (that == null)
         return false;
@@ -3383,6 +4061,15 @@ public class DeviceTransport {
         if (!(this_present_success && that_present_success))
           return false;
         if (this.success != that.success)
+          return false;
+      }
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
           return false;
       }
 
@@ -3410,6 +4097,16 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -3431,6 +4128,14 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -3447,6 +4152,10 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeBool(this.success);
         oprot.writeFieldEnd();
+      } else if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -3458,6 +4167,14 @@ public class DeviceTransport {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -3641,8 +4358,10 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getDigitalInput_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.BOOL, (short)0);
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
 
     private boolean success;
+    private InvalidAddressException error;
 
     // isset id assignments
     private static final int __SUCCESS_ISSET_ID = 0;
@@ -3652,11 +4371,13 @@ public class DeviceTransport {
     }
 
     public getDigitalInput_result(
-      boolean success)
+      boolean success,
+      InvalidAddressException error)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.error = error;
     }
 
     /**
@@ -3665,6 +4386,9 @@ public class DeviceTransport {
     public getDigitalInput_result(getDigitalInput_result other) {
       System.arraycopy(other.__isset_vector, 0, __isset_vector, 0, other.__isset_vector.length);
       this.success = other.success;
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public getDigitalInput_result deepCopy() {
@@ -3674,6 +4398,7 @@ public class DeviceTransport {
     public void clear() {
       setSuccessIsSet(false);
       this.success = false;
+      this.error = null;
     }
 
     public boolean isSuccess() {
@@ -3698,6 +4423,29 @@ public class DeviceTransport {
       __isset_vector[__SUCCESS_ISSET_ID] = value;
     }
 
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
     public boolean equals(Object that) {
       if (that == null)
         return false;
@@ -3716,6 +4464,15 @@ public class DeviceTransport {
         if (!(this_present_success && that_present_success))
           return false;
         if (this.success != that.success)
+          return false;
+      }
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
           return false;
       }
 
@@ -3743,6 +4500,16 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -3764,6 +4531,14 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -3780,6 +4555,10 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeBool(this.success);
         oprot.writeFieldEnd();
+      } else if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -3791,6 +4570,14 @@ public class DeviceTransport {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -3974,8 +4761,10 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getAnalogInput_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.DOUBLE, (short)0);
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
 
     private double success;
+    private InvalidAddressException error;
 
     // isset id assignments
     private static final int __SUCCESS_ISSET_ID = 0;
@@ -3985,11 +4774,13 @@ public class DeviceTransport {
     }
 
     public getAnalogInput_result(
-      double success)
+      double success,
+      InvalidAddressException error)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.error = error;
     }
 
     /**
@@ -3998,6 +4789,9 @@ public class DeviceTransport {
     public getAnalogInput_result(getAnalogInput_result other) {
       System.arraycopy(other.__isset_vector, 0, __isset_vector, 0, other.__isset_vector.length);
       this.success = other.success;
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public getAnalogInput_result deepCopy() {
@@ -4007,6 +4801,7 @@ public class DeviceTransport {
     public void clear() {
       setSuccessIsSet(false);
       this.success = 0.0;
+      this.error = null;
     }
 
     public double getSuccess() {
@@ -4031,6 +4826,29 @@ public class DeviceTransport {
       __isset_vector[__SUCCESS_ISSET_ID] = value;
     }
 
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
     public boolean equals(Object that) {
       if (that == null)
         return false;
@@ -4049,6 +4867,15 @@ public class DeviceTransport {
         if (!(this_present_success && that_present_success))
           return false;
         if (this.success != that.success)
+          return false;
+      }
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
           return false;
       }
 
@@ -4076,6 +4903,16 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -4097,6 +4934,14 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -4113,6 +4958,10 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeDouble(this.success);
         oprot.writeFieldEnd();
+      } else if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -4124,6 +4973,14 @@ public class DeviceTransport {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
       first = false;
       sb.append(")");
       return sb.toString();
@@ -4385,8 +5242,10 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getEncoder_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.DOUBLE, (short)0);
+    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
 
     private double success;
+    private InvalidAddressException error;
 
     // isset id assignments
     private static final int __SUCCESS_ISSET_ID = 0;
@@ -4396,11 +5255,13 @@ public class DeviceTransport {
     }
 
     public getEncoder_result(
-      double success)
+      double success,
+      InvalidAddressException error)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
+      this.error = error;
     }
 
     /**
@@ -4409,6 +5270,9 @@ public class DeviceTransport {
     public getEncoder_result(getEncoder_result other) {
       System.arraycopy(other.__isset_vector, 0, __isset_vector, 0, other.__isset_vector.length);
       this.success = other.success;
+      if (other.isSetError()) {
+        this.error = new InvalidAddressException(other.error);
+      }
     }
 
     public getEncoder_result deepCopy() {
@@ -4418,6 +5282,7 @@ public class DeviceTransport {
     public void clear() {
       setSuccessIsSet(false);
       this.success = 0.0;
+      this.error = null;
     }
 
     public double getSuccess() {
@@ -4442,6 +5307,29 @@ public class DeviceTransport {
       __isset_vector[__SUCCESS_ISSET_ID] = value;
     }
 
+    public InvalidAddressException getError() {
+      return this.error;
+    }
+
+    public void setError(InvalidAddressException error) {
+      this.error = error;
+    }
+
+    public void unsetError() {
+      this.error = null;
+    }
+
+    /** Returns true if field error is set (has been assigned a value) and false otherwise */
+    public boolean isSetError() {
+      return this.error != null;
+    }
+
+    public void setErrorIsSet(boolean value) {
+      if (!value) {
+        this.error = null;
+      }
+    }
+
     public boolean equals(Object that) {
       if (that == null)
         return false;
@@ -4460,6 +5348,15 @@ public class DeviceTransport {
         if (!(this_present_success && that_present_success))
           return false;
         if (this.success != that.success)
+          return false;
+      }
+
+      boolean this_present_error = true && this.isSetError();
+      boolean that_present_error = true && that.isSetError();
+      if (this_present_error || that_present_error) {
+        if (!(this_present_error && that_present_error))
+          return false;
+        if (!this.error.equals(that.error))
           return false;
       }
 
@@ -4487,6 +5384,16 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
+      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetError()) {
+        lastComparison = this.error.compareTo(other.error);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
       return 0;
     }
 
@@ -4508,6 +5415,14 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
+          case 1: // ERROR
+            if (field.type == TType.STRUCT) {
+              this.error = new InvalidAddressException();
+              this.error.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
           default:
             TProtocolUtil.skip(iprot, field.type);
         }
@@ -4524,6 +5439,10 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeDouble(this.success);
         oprot.writeFieldEnd();
+      } else if (this.isSetError()) {
+        oprot.writeFieldBegin(ERROR_FIELD_DESC);
+        this.error.write(oprot);
+        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -4535,6 +5454,14 @@ public class DeviceTransport {
 
       sb.append("success:");
       sb.append(this.success);
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("error:");
+      if (this.error == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.error);
+      }
       first = false;
       sb.append(")");
       return sb.toString();

@@ -37,6 +37,11 @@ exception InvalidStateException {
   1: string message;
 }
 
+exception InvalidAddressException {
+  1:string message
+  2:Address address
+}
+
 struct Event {
   1: DeviceType type;
   2: Address address;
@@ -44,16 +49,16 @@ struct Event {
 
 service DeviceTransport {
   RobotMode getMode();
-  void initializeEncoder(1:Address addressOne, 2:Address addressTwo);
-  void updatePWM(1:Address address, 2:i32 state) throws (1:InvalidStateException error);
-  void updateRelay(1:Address address, 2:RelayState state);
-  void updateSolenoid(1:Address address, 2:bool state);
-  i32 getPWM(1:Address address)
-  RelayState getRelay(1:Address address)
-  bool getSolenid(1:Address address)
-  bool getDigitalInput(1:Address address)
-  double getAnalogInput(1:Address address)
-  double getEncoder(1:Address addressOne, 2:EncoderCommand command)
+  void initializeEncoder(1:Address address, 2:Address addressOne, 3:Address addressTwo) throws (1:InvalidAddressException error);
+  void updatePWM(1:Address address, 2:i32 state) throws (1:InvalidAddressException errorLocation, 2:InvalidStateException errorState);
+  void updateRelay(1:Address address, 2:RelayState state) throws (1:InvalidAddressException error);
+  void updateSolenoid(1:Address address, 2:bool state) throws (1:InvalidAddressException error);
+  i32 getPWM(1:Address address)  throws (1:InvalidAddressException error);
+  RelayState getRelay(1:Address address)  throws (1:InvalidAddressException error);
+  bool getSolenid(1:Address address)  throws (1:InvalidAddressException error);
+  bool getDigitalInput(1:Address address) throws (1:InvalidAddressException error);
+  double getAnalogInput(1:Address address)  throws (1:InvalidAddressException error);
+  double getEncoder(1:Address addressOne, 2:EncoderCommand command)  throws (1:InvalidAddressException error);
 }
 
 service UpdateTransport {
