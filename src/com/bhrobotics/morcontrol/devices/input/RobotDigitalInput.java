@@ -2,7 +2,7 @@ package com.bhrobotics.morcontrol.devices.input;
 
 import com.bhrobotics.morcontrol.devices.Address;
 
-public class RobotDigitalInput implements Digitalnput {
+public class RobotDigitalInput implements DigitalInput {
 	private Address address;
 	private edu.wpi.first.wpilibj.DigitalInput input;
 	

@@ -39,4 +39,8 @@ public class Address {
 			return false;
 		return true;
 	}
+	
+	public String toString() {
+		return "[ " + module + " : " + channel + " ]";
+	}
 }

@@ -37,7 +37,7 @@ public class InputDevices {
 
 	Enumeration e = digitalModules.digitalInputs();
 	while (e.hasMoreElements()) {
-	    Digitalnput digitalInput = (Digitalnput) e.nextElement();
+	    DigitalInput digitalInput = (DigitalInput) e.nextElement();
 	    result.put(digitalInput.getAddress(), digitalInput.getState());
 	}
 

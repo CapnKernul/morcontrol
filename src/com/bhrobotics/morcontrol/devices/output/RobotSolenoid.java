@@ -3,7 +3,6 @@ package com.bhrobotics.morcontrol.devices.output;
 import com.bhrobotics.morcontrol.devices.Address;
 
 public class RobotSolenoid implements Solenoid {
-	public static final boolean DEFAULT_STATE = false;
 	
 	private Address address;
 	private edu.wpi.first.wpilibj.Solenoid solenoid;
