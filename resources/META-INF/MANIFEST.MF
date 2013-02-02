@@ -43,6 +43,7 @@ MicroEdition-Configuration: CLDC-1.1
 
 
 
+<<<<<<< HEAD
 
-
-
+=======
+>>>>>>> stub-dev

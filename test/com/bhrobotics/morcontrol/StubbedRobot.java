@@ -5,6 +5,7 @@ import com.bhrobotics.morcontrol.devices.DeviceRegistry;
 public class StubbedRobot implements Robot {
     
     private RobotMode mode = RobotMode.DISABLED;
+	private DeviceRegistry registry = new StubbedDeviceRegistry();
     
     public RobotMode getMode() {
 	return mode;
@@ -23,7 +24,7 @@ public class StubbedRobot implements Robot {
     }
 
     public DeviceRegistry getDeviceRegistry() {
-	return null;
+	return registry;
     }
 
 }

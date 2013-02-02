@@ -3,7 +3,6 @@ package com.bhrobotics.morcontrol.devices.output;
 import com.bhrobotics.morcontrol.devices.Address;
 
 public class RobotRelay implements Relay {
-	public static final RelayState DEFAULT_STATE = RelayState.OFF;
 	
 	private Address address;
 	private edu.wpi.first.wpilibj.Relay relay;
