@@ -18,6 +18,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TIOStreamTransport;
 import org.apache.thrift.transport.TTransportException;
 
+import com.bhrobotics.morcontrol.io.DeviceTransport;
 import com.bhrobotics.morcontrol.io.MorTransport;
 import com.bhrobotics.morcontrol.io.Service;
 import com.bhrobotics.morcontrol.util.concurrent.ReentrantLock;
@@ -39,7 +40,7 @@ public class SimpleOIServer implements OIServer {
     }
 
     public TProcessor getProcessor() {
-	return new MorTransport.Processor(new Service(robot));
+	return new DeviceTransport.Processor(new Service(robot));
     }
 
     public TProtocol acceptProtocol() throws IOException {

@@ -19,5 +19,17 @@ public class RobotEncoder implements Encoder {
     public void reset() {
 	encoder.reset();
     }
+
+    public int getCount() {
+	return encoder.get();
+    }
+
+    public double getRate() {
+	return encoder.getRate();
+    }
+
+    public double getDistance() {
+	return encoder.getDistance();
+    }
     
 }

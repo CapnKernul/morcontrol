@@ -8,9 +8,6 @@ enum RobotMode {
 
 
 enum DeviceType {
-  PWM,
-  SOLENOID,
-  RELAY,
   DIGITAL_INPUT,
   ANALOG_INPUT,
   ENCODER
@@ -25,7 +22,8 @@ enum RelayState {
 enum EncoderCommand {
   COUNT,
   RATE,
-  DISTANCE
+  DISTANCE,
+  RESET
 }
 
 struct Address {

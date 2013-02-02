@@ -23,4 +23,5 @@ public interface DeviceRegistry {
     public Encoder getEncoder(Address address) throws InvalidAddressException;
     
     public void initializeEncoder(Address address, Address one, Address two) throws InvalidAddressException;
+
 }
