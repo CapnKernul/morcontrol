@@ -1,6 +1,13 @@
 package com.bhrobotics.morcontrol.devices;
 
+
 public interface Device {
-    public Address getAddress();
-    public void reset();
+    
+    public abstract Address getAddress();
+    
+    public abstract void reset();
+    
+    public abstract DeviceType getDeviceType();
+    
+    
 }

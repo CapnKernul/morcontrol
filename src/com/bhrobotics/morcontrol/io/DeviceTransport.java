@@ -25,7 +25,7 @@ public class DeviceTransport {
 
     public void updatePWM(Address address, int state) throws InvalidAddressException, InvalidStateException, TException;
 
-    public void updateRelay(Address address, RelayState state) throws InvalidAddressException, TException;
+    public void updateRelay(Address address, RelayState state) throws InvalidAddressException, InvalidStateException, TException;
 
     public void updateSolenoid(Address address, boolean state) throws InvalidAddressException, TException;
 
@@ -39,7 +39,7 @@ public class DeviceTransport {
 
     public double getAnalogInput(Address address) throws InvalidAddressException, TException;
 
-    public double getEncoder(Address addressOne, EncoderCommand command) throws InvalidAddressException, TException;
+    public double getEncoder(Address addressOne, EncoderCommand command) throws InvalidAddressException, InvalidCommandException, TException;
 
   }
 
@@ -183,7 +183,7 @@ public class DeviceTransport {
       return;
     }
 
-    public void updateRelay(Address address, RelayState state) throws InvalidAddressException, TException
+    public void updateRelay(Address address, RelayState state) throws InvalidAddressException, InvalidStateException, TException
     {
       send_updateRelay(address, state);
       recv_updateRelay();
@@ -200,7 +200,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public void recv_updateRelay() throws InvalidAddressException, TException
+    public void recv_updateRelay() throws InvalidAddressException, InvalidStateException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -214,8 +214,11 @@ public class DeviceTransport {
       updateRelay_result result = new updateRelay_result();
       result.read(iprot_);
       iprot_.readMessageEnd();
-      if (result.error != null) {
-        throw result.error;
+      if (result.errorLocation != null) {
+        throw result.errorLocation;
+      }
+      if (result.errorState != null) {
+        throw result.errorState;
       }
       return;
     }
@@ -452,7 +455,7 @@ public class DeviceTransport {
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getAnalogInput failed: unknown result");
     }
 
-    public double getEncoder(Address addressOne, EncoderCommand command) throws InvalidAddressException, TException
+    public double getEncoder(Address addressOne, EncoderCommand command) throws InvalidAddressException, InvalidCommandException, TException
     {
       send_getEncoder(addressOne, command);
       return recv_getEncoder();
@@ -469,7 +472,7 @@ public class DeviceTransport {
       oprot_.getTransport().flush();
     }
 
-    public double recv_getEncoder() throws InvalidAddressException, TException
+    public double recv_getEncoder() throws InvalidAddressException, InvalidCommandException, TException
     {
       TMessage msg = iprot_.readMessageBegin();
       if (msg.type == TMessageType.EXCEPTION) {
@@ -486,8 +489,11 @@ public class DeviceTransport {
       if (result.isSetSuccess()) {
         return result.success;
       }
-      if (result.error != null) {
-        throw result.error;
+      if (result.errorLocation != null) {
+        throw result.errorLocation;
+      }
+      if (result.errorCommand != null) {
+        throw result.errorCommand;
       }
       throw new TApplicationException(TApplicationException.MISSING_RESULT, "getEncoder failed: unknown result");
     }
@@ -656,8 +662,10 @@ public class DeviceTransport {
         updateRelay_result result = new updateRelay_result();
         try {
           iface_.updateRelay(args.address, args.state);
-        } catch (InvalidAddressException error) {
-          result.error = error;
+        } catch (InvalidAddressException errorLocation) {
+          result.errorLocation = errorLocation;
+        } catch (InvalidStateException errorState) {
+          result.errorState = errorState;
         } catch (Throwable th) {
           TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing updateRelay");
           oprot.writeMessageBegin(new TMessage("updateRelay", TMessageType.EXCEPTION, seqid));
@@ -920,8 +928,10 @@ public class DeviceTransport {
         try {
           result.success = iface_.getEncoder(args.addressOne, args.command);
           result.setSuccessIsSet(true);
-        } catch (InvalidAddressException error) {
-          result.error = error;
+        } catch (InvalidAddressException errorLocation) {
+          result.errorLocation = errorLocation;
+        } catch (InvalidCommandException errorCommand) {
+          result.errorCommand = errorCommand;
         } catch (Throwable th) {
           TApplicationException x = new TApplicationException(TApplicationException.INTERNAL_ERROR, "Internal error processing getEncoder");
           oprot.writeMessageBegin(new TMessage("getEncoder", TMessageType.EXCEPTION, seqid));
@@ -2402,9 +2412,11 @@ public class DeviceTransport {
   public static class updateRelay_result implements TBase   {
     private static final TStruct STRUCT_DESC = new TStruct("updateRelay_result");
 
-    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
+    private static final TField ERROR_LOCATION_FIELD_DESC = new TField("errorLocation", TType.STRUCT, (short)1);
+    private static final TField ERROR_STATE_FIELD_DESC = new TField("errorState", TType.STRUCT, (short)2);
 
-    private InvalidAddressException error;
+    private InvalidAddressException errorLocation;
+    private InvalidStateException errorState;
 
     // isset id assignments
 
@@ -2412,18 +2424,23 @@ public class DeviceTransport {
     }
 
     public updateRelay_result(
-      InvalidAddressException error)
+      InvalidAddressException errorLocation,
+      InvalidStateException errorState)
     {
       this();
-      this.error = error;
+      this.errorLocation = errorLocation;
+      this.errorState = errorState;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public updateRelay_result(updateRelay_result other) {
-      if (other.isSetError()) {
-        this.error = new InvalidAddressException(other.error);
+      if (other.isSetErrorLocation()) {
+        this.errorLocation = new InvalidAddressException(other.errorLocation);
+      }
+      if (other.isSetErrorState()) {
+        this.errorState = new InvalidStateException(other.errorState);
       }
     }
 
@@ -2432,29 +2449,53 @@ public class DeviceTransport {
     }
 
     public void clear() {
-      this.error = null;
+      this.errorLocation = null;
+      this.errorState = null;
     }
 
-    public InvalidAddressException getError() {
-      return this.error;
+    public InvalidAddressException getErrorLocation() {
+      return this.errorLocation;
     }
 
-    public void setError(InvalidAddressException error) {
-      this.error = error;
+    public void setErrorLocation(InvalidAddressException errorLocation) {
+      this.errorLocation = errorLocation;
     }
 
-    public void unsetError() {
-      this.error = null;
+    public void unsetErrorLocation() {
+      this.errorLocation = null;
     }
 
-    /** Returns true if field error is set (has been assigned a value) and false otherwise */
-    public boolean isSetError() {
-      return this.error != null;
+    /** Returns true if field errorLocation is set (has been assigned a value) and false otherwise */
+    public boolean isSetErrorLocation() {
+      return this.errorLocation != null;
     }
 
-    public void setErrorIsSet(boolean value) {
+    public void setErrorLocationIsSet(boolean value) {
       if (!value) {
-        this.error = null;
+        this.errorLocation = null;
+      }
+    }
+
+    public InvalidStateException getErrorState() {
+      return this.errorState;
+    }
+
+    public void setErrorState(InvalidStateException errorState) {
+      this.errorState = errorState;
+    }
+
+    public void unsetErrorState() {
+      this.errorState = null;
+    }
+
+    /** Returns true if field errorState is set (has been assigned a value) and false otherwise */
+    public boolean isSetErrorState() {
+      return this.errorState != null;
+    }
+
+    public void setErrorStateIsSet(boolean value) {
+      if (!value) {
+        this.errorState = null;
       }
     }
 
@@ -2470,12 +2511,21 @@ public class DeviceTransport {
       if (that == null)
         return false;
 
-      boolean this_present_error = true && this.isSetError();
-      boolean that_present_error = true && that.isSetError();
-      if (this_present_error || that_present_error) {
-        if (!(this_present_error && that_present_error))
+      boolean this_present_errorLocation = true && this.isSetErrorLocation();
+      boolean that_present_errorLocation = true && that.isSetErrorLocation();
+      if (this_present_errorLocation || that_present_errorLocation) {
+        if (!(this_present_errorLocation && that_present_errorLocation))
           return false;
-        if (!this.error.equals(that.error))
+        if (!this.errorLocation.equals(that.errorLocation))
+          return false;
+      }
+
+      boolean this_present_errorState = true && this.isSetErrorState();
+      boolean that_present_errorState = true && that.isSetErrorState();
+      if (this_present_errorState || that_present_errorState) {
+        if (!(this_present_errorState && that_present_errorState))
+          return false;
+        if (!this.errorState.equals(that.errorState))
           return false;
       }
 
@@ -2493,12 +2543,22 @@ public class DeviceTransport {
 
       updateRelay_result other = (updateRelay_result)otherObject;      int lastComparison = 0;
 
-      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      lastComparison = TBaseHelper.compareTo(isSetErrorLocation(), other.isSetErrorLocation());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetError()) {
-        lastComparison = this.error.compareTo(other.error);
+      if (isSetErrorLocation()) {
+        lastComparison = this.errorLocation.compareTo(other.errorLocation);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = TBaseHelper.compareTo(isSetErrorState(), other.isSetErrorState());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetErrorState()) {
+        lastComparison = this.errorState.compareTo(other.errorState);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -2516,10 +2576,18 @@ public class DeviceTransport {
           break;
         }
         switch (field.id) {
-          case 1: // ERROR
+          case 1: // ERROR_LOCATION
             if (field.type == TType.STRUCT) {
-              this.error = new InvalidAddressException();
-              this.error.read(iprot);
+              this.errorLocation = new InvalidAddressException();
+              this.errorLocation.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // ERROR_STATE
+            if (field.type == TType.STRUCT) {
+              this.errorState = new InvalidStateException();
+              this.errorState.read(iprot);
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -2536,9 +2604,13 @@ public class DeviceTransport {
     public void write(TProtocol oprot) throws TException {
       oprot.writeStructBegin(STRUCT_DESC);
 
-      if (this.isSetError()) {
-        oprot.writeFieldBegin(ERROR_FIELD_DESC);
-        this.error.write(oprot);
+      if (this.isSetErrorLocation()) {
+        oprot.writeFieldBegin(ERROR_LOCATION_FIELD_DESC);
+        this.errorLocation.write(oprot);
+        oprot.writeFieldEnd();
+      } else if (this.isSetErrorState()) {
+        oprot.writeFieldBegin(ERROR_STATE_FIELD_DESC);
+        this.errorState.write(oprot);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -2549,11 +2621,19 @@ public class DeviceTransport {
       StringBuffer sb = new StringBuffer("updateRelay_result(");
       boolean first = true;
 
-      sb.append("error:");
-      if (this.error == null) {
+      sb.append("errorLocation:");
+      if (this.errorLocation == null) {
         sb.append("null");
       } else {
-        sb.append(this.error);
+        sb.append(this.errorLocation);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("errorState:");
+      if (this.errorState == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.errorState);
       }
       first = false;
       sb.append(")");
@@ -5242,10 +5322,12 @@ public class DeviceTransport {
     private static final TStruct STRUCT_DESC = new TStruct("getEncoder_result");
 
     private static final TField SUCCESS_FIELD_DESC = new TField("success", TType.DOUBLE, (short)0);
-    private static final TField ERROR_FIELD_DESC = new TField("error", TType.STRUCT, (short)1);
+    private static final TField ERROR_LOCATION_FIELD_DESC = new TField("errorLocation", TType.STRUCT, (short)1);
+    private static final TField ERROR_COMMAND_FIELD_DESC = new TField("errorCommand", TType.STRUCT, (short)2);
 
     private double success;
-    private InvalidAddressException error;
+    private InvalidAddressException errorLocation;
+    private InvalidCommandException errorCommand;
 
     // isset id assignments
     private static final int __SUCCESS_ISSET_ID = 0;
@@ -5256,12 +5338,14 @@ public class DeviceTransport {
 
     public getEncoder_result(
       double success,
-      InvalidAddressException error)
+      InvalidAddressException errorLocation,
+      InvalidCommandException errorCommand)
     {
       this();
       this.success = success;
       setSuccessIsSet(true);
-      this.error = error;
+      this.errorLocation = errorLocation;
+      this.errorCommand = errorCommand;
     }
 
     /**
@@ -5270,8 +5354,11 @@ public class DeviceTransport {
     public getEncoder_result(getEncoder_result other) {
       System.arraycopy(other.__isset_vector, 0, __isset_vector, 0, other.__isset_vector.length);
       this.success = other.success;
-      if (other.isSetError()) {
-        this.error = new InvalidAddressException(other.error);
+      if (other.isSetErrorLocation()) {
+        this.errorLocation = new InvalidAddressException(other.errorLocation);
+      }
+      if (other.isSetErrorCommand()) {
+        this.errorCommand = new InvalidCommandException(other.errorCommand);
       }
     }
 
@@ -5282,7 +5369,8 @@ public class DeviceTransport {
     public void clear() {
       setSuccessIsSet(false);
       this.success = 0.0;
-      this.error = null;
+      this.errorLocation = null;
+      this.errorCommand = null;
     }
 
     public double getSuccess() {
@@ -5307,26 +5395,49 @@ public class DeviceTransport {
       __isset_vector[__SUCCESS_ISSET_ID] = value;
     }
 
-    public InvalidAddressException getError() {
-      return this.error;
+    public InvalidAddressException getErrorLocation() {
+      return this.errorLocation;
     }
 
-    public void setError(InvalidAddressException error) {
-      this.error = error;
+    public void setErrorLocation(InvalidAddressException errorLocation) {
+      this.errorLocation = errorLocation;
     }
 
-    public void unsetError() {
-      this.error = null;
+    public void unsetErrorLocation() {
+      this.errorLocation = null;
     }
 
-    /** Returns true if field error is set (has been assigned a value) and false otherwise */
-    public boolean isSetError() {
-      return this.error != null;
+    /** Returns true if field errorLocation is set (has been assigned a value) and false otherwise */
+    public boolean isSetErrorLocation() {
+      return this.errorLocation != null;
     }
 
-    public void setErrorIsSet(boolean value) {
+    public void setErrorLocationIsSet(boolean value) {
       if (!value) {
-        this.error = null;
+        this.errorLocation = null;
+      }
+    }
+
+    public InvalidCommandException getErrorCommand() {
+      return this.errorCommand;
+    }
+
+    public void setErrorCommand(InvalidCommandException errorCommand) {
+      this.errorCommand = errorCommand;
+    }
+
+    public void unsetErrorCommand() {
+      this.errorCommand = null;
+    }
+
+    /** Returns true if field errorCommand is set (has been assigned a value) and false otherwise */
+    public boolean isSetErrorCommand() {
+      return this.errorCommand != null;
+    }
+
+    public void setErrorCommandIsSet(boolean value) {
+      if (!value) {
+        this.errorCommand = null;
       }
     }
 
@@ -5351,12 +5462,21 @@ public class DeviceTransport {
           return false;
       }
 
-      boolean this_present_error = true && this.isSetError();
-      boolean that_present_error = true && that.isSetError();
-      if (this_present_error || that_present_error) {
-        if (!(this_present_error && that_present_error))
+      boolean this_present_errorLocation = true && this.isSetErrorLocation();
+      boolean that_present_errorLocation = true && that.isSetErrorLocation();
+      if (this_present_errorLocation || that_present_errorLocation) {
+        if (!(this_present_errorLocation && that_present_errorLocation))
           return false;
-        if (!this.error.equals(that.error))
+        if (!this.errorLocation.equals(that.errorLocation))
+          return false;
+      }
+
+      boolean this_present_errorCommand = true && this.isSetErrorCommand();
+      boolean that_present_errorCommand = true && that.isSetErrorCommand();
+      if (this_present_errorCommand || that_present_errorCommand) {
+        if (!(this_present_errorCommand && that_present_errorCommand))
+          return false;
+        if (!this.errorCommand.equals(that.errorCommand))
           return false;
       }
 
@@ -5384,12 +5504,22 @@ public class DeviceTransport {
           return lastComparison;
         }
       }
-      lastComparison = TBaseHelper.compareTo(isSetError(), other.isSetError());
+      lastComparison = TBaseHelper.compareTo(isSetErrorLocation(), other.isSetErrorLocation());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetError()) {
-        lastComparison = this.error.compareTo(other.error);
+      if (isSetErrorLocation()) {
+        lastComparison = this.errorLocation.compareTo(other.errorLocation);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = TBaseHelper.compareTo(isSetErrorCommand(), other.isSetErrorCommand());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetErrorCommand()) {
+        lastComparison = this.errorCommand.compareTo(other.errorCommand);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -5415,10 +5545,18 @@ public class DeviceTransport {
               TProtocolUtil.skip(iprot, field.type);
             }
             break;
-          case 1: // ERROR
+          case 1: // ERROR_LOCATION
             if (field.type == TType.STRUCT) {
-              this.error = new InvalidAddressException();
-              this.error.read(iprot);
+              this.errorLocation = new InvalidAddressException();
+              this.errorLocation.read(iprot);
+            } else { 
+              TProtocolUtil.skip(iprot, field.type);
+            }
+            break;
+          case 2: // ERROR_COMMAND
+            if (field.type == TType.STRUCT) {
+              this.errorCommand = new InvalidCommandException();
+              this.errorCommand.read(iprot);
             } else { 
               TProtocolUtil.skip(iprot, field.type);
             }
@@ -5439,9 +5577,13 @@ public class DeviceTransport {
         oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
         oprot.writeDouble(this.success);
         oprot.writeFieldEnd();
-      } else if (this.isSetError()) {
-        oprot.writeFieldBegin(ERROR_FIELD_DESC);
-        this.error.write(oprot);
+      } else if (this.isSetErrorLocation()) {
+        oprot.writeFieldBegin(ERROR_LOCATION_FIELD_DESC);
+        this.errorLocation.write(oprot);
+        oprot.writeFieldEnd();
+      } else if (this.isSetErrorCommand()) {
+        oprot.writeFieldBegin(ERROR_COMMAND_FIELD_DESC);
+        this.errorCommand.write(oprot);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -5456,11 +5598,19 @@ public class DeviceTransport {
       sb.append(this.success);
       first = false;
       if (!first) sb.append(", ");
-      sb.append("error:");
-      if (this.error == null) {
+      sb.append("errorLocation:");
+      if (this.errorLocation == null) {
         sb.append("null");
       } else {
-        sb.append(this.error);
+        sb.append(this.errorLocation);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("errorCommand:");
+      if (this.errorCommand == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.errorCommand);
       }
       first = false;
       sb.append(")");

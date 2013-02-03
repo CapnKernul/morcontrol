@@ -6,11 +6,10 @@ import com.bhrobotics.morcontrol.devices.input.Encoder;
 import com.bhrobotics.morcontrol.devices.output.PWM;
 import com.bhrobotics.morcontrol.devices.output.Relay;
 import com.bhrobotics.morcontrol.devices.output.Solenoid;
-import com.bhrobotics.morcontrol.io.InvalidAddressException;
 
 public interface DeviceRegistry {
     
-    public PWM getPWM(Address address) throws InvalidAddressException, InvalidStateException;
+    public PWM getPWM(Address address) throws InvalidAddressException;
 
     public Relay getRelay(Address address) throws InvalidAddressException;
 

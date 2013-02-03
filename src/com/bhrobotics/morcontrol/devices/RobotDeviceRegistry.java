@@ -10,7 +10,6 @@ import com.bhrobotics.morcontrol.devices.input.RobotEncoder;
 import com.bhrobotics.morcontrol.devices.output.PWM;
 import com.bhrobotics.morcontrol.devices.output.Relay;
 import com.bhrobotics.morcontrol.devices.output.Solenoid;
-import com.bhrobotics.morcontrol.io.InvalidAddressException;
 import com.bhrobotics.morcontrol.util.collections.HashMap;
 
 public class RobotDeviceRegistry implements DeviceRegistry {
@@ -40,7 +39,7 @@ public class RobotDeviceRegistry implements DeviceRegistry {
 	if(hash.containsKey(address)) {
 	    return (Device)hash.fetch(address);
 	} else {
-	    throw new InvalidAddressException();
+	    throw new InvalidAddressException(address);
 	}
     }
     
@@ -70,7 +69,7 @@ public class RobotDeviceRegistry implements DeviceRegistry {
     
     public void initializeEncoder(Address address, Address digitalInputOne, Address digitalInputTwo) throws InvalidAddressException {
 	if(encoders.containsKey(address)) {
-	    throw new InvalidAddressException();
+	    throw new InvalidAddressException(address);
 	} else {
 	    encoders.put(address, new RobotEncoder(address, (RobotDigitalInput)getDigitalInput(digitalInputOne), (RobotDigitalInput)getDigitalInput(digitalInputTwo)));
 	}

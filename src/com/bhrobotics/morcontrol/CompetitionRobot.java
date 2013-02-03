@@ -1,7 +1,5 @@
 package com.bhrobotics.morcontrol;
 
-import com.bhrobotics.morcontrol.devices.DeviceRegistry;
-import com.bhrobotics.morcontrol.devices.RobotDeviceRegistry;
 import com.bhrobotics.morcontrol.devices.output.OutputDevices;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
@@ -11,6 +9,7 @@ public class CompetitionRobot implements Robot {
     private RobotMode mode = RobotMode.DISABLED;
 
     private static CompetitionRobot instance;
+
     public static CompetitionRobot getInstance() {
 	if (instance == null) {
 	    instance = new CompetitionRobot();
@@ -86,9 +85,5 @@ public class CompetitionRobot implements Robot {
 
     private void stopAutonomous() {
 	logger.info("Exited autonomous mode.");
-    }
-
-    public DeviceRegistry getDeviceRegistry() {
-	return new RobotDeviceRegistry();
     }
 }

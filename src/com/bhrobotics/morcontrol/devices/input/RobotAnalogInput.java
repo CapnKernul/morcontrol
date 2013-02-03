@@ -1,6 +1,7 @@
 package com.bhrobotics.morcontrol.devices.input;
 
 import com.bhrobotics.morcontrol.devices.Address;
+import com.bhrobotics.morcontrol.devices.DeviceType;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 
@@ -23,5 +24,9 @@ public class RobotAnalogInput implements AnalogInput {
 
     public void reset() {
 	//Has no reset state
+    }
+
+    public DeviceType getDeviceType() {
+	return DeviceType.ANALOG_INPUT;
     }
 }

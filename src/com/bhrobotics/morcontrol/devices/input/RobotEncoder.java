@@ -1,6 +1,7 @@
 package com.bhrobotics.morcontrol.devices.input;
 
 import com.bhrobotics.morcontrol.devices.Address;
+import com.bhrobotics.morcontrol.devices.DeviceType;
 
 public class RobotEncoder implements Encoder {
     
@@ -32,4 +33,7 @@ public class RobotEncoder implements Encoder {
 	return encoder.getDistance();
     }
     
+    public DeviceType getDeviceType() {
+	return DeviceType.ENCODER;
+    }
 }
