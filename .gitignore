@@ -6,3 +6,6 @@ j2meclasses
 *.jar
 *.war
 *.ear
+
+# Eclipse Files #
+.classpath

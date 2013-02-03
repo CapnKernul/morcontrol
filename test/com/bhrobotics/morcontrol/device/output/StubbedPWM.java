@@ -19,7 +19,7 @@ public class StubbedPWM implements PWM {
     		throw new InvalidStateException("Motor state out of range.");
     	} else {
     		this.state = state;
-    		System.out.println("PWM at " + getAddress().toString() + " has been updated to " + state);
+    		System.out.println("PWM at " + getAddress().toString() + " has been updated to " + state + ".");
     	}	
     }
 
@@ -38,4 +38,7 @@ public class StubbedPWM implements PWM {
     	return state;
     }
 
+    public void setState(int num) {
+    	state = num;
+    }
 }

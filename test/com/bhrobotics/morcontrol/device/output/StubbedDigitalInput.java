@@ -25,4 +25,8 @@ public class StubbedDigitalInput implements DigitalInput{
 	public boolean getState() {
 		return state;
 	}
+	
+	public void setState(boolean bool) {
+		state = bool;
+	}
 }

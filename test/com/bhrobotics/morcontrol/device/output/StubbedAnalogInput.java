@@ -25,4 +25,8 @@ public class StubbedAnalogInput implements AnalogInput{
 	public double getState() {
 		return state;
 	}
+	
+	public void setState(int num) {
+		state = num;
+	}
 }

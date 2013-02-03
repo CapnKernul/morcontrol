@@ -32,5 +32,8 @@ public class StubbedRelay implements Relay {
 	public RelayState getState() {
 		return state;
 	}
-
+	
+	public void setState(RelayState relay) {
+		state = relay;
+	}
 }

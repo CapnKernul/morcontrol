@@ -31,4 +31,8 @@ public class StubbedSolenoid implements Solenoid {
 	public boolean getState() {
 		return state;
 	}
+	
+	public void setState(boolean bool) {
+		state = bool;
+	}
 }
