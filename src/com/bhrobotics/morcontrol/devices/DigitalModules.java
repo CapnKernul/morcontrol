@@ -3,8 +3,11 @@ package com.bhrobotics.morcontrol.devices;
 import java.util.Enumeration;
 
 import com.bhrobotics.morcontrol.devices.input.DigitalInput;
-import com.bhrobotics.morcontrol.devices.output.Motor;
+import com.bhrobotics.morcontrol.devices.input.RobotDigitalInput;
+import com.bhrobotics.morcontrol.devices.output.PWM;
 import com.bhrobotics.morcontrol.devices.output.Relay;
+import com.bhrobotics.morcontrol.devices.output.RobotPWM;
+import com.bhrobotics.morcontrol.devices.output.RobotRelay;
 import com.bhrobotics.morcontrol.util.collections.HashMap;
 import com.bhrobotics.morcontrol.util.collections.Map;
 import com.bhrobotics.morcontrol.util.logger.Logger;
@@ -47,9 +50,15 @@ public class DigitalModules {
 		return (DigitalInput) digitalInputs.fetch(address);
 	}
 
+<<<<<<< HEAD
 	public Motor getMotor(Address address) {
 		return (Motor) motors.fetch(address);
 	}
+=======
+    public PWM getMotor(Address address) {
+	return (PWM) motors.fetch(address);
+    }
+>>>>>>> 201926b7b68408bce9e3b7c282d1fb3eb55b68c9
 
 	public Relay getRelay(Address address) {
 		return (Relay) relays.fetch(address);
@@ -67,20 +76,18 @@ public class DigitalModules {
 		return relays.values();
 	}
 
-	private void initializeDigitalInputs(int module) {
-		for (int channel = 1; channel <= DIGITAL_INPUTS; channel++) {
-			Address address = new Address(module, channel);
-			DigitalInput device = new DigitalInput(address);
-			digitalInputs.put(address, device);
-		}
+    private void initializeDigitalInputs(int module) {
+	for (int channel = 1; channel <= DIGITAL_INPUTS; channel++) {
+	    Address address = new Address(module, channel);
+	    DigitalInput device = new RobotDigitalInput(address);
+	    digitalInputs.put(address, device);
 	}
 
-	private void initializeMotors(int module) {
-		for (int channel = 1; channel <= MOTORS; channel++) {
-			Address address = new Address(module, channel);
-			Motor device = new Motor(address);
-			motors.put(address, device);
-		}
+    private void initializeMotors(int module) {
+	for (int channel = 1; channel <= MOTORS; channel++) {
+	    Address address = new Address(module, channel);
+	    PWM device = new RobotPWM(address);
+	    motors.put(address, device);
 	}
 
 	private void initializeRelays(int module) {

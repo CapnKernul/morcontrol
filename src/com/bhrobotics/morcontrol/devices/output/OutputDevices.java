@@ -22,7 +22,7 @@ public class OutputDevices {
 	
 	private OutputDevices() {}
 	
-	public void updateMotor(Address address, double state) throws InvalidStateException {
+	public void updateMotor(Address address, int state) throws InvalidStateException {
 		digitalModules.getMotor(address).update(state);
 	}
 	
@@ -43,8 +43,8 @@ public class OutputDevices {
 	private void resetMotors() {
 		Enumeration e = digitalModules.motors();
 		while (e.hasMoreElements()) {
-			Motor motor = (Motor) e.nextElement();
-			motor.reset();
+			PWM pWM = (PWM) e.nextElement();
+			pWM.reset();
 		}
 	}
 

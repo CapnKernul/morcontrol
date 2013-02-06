@@ -1,7 +1,6 @@
 package com.bhrobotics.morcontrol;
 
-import com.bhrobotics.morcontrol.devices.input.InputDevices;
-import com.bhrobotics.morcontrol.devices.output.OutputDevices;
+import com.bhrobotics.morcontrol.devices.DeviceRegistry;
 
 public interface Robot extends OIServerObserver {
 
@@ -13,7 +12,5 @@ public interface Robot extends OIServerObserver {
 
     public abstract void oiDisconnected();
     
-    public abstract InputDevices getInputDevices();
-    
-    public abstract OutputDevices getOutputDevices();
+    public abstract DeviceRegistry getDeviceRegistry();
 }

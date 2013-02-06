@@ -6,12 +6,6 @@ import org.apache.thrift.TProcessor;
 
 public interface OIServer {
     
-    public abstract void setRobot(Robot robot);
-    
-    public abstract Robot getRobot();
-    
-    public abstract boolean robotSet();
-    
     public abstract void start();
 
     public abstract void stop();

@@ -1,6 +1,5 @@
 package com.bhrobotics.morcontrol;
 
-import com.bhrobotics.morcontrol.devices.input.InputDevices;
 import com.bhrobotics.morcontrol.devices.output.OutputDevices;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
@@ -10,6 +9,7 @@ public class CompetitionRobot implements Robot {
     private RobotMode mode = RobotMode.DISABLED;
 
     private static CompetitionRobot instance;
+
     public static CompetitionRobot getInstance() {
 	if (instance == null) {
 	    instance = new CompetitionRobot();
@@ -85,17 +85,5 @@ public class CompetitionRobot implements Robot {
 
     private void stopAutonomous() {
 	logger.info("Exited autonomous mode.");
-    }
-
-    @Override
-    public InputDevices getInputDevices() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public OutputDevices getOutputDevices() {
-	// TODO Auto-generated method stub
-	return null;
     }
 }

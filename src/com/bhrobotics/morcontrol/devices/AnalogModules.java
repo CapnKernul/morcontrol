@@ -3,6 +3,7 @@ package com.bhrobotics.morcontrol.devices;
 import java.util.Enumeration;
 
 import com.bhrobotics.morcontrol.devices.input.AnalogInput;
+import com.bhrobotics.morcontrol.devices.input.RobotAnalogInput;
 import com.bhrobotics.morcontrol.util.collections.HashMap;
 import com.bhrobotics.morcontrol.util.collections.Map;
 import com.bhrobotics.morcontrol.util.logger.Logger;
@@ -49,7 +50,7 @@ public class AnalogModules {
 
 	for (int channel = 1; channel <= channels; channel++) {
 	    Address address = new Address(module, channel);
-	    AnalogInput device = new AnalogInput(address);
+	    AnalogInput device = new RobotAnalogInput(address);
 	    analogInputs.put(address, device);
 	}
     }

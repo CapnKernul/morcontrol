@@ -49,8 +49,8 @@ public class InputDevices {
 
 	Enumeration e = analogModules.analogInputs();
 	while (e.hasMoreElements()) {
-	    AnalogInput analogInput = (AnalogInput) e.nextElement();
-	    result.put(analogInput.getAddress(), analogInput.getState());
+	    AnalogInput deviceAnalogInput = (AnalogInput) e.nextElement();
+	    result.put(deviceAnalogInput.getAddress(), deviceAnalogInput.getState());
 	}
 
 	return result;
