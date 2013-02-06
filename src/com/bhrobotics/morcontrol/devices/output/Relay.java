@@ -7,12 +7,12 @@ public interface Relay extends Device {
     
     public static final RelayState DEFAULT_STATE = RelayState.OFF;
 
-    public abstract void update(RelayState state);
+    public void update(RelayState state);
 
-    public abstract void reset();
+    public void reset();
 
-    public abstract Address getAddress();
+    public Address getAddress();
 
-    public abstract RelayState getState();
+    public RelayState getState();
 
 }

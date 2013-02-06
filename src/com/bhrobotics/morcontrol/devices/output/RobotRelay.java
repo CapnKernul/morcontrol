@@ -1,6 +1,7 @@
 package com.bhrobotics.morcontrol.devices.output;
 
 import com.bhrobotics.morcontrol.devices.Address;
+import com.bhrobotics.morcontrol.devices.DeviceType;
 
 public class RobotRelay implements Relay {
 	
@@ -40,5 +41,11 @@ public class RobotRelay implements Relay {
 	 */
 	public RelayState getState() {
 		return state;
+	}
+
+	@Override
+	public DeviceType getDeviceType() {
+	    // TODO Auto-generated method stub
+	    return null;
 	}
 }
