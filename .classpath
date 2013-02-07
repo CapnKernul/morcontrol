@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Daguan/.eclipse/org.eclipse.platform_4.2.0_1709980481/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.7.1/sunspotfrcsdk/lib/WPILibJ/classes.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daguan/.eclipse/org.eclipse.platform_4.2.0_1709980481/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.7.1/sunspotfrcsdk/lib/squawk_device.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daguan/Documents/GenCode/Java/MorControl/lib/mockito-all-1.9.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Daguan/Documents/GenCode/Java/MorControl/lib/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.7.1/sunspotfrcsdk/lib/WPILibJ/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Daguan Lu/My Documents/Downloads/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Daguan Lu/My Documents/Downloads/mockito-all-1.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/edu.wpi.first.javadev.sunspotfrcsdk_1.0.7.1/sunspotfrcsdk/lib/squawk_device.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

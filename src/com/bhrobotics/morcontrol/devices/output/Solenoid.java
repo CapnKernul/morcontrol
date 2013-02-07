@@ -2,16 +2,36 @@ package com.bhrobotics.morcontrol.devices.output;
 
 import com.bhrobotics.morcontrol.devices.Address;
 import com.bhrobotics.morcontrol.devices.Device;
+import com.bhrobotics.morcontrol.devices.DeviceType;
 
-public interface Solenoid extends Device {
-    public static final boolean DEFAULT_STATE = false;
+public class Solenoid implements Device {
+	
+	private static final boolean DEFAULT_STATE = false;
+	private Address address;
+	private edu.wpi.first.wpilibj.Solenoid solenoid;
+	
+	public Solenoid(Address address) {
+		this.address = address;
+		solenoid = new edu.wpi.first.wpilibj.Solenoid(address.getModule(), address.getChannel());
+	}
 
-    public abstract void update(boolean state);
+	public void update(boolean state) {
+		solenoid.set(state);
+	}
 
-    public abstract void reset();
+	public void reset() {
+		update(DEFAULT_STATE);
+	}
 
-    public abstract Address getAddress();
+	public Address getAddress() {
+		return address;
+	}
 
-    public abstract boolean getState();
+	public boolean getState() {
+		return solenoid.get();
+	}
 
+	public DeviceType getDeviceType() {
+	    return DeviceType.SOLENOID;
+	}
 }
