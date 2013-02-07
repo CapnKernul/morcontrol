@@ -21,14 +21,15 @@ package org.apache.thrift.protocol;
 
 /**
  * Helper class that encapsulates struct metadata.
- *
+ * 
  */
 public class TStruct {
-  public TStruct() {}
+	public TStruct() {
+	}
 
-  public TStruct(String n) {
-    name = n;
-  }
+	public TStruct(String n) {
+		name = n;
+	}
 
-  public String name = "";
+	public String name = "";
 }

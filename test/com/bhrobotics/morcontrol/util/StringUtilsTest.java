@@ -15,7 +15,7 @@ public class StringUtilsTest extends TestCase {
 		assertEquals("foo", parts[0]);
 		assertEquals("bar", parts[1]);
 		assertEquals("qux", parts[2]);
-		
+
 		original = "::bar::a:";
 		parts = StringUtils.split(original, ":");
 		assertEquals(6, parts.length);
@@ -26,7 +26,7 @@ public class StringUtilsTest extends TestCase {
 		assertEquals("a", parts[4]);
 		assertEquals("", parts[5]);
 	}
-	
+
 	@Test
 	public void testContains() {
 		String original = "foo:bar:qux";

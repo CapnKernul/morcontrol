@@ -21,18 +21,19 @@ package org.apache.thrift.protocol;
 
 /**
  * Helper class that encapsulates field metadata.
- *
+ * 
  */
 public class TField {
-  public TField() {}
+	public TField() {
+	}
 
-  public TField(String n, byte t, short i) {
-    name = n;
-    type = t;
-    id = i;
-  }
+	public TField(String n, byte t, short i) {
+		name = n;
+		type = t;
+		id = i;
+	}
 
-  public String name = "";
-  public byte   type = TType.STOP;
-  public short  id   = 0;
+	public String name = "";
+	public byte type = TType.STOP;
+	public short id = 0;
 }

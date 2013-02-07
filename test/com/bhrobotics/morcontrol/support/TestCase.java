@@ -7,12 +7,12 @@ public class TestCase extends Assert {
 		Thread thread = new Thread(runnable);
 		thread.start();
 	}
-	
+
 	public void doAsync(String name, Runnable runnable) {
 		Thread thread = new Thread(runnable, name);
 		thread.start();
 	}
-	
+
 	public void delay(long length) {
 		try {
 			Thread.sleep(length);

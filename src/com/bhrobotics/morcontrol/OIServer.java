@@ -5,17 +5,17 @@ import java.util.Vector;
 import org.apache.thrift.TProcessor;
 
 public interface OIServer {
-    
-    public abstract void start();
 
-    public abstract void stop();
+	public abstract void start();
 
-    public abstract boolean isRunning();
+	public abstract void stop();
 
-    public abstract void addObserver(OIServerObserver observer);
+	public abstract boolean isRunning();
 
-    public abstract void removeObserver(OIServerObserver observer);
+	public abstract void addObserver(OIServerObserver observer);
 
-    public abstract Vector getObservers();
+	public abstract void removeObserver(OIServerObserver observer);
+
+	public abstract Vector getObservers();
 
 }

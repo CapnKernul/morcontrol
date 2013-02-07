@@ -22,18 +22,21 @@ package org.apache.thrift;
 import org.apache.thrift.protocol.TProtocol;
 
 /**
- * A TServiceClient is used to communicate with a TService implementation
- * across protocols and transports.
+ * A TServiceClient is used to communicate with a TService implementation across
+ * protocols and transports.
  */
 public interface TServiceClient {
-  /**
-   * Get the TProtocol being used as the input (read) protocol.
-   * @return
-   */
-  public TProtocol getInputProtocol();
-  /**
-   * Get the TProtocol being used as the output (write) protocol.
-   * @return
-   */
-  public TProtocol getOutputProtocol();
+	/**
+	 * Get the TProtocol being used as the input (read) protocol.
+	 * 
+	 * @return
+	 */
+	public TProtocol getInputProtocol();
+
+	/**
+	 * Get the TProtocol being used as the output (write) protocol.
+	 * 
+	 * @return
+	 */
+	public TProtocol getOutputProtocol();
 }

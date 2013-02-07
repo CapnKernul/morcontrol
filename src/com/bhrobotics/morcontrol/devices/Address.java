@@ -3,16 +3,16 @@ package com.bhrobotics.morcontrol.devices;
 public class Address {
 	private int module;
 	private int channel;
-	
+
 	public Address(int module, int channel) {
 		this.module = module;
 		this.channel = channel;
 	}
-	
+
 	public int getModule() {
 		return module;
 	}
-	
+
 	public int getChannel() {
 		return channel;
 	}
@@ -39,7 +39,7 @@ public class Address {
 			return false;
 		return true;
 	}
-	
+
 	public String toString() {
 		return "[ " + module + " : " + channel + " ]";
 	}

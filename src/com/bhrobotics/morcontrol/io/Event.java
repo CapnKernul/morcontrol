@@ -16,248 +16,251 @@ import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
 public class Event implements TBase {
-  private static final TStruct STRUCT_DESC = new TStruct("Event");
+	private static final TStruct STRUCT_DESC = new TStruct("Event");
 
-  private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short)1);
-  private static final TField ADDRESS_FIELD_DESC = new TField("address", TType.STRUCT, (short)2);
+	private static final TField TYPE_FIELD_DESC = new TField("type", TType.I32, (short) 1);
+	private static final TField ADDRESS_FIELD_DESC = new TField("address", TType.STRUCT, (short) 2);
 
-  private DeviceType type;
-  private Address address;
+	private DeviceType type;
+	private Address address;
 
-  // isset id assignments
+	// isset id assignments
 
-  public Event() {
-  }
+	public Event() {
+	}
 
-  public Event(
-    DeviceType type,
-    Address address)
-  {
-    this();
-    this.type = type;
-    this.address = address;
-  }
+	public Event(DeviceType type, Address address) {
+		this();
+		this.type = type;
+		this.address = address;
+	}
 
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public Event(Event other) {
-    if (other.isSetType()) {
-      this.type = other.type;
-    }
-    if (other.isSetAddress()) {
-      this.address = new Address(other.address);
-    }
-  }
+	/**
+	 * Performs a deep copy on <i>other</i>.
+	 */
+	public Event(Event other) {
+		if (other.isSetType()) {
+			this.type = other.type;
+		}
+		if (other.isSetAddress()) {
+			this.address = new Address(other.address);
+		}
+	}
 
-  public Event deepCopy() {
-    return new Event(this);
-  }
+	public Event deepCopy() {
+		return new Event(this);
+	}
 
-  public void clear() {
-    this.type = null;
-    this.address = null;
-  }
+	public void clear() {
+		this.type = null;
+		this.address = null;
+	}
 
-  /**
-   * 
-   * @see DeviceType
-   */
-  public DeviceType getType() {
-    return this.type;
-  }
+	/**
+	 * 
+	 * @see DeviceType
+	 */
+	public DeviceType getType() {
+		return this.type;
+	}
 
-  /**
-   * 
-   * @see DeviceType
-   */
-  public void setType(DeviceType type) {
-    this.type = type;
-  }
+	/**
+	 * 
+	 * @see DeviceType
+	 */
+	public void setType(DeviceType type) {
+		this.type = type;
+	}
 
-  public void unsetType() {
-    this.type = null;
-  }
+	public void unsetType() {
+		this.type = null;
+	}
 
-  /** Returns true if field type is set (has been assigned a value) and false otherwise */
-  public boolean isSetType() {
-    return this.type != null;
-  }
+	/**
+	 * Returns true if field type is set (has been assigned a value) and false
+	 * otherwise
+	 */
+	public boolean isSetType() {
+		return this.type != null;
+	}
 
-  public void setTypeIsSet(boolean value) {
-    if (!value) {
-      this.type = null;
-    }
-  }
+	public void setTypeIsSet(boolean value) {
+		if (!value) {
+			this.type = null;
+		}
+	}
 
-  public Address getAddress() {
-    return this.address;
-  }
+	public Address getAddress() {
+		return this.address;
+	}
 
-  public void setAddress(Address address) {
-    this.address = address;
-  }
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 
-  public void unsetAddress() {
-    this.address = null;
-  }
+	public void unsetAddress() {
+		this.address = null;
+	}
 
-  /** Returns true if field address is set (has been assigned a value) and false otherwise */
-  public boolean isSetAddress() {
-    return this.address != null;
-  }
+	/**
+	 * Returns true if field address is set (has been assigned a value) and
+	 * false otherwise
+	 */
+	public boolean isSetAddress() {
+		return this.address != null;
+	}
 
-  public void setAddressIsSet(boolean value) {
-    if (!value) {
-      this.address = null;
-    }
-  }
+	public void setAddressIsSet(boolean value) {
+		if (!value) {
+			this.address = null;
+		}
+	}
 
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof Event)
-      return this.equals((Event)that);
-    return false;
-  }
+	public boolean equals(Object that) {
+		if (that == null)
+			return false;
+		if (that instanceof Event)
+			return this.equals((Event) that);
+		return false;
+	}
 
-  public boolean equals(Event that) {
-    if (that == null)
-      return false;
+	public boolean equals(Event that) {
+		if (that == null)
+			return false;
 
-    boolean this_present_type = true && this.isSetType();
-    boolean that_present_type = true && that.isSetType();
-    if (this_present_type || that_present_type) {
-      if (!(this_present_type && that_present_type))
-        return false;
-      if (!this.type.equals(that.type))
-        return false;
-    }
+		boolean this_present_type = true && this.isSetType();
+		boolean that_present_type = true && that.isSetType();
+		if (this_present_type || that_present_type) {
+			if (!(this_present_type && that_present_type))
+				return false;
+			if (!this.type.equals(that.type))
+				return false;
+		}
 
-    boolean this_present_address = true && this.isSetAddress();
-    boolean that_present_address = true && that.isSetAddress();
-    if (this_present_address || that_present_address) {
-      if (!(this_present_address && that_present_address))
-        return false;
-      if (!this.address.equals(that.address))
-        return false;
-    }
+		boolean this_present_address = true && this.isSetAddress();
+		boolean that_present_address = true && that.isSetAddress();
+		if (this_present_address || that_present_address) {
+			if (!(this_present_address && that_present_address))
+				return false;
+			if (!this.address.equals(that.address))
+				return false;
+		}
 
-    return true;
-  }
+		return true;
+	}
 
-  public int hashCode() {
-    return 0;
-  }
+	public int hashCode() {
+		return 0;
+	}
 
-  public int compareTo(Object otherObject) {
-    if (!getClass().equals(otherObject.getClass())) {
-      return getClass().getName().compareTo(otherObject.getClass().getName());
-    }
+	public int compareTo(Object otherObject) {
+		if (!getClass().equals(otherObject.getClass())) {
+			return getClass().getName().compareTo(otherObject.getClass().getName());
+		}
 
-    Event other = (Event)otherObject;    int lastComparison = 0;
+		Event other = (Event) otherObject;
+		int lastComparison = 0;
 
-    lastComparison = TBaseHelper.compareTo(isSetType(), other.isSetType());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetType()) {
-      lastComparison = TBaseHelper.compareTo(this.type, other.type);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = TBaseHelper.compareTo(isSetAddress(), other.isSetAddress());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetAddress()) {
-      lastComparison = this.address.compareTo(other.address);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
+		lastComparison = TBaseHelper.compareTo(isSetType(), other.isSetType());
+		if (lastComparison != 0) {
+			return lastComparison;
+		}
+		if (isSetType()) {
+			lastComparison = TBaseHelper.compareTo(this.type, other.type);
+			if (lastComparison != 0) {
+				return lastComparison;
+			}
+		}
+		lastComparison = TBaseHelper.compareTo(isSetAddress(), other.isSetAddress());
+		if (lastComparison != 0) {
+			return lastComparison;
+		}
+		if (isSetAddress()) {
+			lastComparison = this.address.compareTo(other.address);
+			if (lastComparison != 0) {
+				return lastComparison;
+			}
+		}
+		return 0;
+	}
 
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id) {
-        case 1: // TYPE
-          if (field.type == TType.I32) {
-            this.type = DeviceType.findByValue(iprot.readI32());
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // ADDRESS
-          if (field.type == TType.STRUCT) {
-            this.address = new Address();
-            this.address.read(iprot);
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-    validate();
-  }
+	public void read(TProtocol iprot) throws TException {
+		TField field;
+		iprot.readStructBegin();
+		while (true) {
+			field = iprot.readFieldBegin();
+			if (field.type == TType.STOP) {
+				break;
+			}
+			switch (field.id) {
+			case 1: // TYPE
+				if (field.type == TType.I32) {
+					this.type = DeviceType.findByValue(iprot.readI32());
+				} else {
+					TProtocolUtil.skip(iprot, field.type);
+				}
+				break;
+			case 2: // ADDRESS
+				if (field.type == TType.STRUCT) {
+					this.address = new Address();
+					this.address.read(iprot);
+				} else {
+					TProtocolUtil.skip(iprot, field.type);
+				}
+				break;
+			default:
+				TProtocolUtil.skip(iprot, field.type);
+			}
+			iprot.readFieldEnd();
+		}
+		iprot.readStructEnd();
+		validate();
+	}
 
-  public void write(TProtocol oprot) throws TException {
-    validate();
+	public void write(TProtocol oprot) throws TException {
+		validate();
 
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.type != null) {
-      oprot.writeFieldBegin(TYPE_FIELD_DESC);
-      oprot.writeI32(this.type.getValue());
-      oprot.writeFieldEnd();
-    }
-    if (this.address != null) {
-      oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
-      this.address.write(oprot);
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
+		oprot.writeStructBegin(STRUCT_DESC);
+		if (this.type != null) {
+			oprot.writeFieldBegin(TYPE_FIELD_DESC);
+			oprot.writeI32(this.type.getValue());
+			oprot.writeFieldEnd();
+		}
+		if (this.address != null) {
+			oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
+			this.address.write(oprot);
+			oprot.writeFieldEnd();
+		}
+		oprot.writeFieldStop();
+		oprot.writeStructEnd();
+	}
 
-  public String toString() {
-    StringBuffer sb = new StringBuffer("Event(");
-    boolean first = true;
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Event(");
+		boolean first = true;
 
-    sb.append("type:");
-    if (this.type == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.type);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("address:");
-    if (this.address == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.address);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
+		sb.append("type:");
+		if (this.type == null) {
+			sb.append("null");
+		} else {
+			sb.append(this.type);
+		}
+		first = false;
+		if (!first)
+			sb.append(", ");
+		sb.append("address:");
+		if (this.address == null) {
+			sb.append("null");
+		} else {
+			sb.append(this.address);
+		}
+		first = false;
+		sb.append(")");
+		return sb.toString();
+	}
 
-  public void validate() throws TException {
-    // check for required fields
-  }
+	public void validate() throws TException {
+		// check for required fields
+	}
 
 }
-

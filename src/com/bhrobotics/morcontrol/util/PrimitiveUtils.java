@@ -2,14 +2,7 @@ package com.bhrobotics.morcontrol.util;
 
 public abstract class PrimitiveUtils {
 	public static boolean isPrimitive(Object obj) {
-		return (obj instanceof Character) ||
-			   (obj instanceof Byte) ||
-			   (obj instanceof Short) ||
-			   (obj instanceof Integer) ||
-			   (obj instanceof Long) ||
-			   (obj instanceof Float) ||
-			   (obj instanceof Double) ||
-			   (obj instanceof Boolean);
+		return (obj instanceof Character) || (obj instanceof Byte) || (obj instanceof Short) || (obj instanceof Integer) || (obj instanceof Long) || (obj instanceof Float) || (obj instanceof Double) || (obj instanceof Boolean);
 	}
 
 	public static char toPrimitive(Character obj) {

@@ -15,7 +15,7 @@ public class PrimitiveUtilsTest extends TestCase {
 	private Float objFloat = new Float(6f);
 	private Double objDouble = new Double(7.0);
 	private Boolean objBoolean = new Boolean(true);
-	
+
 	@Test
 	public void testIsPrimitive() {
 		assertThat(PrimitiveUtils.isPrimitive("foo"), is(false));
@@ -28,7 +28,7 @@ public class PrimitiveUtilsTest extends TestCase {
 		assertThat(PrimitiveUtils.isPrimitive(objDouble), is(true));
 		assertThat(PrimitiveUtils.isPrimitive(objBoolean), is(true));
 	}
-	
+
 	@Test
 	public void testToPrimitive() {
 		assertThat(PrimitiveUtils.toPrimitive(objChar), is((char) 1));

@@ -6,13 +6,13 @@ public class RelayState {
 	public static final RelayState OFF = new RelayState(0);
 	public static final RelayState FORWARD = new RelayState(1);
 	public static final RelayState REVERSE = new RelayState(2);
-	
+
 	private int value;
-	
+
 	private RelayState(int value) {
 		this.value = value;
 	}
-	
+
 	public static RelayState fromRelayValue(Relay.Value value) {
 		if (value.equals(Relay.Value.kForward)) {
 			return FORWARD;
@@ -22,7 +22,7 @@ public class RelayState {
 			return OFF;
 		}
 	}
-	
+
 	public Relay.Value toRelayValue() {
 		switch (value) {
 		case 1:

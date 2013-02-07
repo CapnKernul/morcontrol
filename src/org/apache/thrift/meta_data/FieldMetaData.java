@@ -39,48 +39,49 @@ package org.apache.thrift.meta_data;
 
 import java.util.Hashtable;
 
-
 /**
- * This class is used to store meta data about thrift fields. Every field in a
- * a struct should have a corresponding instance of this class describing it.
- *
+ * This class is used to store meta data about thrift fields. Every field in a a
+ * struct should have a corresponding instance of this class describing it.
+ * 
  */
-public class FieldMetaData  {
-  public final String fieldName;
-  public final byte requirementType;
-  public final FieldValueMetaData valueMetaData;
-  private static Hashtable structMap;
-  
-  static {
-    structMap = new Hashtable();
-  }
-  
-  public FieldMetaData(String name, byte req, FieldValueMetaData vMetaData){
-    this.fieldName = name;
-    this.requirementType = req;
-    this.valueMetaData = vMetaData;
-  }
-  
-  public static void addStructMetaDataMap(Class sClass, Hashtable map){
-    structMap.put(sClass, map);
-  }
+public class FieldMetaData {
+	public final String fieldName;
+	public final byte requirementType;
+	public final FieldValueMetaData valueMetaData;
+	private static Hashtable structMap;
 
-  /**
-   * Returns a map with metadata (i.e. instances of FieldMetaData) that
-   * describe the fields of the given class.
-   *
-   * @param sClass The TBase class for which the metadata map is requested
-   */
-  public static Hashtable getStructMetaDataMap(Class sClass){
-    if (!structMap.containsKey(sClass)){ // Load class if it hasn't been loaded
-      try{
-        sClass.newInstance();
-      } catch (InstantiationException e){
-        throw new RuntimeException("InstantiationException for TBase class: " + sClass.getName() + ", message: " + e.getMessage());
-      } catch (IllegalAccessException e){
-        throw new RuntimeException("IllegalAccessException for TBase class: " + sClass.getName() + ", message: " + e.getMessage());
-      }
-    }
-    return (Hashtable) structMap.get(sClass);
-  }
+	static {
+		structMap = new Hashtable();
+	}
+
+	public FieldMetaData(String name, byte req, FieldValueMetaData vMetaData) {
+		this.fieldName = name;
+		this.requirementType = req;
+		this.valueMetaData = vMetaData;
+	}
+
+	public static void addStructMetaDataMap(Class sClass, Hashtable map) {
+		structMap.put(sClass, map);
+	}
+
+	/**
+	 * Returns a map with metadata (i.e. instances of FieldMetaData) that
+	 * describe the fields of the given class.
+	 * 
+	 * @param sClass
+	 *            The TBase class for which the metadata map is requested
+	 */
+	public static Hashtable getStructMetaDataMap(Class sClass) {
+		if (!structMap.containsKey(sClass)) { // Load class if it hasn't been
+												// loaded
+			try {
+				sClass.newInstance();
+			} catch (InstantiationException e) {
+				throw new RuntimeException("InstantiationException for TBase class: " + sClass.getName() + ", message: " + e.getMessage());
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException("IllegalAccessException for TBase class: " + sClass.getName() + ", message: " + e.getMessage());
+			}
+		}
+		return (Hashtable) structMap.get(sClass);
+	}
 }

@@ -23,8 +23,8 @@ import org.apache.thrift.transport.TTransport;
 
 /**
  * Factory interface for constructing protocol instances.
- *
+ * 
  */
 public interface TProtocolFactory {
-  public TProtocol getProtocol(TTransport trans);
+	public TProtocol getProtocol(TTransport trans);
 }

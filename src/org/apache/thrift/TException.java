@@ -21,22 +21,22 @@ package org.apache.thrift;
 
 /**
  * Generic exception class for Thrift.
- *
+ * 
  */
 public class TException extends Exception {
-  public TException() {
-    super();
-  }
+	public TException() {
+		super();
+	}
 
-  public TException(String message) {
-    super(message);
-  }
+	public TException(String message) {
+		super(message);
+	}
 
-  public TException(Throwable cause) {
-	super(cause.getMessage());
-  }
+	public TException(Throwable cause) {
+		super(cause.getMessage());
+	}
 
-  public TException(String message, Throwable cause) {
-	  super(message);
-  }
+	public TException(String message, Throwable cause) {
+		super(message);
+	}
 }
