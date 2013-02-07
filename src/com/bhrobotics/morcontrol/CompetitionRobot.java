@@ -1,11 +1,8 @@
-package com.bhrobotics.morcontrol;
-
-import com.bhrobotics.morcontrol.devices.output.OutputDevices;
+/*package com.bhrobotics.morcontrol;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class CompetitionRobot implements Robot {
     private final Logger logger = Logger.defaultLogger;
-    private final OutputDevices outputDevices = OutputDevices.getInstance();
     private RobotMode mode = RobotMode.DISABLED;
 
     private static CompetitionRobot instance;
@@ -86,4 +83,4 @@ public class CompetitionRobot implements Robot {
     private void stopAutonomous() {
 	logger.info("Exited autonomous mode.");
     }
-}
+}*/

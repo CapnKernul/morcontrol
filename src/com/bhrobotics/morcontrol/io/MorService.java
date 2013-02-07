@@ -1,4 +1,4 @@
-package com.bhrobotics.morcontrol.io;
+/*package com.bhrobotics.morcontrol.io;
 
 import org.apache.thrift.TException;
 
@@ -158,4 +158,4 @@ public class MorService implements DeviceTransport.Iface {
 	    return RelayState.REVERSE;
 	}
     }
-}
+}*/

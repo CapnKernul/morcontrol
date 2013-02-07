@@ -2,20 +2,43 @@ package com.bhrobotics.morcontrol.devices.output;
 
 import com.bhrobotics.morcontrol.devices.Address;
 import com.bhrobotics.morcontrol.devices.Device;
+import com.bhrobotics.morcontrol.devices.DeviceType;
 import com.bhrobotics.morcontrol.devices.InvalidStateException;
 
-public interface PWM extends Device {
+public class PWM implements Device {
+    private static final int MAX_VALUE = 255;
+    private static final int MIN_VALUE = 1;
+    private static final int DEFAULT_STATE = 127;
 
-    public static final int DEFAULT_STATE = 127;
-    public static final int MAX_VALUE = 255;
-    public static final int MIN_VALUE = 1;
+    private Address address;
+    private edu.wpi.first.wpilibj.PWM pwm;
 
-    public abstract void update(int state) throws InvalidStateException;
+    public PWM(Address address) {
+	this.address = address;
+	pwm = new edu.wpi.first.wpilibj.PWM(address.getModule(), address.getChannel());
+    }
 
-    public abstract void reset();
+    public void update(int state) throws InvalidStateException {
+	if (state > MAX_VALUE || state < MIN_VALUE) {
+	    throw new InvalidStateException("Motor state out of range.");
+	} else {
+	    pwm.setRaw(state);	
+	}
+    }
 
-    public abstract Address getAddress();
+    public void reset() {
+	pwm.setRaw(DEFAULT_STATE);
+    }
 
-    public abstract int getState();
+    public Address getAddress() {
+	return address;
+    }
 
+    public int getState() {
+	return pwm.getRaw();
+    }
+
+    public DeviceType getDeviceType() {
+	return DeviceType.MOTOR;
+    }
 }
