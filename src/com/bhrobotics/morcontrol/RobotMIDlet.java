@@ -14,38 +14,38 @@ import com.bhrobotics.morcontrol.io.RuntimeIOException;
 import edu.wpi.first.wpilibj.SimpleRobot;
 
 public class RobotMIDlet extends SimpleRobot {
-	// private OIServer oIServer;
-	// private CompetitionRobot competitionRobot;
+    // private OIServer oIServer;
+    // private CompetitionRobot competitionRobot;
 
-	public void robotInit() {
-		ModuleMapping mapping = ModuleMapping.getInstance();
-		System.out.println(mapping.getAnalogModuleCount() + " " + mapping.getDigitalModuleCount() + " " + mapping.getSolenoidModuleCount());
-		AnalogInputRegistry analogRegistry = new AnalogInputRegistry(mapping);
-		DigitalInputRegistry digitalRegistry = new DigitalInputRegistry(mapping);
-		EncoderRegistry encoderRegistry = new EncoderRegistry(digitalRegistry, mapping);
-		PWMRegistry pwmsRegistry = new PWMRegistry(mapping);
-		SolenoidRegistry solenoidRegistry = new SolenoidRegistry(mapping);
-		RelayRegistry relayRegistry = new RelayRegistry(mapping);
+    public void robotInit() {
+	ModuleMapping mapping = ModuleMapping.getInstance();
+	System.out.println(mapping.getAnalogModuleCount() + " " + mapping.getDigitalModuleCount() + " " + mapping.getSolenoidModuleCount());
+	AnalogInputRegistry analogRegistry = new AnalogInputRegistry(mapping);
+	DigitalInputRegistry digitalRegistry = new DigitalInputRegistry(mapping);
+	EncoderRegistry encoderRegistry = new EncoderRegistry(digitalRegistry, mapping);
+	PWMRegistry pwmsRegistry = new PWMRegistry(mapping);
+	SolenoidRegistry solenoidRegistry = new SolenoidRegistry(mapping);
+	RelayRegistry relayRegistry = new RelayRegistry(mapping);
 
-		// try {
-		// oIServer = new SimpleOIServer(competitionRobot);
-		// } catch (IOException e) {
-		// throw new RuntimeIOException(e);
-		// }
-		//
-		// oIServer.addObserver(competitionRobot);
-		// oIServer.start();
-	}
+	// try {
+	// oIServer = new SimpleOIServer(competitionRobot);
+	// } catch (IOException e) {
+	// throw new RuntimeIOException(e);
+	// }
+	//
+	// oIServer.addObserver(competitionRobot);
+	// oIServer.start();
+    }
 
-	public void disabled() {
-		// competitionRobot.switchMode(RobotMode.DISABLED);
-	}
+    public void disabled() {
+	// competitionRobot.switchMode(RobotMode.DISABLED);
+    }
 
-	public void autonomous() {
-		// competitionRobot.switchMode(RobotMode.AUTONOMOUS);
-	}
+    public void autonomous() {
+	// competitionRobot.switchMode(RobotMode.AUTONOMOUS);
+    }
 
-	public void operatorControl() {
-		// competitionRobot.switchMode(RobotMode.OPERATOR_CONTROL);
-	}
+    public void operatorControl() {
+	// competitionRobot.switchMode(RobotMode.OPERATOR_CONTROL);
+    }
 }

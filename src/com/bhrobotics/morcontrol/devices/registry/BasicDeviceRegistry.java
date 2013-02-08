@@ -6,15 +6,15 @@ import com.bhrobotics.morcontrol.devices.InvalidAddressException;
 
 public abstract class BasicDeviceRegistry implements Registry {
 
-	public Device getDevice(Address address) throws InvalidAddressException {
-		return getIndex().getDeviceAt(address);
-	}
+    public Device getDevice(Address address) throws InvalidAddressException {
+	return getIndex().getDeviceAt(address);
+    }
 
-	public Device[] getAllDevices() {
-		return getIndex().getAllDevices();
-	}
+    public Device[] getAllDevices() {
+	return getIndex().getAllDevices();
+    }
 
-	public abstract BasicDeviceIndex getIndex();
+    public abstract BasicDeviceIndex getIndex();
 
-	public abstract Device initializeDevice(Address address);
+    public abstract Device initializeDevice(Address address);
 }

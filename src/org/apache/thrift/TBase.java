@@ -27,22 +27,22 @@ import org.apache.thrift.protocol.TProtocol;
  */
 public interface TBase {
 
-	/**
-	 * Reads the TObject from the given input protocol.
-	 * 
-	 * @param iprot
-	 *            Input protocol
-	 */
-	public void read(TProtocol iprot) throws TException;
+    /**
+     * Reads the TObject from the given input protocol.
+     * 
+     * @param iprot
+     *            Input protocol
+     */
+    public void read(TProtocol iprot) throws TException;
 
-	/**
-	 * Writes the objects out to the protocol
-	 * 
-	 * @param oprot
-	 *            Output protocol
-	 */
-	public void write(TProtocol oprot) throws TException;
+    /**
+     * Writes the objects out to the protocol
+     * 
+     * @param oprot
+     *            Output protocol
+     */
+    public void write(TProtocol oprot) throws TException;
 
-	public int compareTo(Object other);
+    public int compareTo(Object other);
 
 }

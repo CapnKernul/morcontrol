@@ -7,27 +7,27 @@ import com.bhrobotics.morcontrol.devices.DeviceType;
 import edu.wpi.first.wpilibj.AnalogChannel;
 
 public class AnalogInput implements Device {
-	private Address address;
-	private AnalogChannel input;
+    private Address address;
+    private AnalogChannel input;
 
-	public AnalogInput(Address address) {
-		this.address = address;
-		input = new AnalogChannel(address.getModule(), address.getChannel());
-	}
+    public AnalogInput(Address address) {
+	this.address = address;
+	input = new AnalogChannel(address.getModule(), address.getChannel());
+    }
 
-	public Address getAddress() {
-		return address;
-	}
+    public Address getAddress() {
+	return address;
+    }
 
-	public double getState() {
-		return input.getVoltage();
-	}
+    public double getState() {
+	return input.getVoltage();
+    }
 
-	public void reset() {
-		// Has no reset state
-	}
+    public void reset() {
+	// Has no reset state
+    }
 
-	public DeviceType getDeviceType() {
-		return DeviceType.ANALOG_INPUT;
-	}
+    public DeviceType getDeviceType() {
+	return DeviceType.ANALOG_INPUT;
+    }
 }

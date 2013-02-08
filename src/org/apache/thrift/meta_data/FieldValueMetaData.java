@@ -44,17 +44,17 @@ import org.apache.thrift.protocol.TType;
  * value(s) of a field
  */
 public class FieldValueMetaData {
-	public final byte type;
+    public final byte type;
 
-	public FieldValueMetaData(byte type) {
-		this.type = type;
-	}
+    public FieldValueMetaData(byte type) {
+	this.type = type;
+    }
 
-	public boolean isStruct() {
-		return type == TType.STRUCT;
-	}
+    public boolean isStruct() {
+	return type == TType.STRUCT;
+    }
 
-	public boolean isContainer() {
-		return type == TType.LIST || type == TType.MAP || type == TType.SET;
-	}
+    public boolean isContainer() {
+	return type == TType.LIST || type == TType.MAP || type == TType.SET;
+    }
 }
