@@ -1,14 +1,22 @@
 package com.bhrobotics.morcontrol.devices.input;
 
+import java.util.Enumeration;
+
 import com.bhrobotics.morcontrol.devices.Address;
 import com.bhrobotics.morcontrol.devices.Device;
 import com.bhrobotics.morcontrol.devices.DeviceType;
+import com.bhrobotics.morcontrol.devices.tracking.BasicObservable;
+import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
+import com.bhrobotics.morcontrol.devices.tracking.Observable;
+import com.bhrobotics.morcontrol.devices.tracking.Tickable;
 
-public class Encoder implements Device {
+public class Encoder implements Device, Observable, Tickable {
 
     private edu.wpi.first.wpilibj.Encoder encoder;
     private Address address;
-
+    private BasicObservable observable = new BasicObservable();
+    private int savedCountState = 0;
+    
     public Encoder(Address encoderAddress, DigitalInput first, DigitalInput second) {
 	encoder = new edu.wpi.first.wpilibj.Encoder(first.getRawDevice(), second.getRawDevice());
 	address = encoderAddress;
@@ -36,5 +44,20 @@ public class Encoder implements Device {
 
     public DeviceType getDeviceType() {
 	return DeviceType.ENCODER;
+    }
+
+    public void tick() {
+	if(savedCountState != getCount()) {
+	    observable.alertObservers(this);
+	}
+    }
+
+    //Delegated Methods
+    public void addObserver(DeviceObserver observer) {
+	observable.addObserver(observer);
+    }
+
+    public Enumeration getObservers() {
+	return observable.getObservers();
     }
 }

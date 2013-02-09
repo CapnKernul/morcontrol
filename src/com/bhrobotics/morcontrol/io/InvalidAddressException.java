@@ -16,243 +16,240 @@ import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
 public class InvalidAddressException extends Exception implements TBase {
-    private static final TStruct STRUCT_DESC = new TStruct("InvalidAddressException");
+  private static final TStruct STRUCT_DESC = new TStruct("InvalidAddressException");
 
-    private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short) 1);
-    private static final TField ADDRESS_FIELD_DESC = new TField("address", TType.STRUCT, (short) 2);
+  private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short)1);
+  private static final TField ADDRESS_FIELD_DESC = new TField("address", TType.STRUCT, (short)2);
 
-    private String message;
-    private Address address;
+  private String message;
+  private Address address;
 
-    // isset id assignments
+  // isset id assignments
 
-    public InvalidAddressException() {
+  public InvalidAddressException() {
+  }
+
+  public InvalidAddressException(
+    String message,
+    Address address)
+  {
+    this();
+    this.message = message;
+    this.address = address;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public InvalidAddressException(InvalidAddressException other) {
+    if (other.isSetMessage()) {
+      this.message = other.message;
+    }
+    if (other.isSetAddress()) {
+      this.address = new Address(other.address);
+    }
+  }
+
+  public InvalidAddressException deepCopy() {
+    return new InvalidAddressException(this);
+  }
+
+  public void clear() {
+    this.message = null;
+    this.address = null;
+  }
+
+  public String getMessage() {
+    return this.message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public void unsetMessage() {
+    this.message = null;
+  }
+
+  /** Returns true if field message is set (has been assigned a value) and false otherwise */
+  public boolean isSetMessage() {
+    return this.message != null;
+  }
+
+  public void setMessageIsSet(boolean value) {
+    if (!value) {
+      this.message = null;
+    }
+  }
+
+  public Address getAddress() {
+    return this.address;
+  }
+
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+
+  public void unsetAddress() {
+    this.address = null;
+  }
+
+  /** Returns true if field address is set (has been assigned a value) and false otherwise */
+  public boolean isSetAddress() {
+    return this.address != null;
+  }
+
+  public void setAddressIsSet(boolean value) {
+    if (!value) {
+      this.address = null;
+    }
+  }
+
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof InvalidAddressException)
+      return this.equals((InvalidAddressException)that);
+    return false;
+  }
+
+  public boolean equals(InvalidAddressException that) {
+    if (that == null)
+      return false;
+
+    boolean this_present_message = true && this.isSetMessage();
+    boolean that_present_message = true && that.isSetMessage();
+    if (this_present_message || that_present_message) {
+      if (!(this_present_message && that_present_message))
+        return false;
+      if (!this.message.equals(that.message))
+        return false;
     }
 
-    public InvalidAddressException(String message, Address address) {
-	this();
-	this.message = message;
-	this.address = address;
+    boolean this_present_address = true && this.isSetAddress();
+    boolean that_present_address = true && that.isSetAddress();
+    if (this_present_address || that_present_address) {
+      if (!(this_present_address && that_present_address))
+        return false;
+      if (!this.address.equals(that.address))
+        return false;
     }
 
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public InvalidAddressException(InvalidAddressException other) {
-	if (other.isSetMessage()) {
-	    this.message = other.message;
-	}
-	if (other.isSetAddress()) {
-	    this.address = new Address(other.address);
-	}
+    return true;
+  }
+
+  public int hashCode() {
+    return 0;
+  }
+
+  public int compareTo(Object otherObject) {
+    if (!getClass().equals(otherObject.getClass())) {
+      return getClass().getName().compareTo(otherObject.getClass().getName());
     }
 
-    public InvalidAddressException deepCopy() {
-	return new InvalidAddressException(this);
+    InvalidAddressException other = (InvalidAddressException)otherObject;    int lastComparison = 0;
+
+    lastComparison = TBaseHelper.compareTo(isSetMessage(), other.isSetMessage());
+    if (lastComparison != 0) {
+      return lastComparison;
     }
-
-    public void clear() {
-	this.message = null;
-	this.address = null;
+    if (isSetMessage()) {
+      lastComparison = TBaseHelper.compareTo(this.message, other.message);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
     }
-
-    public String getMessage() {
-	return this.message;
+    lastComparison = TBaseHelper.compareTo(isSetAddress(), other.isSetAddress());
+    if (lastComparison != 0) {
+      return lastComparison;
     }
-
-    public void setMessage(String message) {
-	this.message = message;
+    if (isSetAddress()) {
+      lastComparison = this.address.compareTo(other.address);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
     }
+    return 0;
+  }
 
-    public void unsetMessage() {
-	this.message = null;
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id) {
+        case 1: // MESSAGE
+          if (field.type == TType.STRING) {
+            this.message = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        case 2: // ADDRESS
+          if (field.type == TType.STRUCT) {
+            this.address = new Address();
+            this.address.read(iprot);
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
     }
+    iprot.readStructEnd();
+    validate();
+  }
 
-    /**
-     * Returns true if field message is set (has been assigned a value) and
-     * false otherwise
-     */
-    public boolean isSetMessage() {
-	return this.message != null;
+  public void write(TProtocol oprot) throws TException {
+    validate();
+
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.message != null) {
+      oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
+      oprot.writeString(this.message);
+      oprot.writeFieldEnd();
     }
-
-    public void setMessageIsSet(boolean value) {
-	if (!value) {
-	    this.message = null;
-	}
+    if (this.address != null) {
+      oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
+      this.address.write(oprot);
+      oprot.writeFieldEnd();
     }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
 
-    public Address getAddress() {
-	return this.address;
+  public String toString() {
+    StringBuffer sb = new StringBuffer("InvalidAddressException(");
+    boolean first = true;
+
+    sb.append("message:");
+    if (this.message == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.message);
     }
-
-    public void setAddress(Address address) {
-	this.address = address;
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("address:");
+    if (this.address == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.address);
     }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
 
-    public void unsetAddress() {
-	this.address = null;
-    }
-
-    /**
-     * Returns true if field address is set (has been assigned a value) and
-     * false otherwise
-     */
-    public boolean isSetAddress() {
-	return this.address != null;
-    }
-
-    public void setAddressIsSet(boolean value) {
-	if (!value) {
-	    this.address = null;
-	}
-    }
-
-    public boolean equals(Object that) {
-	if (that == null)
-	    return false;
-	if (that instanceof InvalidAddressException)
-	    return this.equals((InvalidAddressException) that);
-	return false;
-    }
-
-    public boolean equals(InvalidAddressException that) {
-	if (that == null)
-	    return false;
-
-	boolean this_present_message = true && this.isSetMessage();
-	boolean that_present_message = true && that.isSetMessage();
-	if (this_present_message || that_present_message) {
-	    if (!(this_present_message && that_present_message))
-		return false;
-	    if (!this.message.equals(that.message))
-		return false;
-	}
-
-	boolean this_present_address = true && this.isSetAddress();
-	boolean that_present_address = true && that.isSetAddress();
-	if (this_present_address || that_present_address) {
-	    if (!(this_present_address && that_present_address))
-		return false;
-	    if (!this.address.equals(that.address))
-		return false;
-	}
-
-	return true;
-    }
-
-    public int hashCode() {
-	return 0;
-    }
-
-    public int compareTo(Object otherObject) {
-	if (!getClass().equals(otherObject.getClass())) {
-	    return getClass().getName().compareTo(otherObject.getClass().getName());
-	}
-
-	InvalidAddressException other = (InvalidAddressException) otherObject;
-	int lastComparison = 0;
-
-	lastComparison = TBaseHelper.compareTo(isSetMessage(), other.isSetMessage());
-	if (lastComparison != 0) {
-	    return lastComparison;
-	}
-	if (isSetMessage()) {
-	    lastComparison = TBaseHelper.compareTo(this.message, other.message);
-	    if (lastComparison != 0) {
-		return lastComparison;
-	    }
-	}
-	lastComparison = TBaseHelper.compareTo(isSetAddress(), other.isSetAddress());
-	if (lastComparison != 0) {
-	    return lastComparison;
-	}
-	if (isSetAddress()) {
-	    lastComparison = this.address.compareTo(other.address);
-	    if (lastComparison != 0) {
-		return lastComparison;
-	    }
-	}
-	return 0;
-    }
-
-    public void read(TProtocol iprot) throws TException {
-	TField field;
-	iprot.readStructBegin();
-	while (true) {
-	    field = iprot.readFieldBegin();
-	    if (field.type == TType.STOP) {
-		break;
-	    }
-	    switch (field.id) {
-	    case 1: // MESSAGE
-		if (field.type == TType.STRING) {
-		    this.message = iprot.readString();
-		} else {
-		    TProtocolUtil.skip(iprot, field.type);
-		}
-		break;
-	    case 2: // ADDRESS
-		if (field.type == TType.STRUCT) {
-		    this.address = new Address();
-		    this.address.read(iprot);
-		} else {
-		    TProtocolUtil.skip(iprot, field.type);
-		}
-		break;
-	    default:
-		TProtocolUtil.skip(iprot, field.type);
-	    }
-	    iprot.readFieldEnd();
-	}
-	iprot.readStructEnd();
-	validate();
-    }
-
-    public void write(TProtocol oprot) throws TException {
-	validate();
-
-	oprot.writeStructBegin(STRUCT_DESC);
-	if (this.message != null) {
-	    oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
-	    oprot.writeString(this.message);
-	    oprot.writeFieldEnd();
-	}
-	if (this.address != null) {
-	    oprot.writeFieldBegin(ADDRESS_FIELD_DESC);
-	    this.address.write(oprot);
-	    oprot.writeFieldEnd();
-	}
-	oprot.writeFieldStop();
-	oprot.writeStructEnd();
-    }
-
-    public String toString() {
-	StringBuffer sb = new StringBuffer("InvalidAddressException(");
-	boolean first = true;
-
-	sb.append("message:");
-	if (this.message == null) {
-	    sb.append("null");
-	} else {
-	    sb.append(this.message);
-	}
-	first = false;
-	if (!first)
-	    sb.append(", ");
-	sb.append("address:");
-	if (this.address == null) {
-	    sb.append("null");
-	} else {
-	    sb.append(this.address);
-	}
-	first = false;
-	sb.append(")");
-	return sb.toString();
-    }
-
-    public void validate() throws TException {
-	// check for required fields
-    }
+  public void validate() throws TException {
+    // check for required fields
+  }
 
 }
+

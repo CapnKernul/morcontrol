@@ -1,15 +1,38 @@
 package com.bhrobotics.morcontrol;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 public class AsyncOIServer implements OIServer {
 
-    public void start() {
+    private Vector observers = new Vector();
 
+    private class UpdateThread implements Runnable {
+	
+	public void run() {
+	    
+	}
+	
+    }
+    
+    private class DeviceThread implements Runnable {
+
+	public void run() {
+	    
+	}
+	
+    }
+    
+    public AsyncOIServer() {
+	
+    }
+
+    public void start() {
+	
     }
 
     public void stop() {
-
+	
     }
 
     public boolean isRunning() {
@@ -17,17 +40,14 @@ public class AsyncOIServer implements OIServer {
     }
 
     public void addObserver(OIServerObserver observer) {
-	// TODO Auto-generated method stub
-
+	observers.addElement(observer);
     }
 
     public void removeObserver(OIServerObserver observer) {
-	// TODO Auto-generated method stub
-
+	observers.remove(observer);
     }
 
-    public Vector getObservers() {
-	// TODO Auto-generated method stub
-	return null;
+    public Enumeration getObservers() {
+	return observers.elements();
     }
 }

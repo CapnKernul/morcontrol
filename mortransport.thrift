@@ -8,6 +8,7 @@ enum RobotMode {
 
 
 enum DeviceType {
+  ROBOT,
   DIGITAL_INPUT,
   ANALOG_INPUT,
   ENCODER
@@ -54,7 +55,7 @@ service DeviceTransport {
   RobotMode getMode();
   void initializeEncoder(1:Address address, 2:Address addressOne, 3:Address addressTwo) throws (1:InvalidAddressException error);
   void updatePWM(1:Address address, 2:i32 state) throws (1:InvalidAddressException errorLocation, 2:InvalidStateException errorState);
-  void updateRelay(1:Address address, 2:RelayState state) throws (1:InvalidAddressException errorLocation, 2:InvalidStateException errorState);
+  void updateRelay(1:Address address, 2:RelayState state) throws (1:InvalidAddressException errorLocations);
   void updateSolenoid(1:Address address, 2:bool state) throws (1:InvalidAddressException error);
   i32 getPWM(1:Address address)  throws (1:InvalidAddressException error);
   RelayState getRelay(1:Address address)  throws (1:InvalidAddressException error);

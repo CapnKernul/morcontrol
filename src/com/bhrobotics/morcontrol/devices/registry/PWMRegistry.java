@@ -39,12 +39,12 @@ public class PWMRegistry extends BasicDeviceRegistry {
 	((PWM) index.getDeviceAt(address)).update(state);
     }
 
-    public double getPWM(Address address) throws InvalidAddressException {
+    public int getPWM(Address address) throws InvalidAddressException {
 	return ((PWM) index.getDeviceAt(address)).getState();
     }
 
-    public double[] getAllPWMs() {
-	double[] states = new double[getAllDevices().length];
+    public int[] getAllPWMs() {
+	int[] states = new int[getAllDevices().length];
 	for (int i = 0; i < getAllDevices().length; i++) {
 	    states[i] = ((PWM) getAllDevices()[i]).getState();
 	}

@@ -8,38 +8,37 @@ package com.bhrobotics.morcontrol.io;
 
 public class RobotMode implements org.apache.thrift.TEnum {
 
-    public static final RobotMode DISABLED = new RobotMode(0);
-    public static final RobotMode AUTONOMOUS = new RobotMode(1);
-    public static final RobotMode OPERATOR_CONTROL = new RobotMode(2);
+  public static final RobotMode DISABLED = new RobotMode(0);
+  public static final RobotMode AUTONOMOUS = new RobotMode(1);
+  public static final RobotMode OPERATOR_CONTROL = new RobotMode(2);
 
-    private final int value;
+  private final int value;
 
-    private RobotMode(int value) {
-	this.value = value;
+  private RobotMode(int value) {
+    this.value = value;
+  }
+
+  /**
+   * Get the integer value of this enum value, as defined in the Thrift IDL.
+   */
+  public int getValue() {
+    return value;
+  }
+
+  /**
+   * Find a the enum type by its integer value, as defined in the Thrift IDL.
+   * @return null if the value is not found.
+   */
+  public static RobotMode findByValue(int value) { 
+    switch (value) {
+      case 0:
+        return DISABLED;
+      case 1:
+        return AUTONOMOUS;
+      case 2:
+        return OPERATOR_CONTROL;
+      default:
+        return null;
     }
-
-    /**
-     * Get the integer value of this enum value, as defined in the Thrift IDL.
-     */
-    public int getValue() {
-	return value;
-    }
-
-    /**
-     * Find a the enum type by its integer value, as defined in the Thrift IDL.
-     * 
-     * @return null if the value is not found.
-     */
-    public static RobotMode findByValue(int value) {
-	switch (value) {
-	case 0:
-	    return DISABLED;
-	case 1:
-	    return AUTONOMOUS;
-	case 2:
-	    return OPERATOR_CONTROL;
-	default:
-	    return null;
-	}
-    }
+  }
 }

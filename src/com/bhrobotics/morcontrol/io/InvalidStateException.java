@@ -16,169 +16,169 @@ import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
 public class InvalidStateException extends Exception implements TBase {
-    private static final TStruct STRUCT_DESC = new TStruct("InvalidStateException");
+  private static final TStruct STRUCT_DESC = new TStruct("InvalidStateException");
 
-    private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short) 1);
+  private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short)1);
 
-    private String message;
+  private String message;
 
-    // isset id assignments
+  // isset id assignments
 
-    public InvalidStateException() {
+  public InvalidStateException() {
+  }
+
+  public InvalidStateException(
+    String message)
+  {
+    this();
+    this.message = message;
+  }
+
+  /**
+   * Performs a deep copy on <i>other</i>.
+   */
+  public InvalidStateException(InvalidStateException other) {
+    if (other.isSetMessage()) {
+      this.message = other.message;
+    }
+  }
+
+  public InvalidStateException deepCopy() {
+    return new InvalidStateException(this);
+  }
+
+  public void clear() {
+    this.message = null;
+  }
+
+  public String getMessage() {
+    return this.message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public void unsetMessage() {
+    this.message = null;
+  }
+
+  /** Returns true if field message is set (has been assigned a value) and false otherwise */
+  public boolean isSetMessage() {
+    return this.message != null;
+  }
+
+  public void setMessageIsSet(boolean value) {
+    if (!value) {
+      this.message = null;
+    }
+  }
+
+  public boolean equals(Object that) {
+    if (that == null)
+      return false;
+    if (that instanceof InvalidStateException)
+      return this.equals((InvalidStateException)that);
+    return false;
+  }
+
+  public boolean equals(InvalidStateException that) {
+    if (that == null)
+      return false;
+
+    boolean this_present_message = true && this.isSetMessage();
+    boolean that_present_message = true && that.isSetMessage();
+    if (this_present_message || that_present_message) {
+      if (!(this_present_message && that_present_message))
+        return false;
+      if (!this.message.equals(that.message))
+        return false;
     }
 
-    public InvalidStateException(String message) {
-	this();
-	this.message = message;
+    return true;
+  }
+
+  public int hashCode() {
+    return 0;
+  }
+
+  public int compareTo(Object otherObject) {
+    if (!getClass().equals(otherObject.getClass())) {
+      return getClass().getName().compareTo(otherObject.getClass().getName());
     }
 
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public InvalidStateException(InvalidStateException other) {
-	if (other.isSetMessage()) {
-	    this.message = other.message;
-	}
+    InvalidStateException other = (InvalidStateException)otherObject;    int lastComparison = 0;
+
+    lastComparison = TBaseHelper.compareTo(isSetMessage(), other.isSetMessage());
+    if (lastComparison != 0) {
+      return lastComparison;
     }
-
-    public InvalidStateException deepCopy() {
-	return new InvalidStateException(this);
+    if (isSetMessage()) {
+      lastComparison = TBaseHelper.compareTo(this.message, other.message);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
     }
+    return 0;
+  }
 
-    public void clear() {
-	this.message = null;
+  public void read(TProtocol iprot) throws TException {
+    TField field;
+    iprot.readStructBegin();
+    while (true)
+    {
+      field = iprot.readFieldBegin();
+      if (field.type == TType.STOP) { 
+        break;
+      }
+      switch (field.id) {
+        case 1: // MESSAGE
+          if (field.type == TType.STRING) {
+            this.message = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
+        default:
+          TProtocolUtil.skip(iprot, field.type);
+      }
+      iprot.readFieldEnd();
     }
+    iprot.readStructEnd();
+    validate();
+  }
 
-    public String getMessage() {
-	return this.message;
+  public void write(TProtocol oprot) throws TException {
+    validate();
+
+    oprot.writeStructBegin(STRUCT_DESC);
+    if (this.message != null) {
+      oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
+      oprot.writeString(this.message);
+      oprot.writeFieldEnd();
     }
+    oprot.writeFieldStop();
+    oprot.writeStructEnd();
+  }
 
-    public void setMessage(String message) {
-	this.message = message;
+  public String toString() {
+    StringBuffer sb = new StringBuffer("InvalidStateException(");
+    boolean first = true;
+
+    sb.append("message:");
+    if (this.message == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.message);
     }
+    first = false;
+    sb.append(")");
+    return sb.toString();
+  }
 
-    public void unsetMessage() {
-	this.message = null;
-    }
-
-    /**
-     * Returns true if field message is set (has been assigned a value) and
-     * false otherwise
-     */
-    public boolean isSetMessage() {
-	return this.message != null;
-    }
-
-    public void setMessageIsSet(boolean value) {
-	if (!value) {
-	    this.message = null;
-	}
-    }
-
-    public boolean equals(Object that) {
-	if (that == null)
-	    return false;
-	if (that instanceof InvalidStateException)
-	    return this.equals((InvalidStateException) that);
-	return false;
-    }
-
-    public boolean equals(InvalidStateException that) {
-	if (that == null)
-	    return false;
-
-	boolean this_present_message = true && this.isSetMessage();
-	boolean that_present_message = true && that.isSetMessage();
-	if (this_present_message || that_present_message) {
-	    if (!(this_present_message && that_present_message))
-		return false;
-	    if (!this.message.equals(that.message))
-		return false;
-	}
-
-	return true;
-    }
-
-    public int hashCode() {
-	return 0;
-    }
-
-    public int compareTo(Object otherObject) {
-	if (!getClass().equals(otherObject.getClass())) {
-	    return getClass().getName().compareTo(otherObject.getClass().getName());
-	}
-
-	InvalidStateException other = (InvalidStateException) otherObject;
-	int lastComparison = 0;
-
-	lastComparison = TBaseHelper.compareTo(isSetMessage(), other.isSetMessage());
-	if (lastComparison != 0) {
-	    return lastComparison;
-	}
-	if (isSetMessage()) {
-	    lastComparison = TBaseHelper.compareTo(this.message, other.message);
-	    if (lastComparison != 0) {
-		return lastComparison;
-	    }
-	}
-	return 0;
-    }
-
-    public void read(TProtocol iprot) throws TException {
-	TField field;
-	iprot.readStructBegin();
-	while (true) {
-	    field = iprot.readFieldBegin();
-	    if (field.type == TType.STOP) {
-		break;
-	    }
-	    switch (field.id) {
-	    case 1: // MESSAGE
-		if (field.type == TType.STRING) {
-		    this.message = iprot.readString();
-		} else {
-		    TProtocolUtil.skip(iprot, field.type);
-		}
-		break;
-	    default:
-		TProtocolUtil.skip(iprot, field.type);
-	    }
-	    iprot.readFieldEnd();
-	}
-	iprot.readStructEnd();
-	validate();
-    }
-
-    public void write(TProtocol oprot) throws TException {
-	validate();
-
-	oprot.writeStructBegin(STRUCT_DESC);
-	if (this.message != null) {
-	    oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
-	    oprot.writeString(this.message);
-	    oprot.writeFieldEnd();
-	}
-	oprot.writeFieldStop();
-	oprot.writeStructEnd();
-    }
-
-    public String toString() {
-	StringBuffer sb = new StringBuffer("InvalidStateException(");
-	boolean first = true;
-
-	sb.append("message:");
-	if (this.message == null) {
-	    sb.append("null");
-	} else {
-	    sb.append(this.message);
-	}
-	first = false;
-	sb.append(")");
-	return sb.toString();
-    }
-
-    public void validate() throws TException {
-	// check for required fields
-    }
+  public void validate() throws TException {
+    // check for required fields
+  }
 
 }
+

@@ -1,5 +1,6 @@
 package com.bhrobotics.morcontrol;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.thrift.TProcessor;
@@ -16,6 +17,6 @@ public interface OIServer {
 
     public abstract void removeObserver(OIServerObserver observer);
 
-    public abstract Vector getObservers();
+    public abstract Enumeration getObservers();
 
 }

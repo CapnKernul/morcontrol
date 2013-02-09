@@ -1,15 +1,23 @@
 package com.bhrobotics.morcontrol.devices.input;
 
+import java.util.Enumeration;
+
 import com.bhrobotics.morcontrol.devices.Address;
 import com.bhrobotics.morcontrol.devices.Device;
 import com.bhrobotics.morcontrol.devices.DeviceType;
+import com.bhrobotics.morcontrol.devices.tracking.BasicObservable;
+import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
+import com.bhrobotics.morcontrol.devices.tracking.Observable;
+import com.bhrobotics.morcontrol.devices.tracking.Tickable;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 
-public class AnalogInput implements Device {
+public class AnalogInput implements Device, Observable, Tickable {
     private Address address;
     private AnalogChannel input;
-
+    private BasicObservable observable = new BasicObservable();
+    private double savedState = 0.0;
+    
     public AnalogInput(Address address) {
 	this.address = address;
 	input = new AnalogChannel(address.getModule(), address.getChannel());
@@ -29,5 +37,20 @@ public class AnalogInput implements Device {
 
     public DeviceType getDeviceType() {
 	return DeviceType.ANALOG_INPUT;
+    }
+
+    public void tick() {
+	if(savedState != getState()) {
+	    observable.alertObservers(this);
+	}
+    }
+    
+    //Delegated methods
+    public void addObserver(DeviceObserver observer) {
+	observable.addObserver(observer);
+    }
+
+    public Enumeration getObservers() {
+	return observable.getObservers();
     }
 }
