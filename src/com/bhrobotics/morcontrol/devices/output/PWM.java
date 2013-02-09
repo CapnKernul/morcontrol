@@ -39,6 +39,6 @@ public class PWM implements Device {
     }
 
     public DeviceType getDeviceType() {
-	return DeviceType.MOTOR;
+	return DeviceType.PWM;
     }
 }
