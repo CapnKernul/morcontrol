@@ -13,44 +13,44 @@ import com.bhrobotics.morcontrol.devices.tracking.Tickable;
 import edu.wpi.first.wpilibj.AnalogChannel;
 
 public class AnalogInput implements Device, Observable, Tickable {
-    private Address address;
-    private AnalogChannel input;
-    private BasicObservable observable = new BasicObservable();
-    private double savedState = 0.0;
-    
-    public AnalogInput(Address address) {
-	this.address = address;
-	input = new AnalogChannel(address.getModule(), address.getChannel());
-    }
+	private Address address;
+	private AnalogChannel input;
+	private BasicObservable observable = new BasicObservable();
+	private double savedState = 0.0;
 
-    public Address getAddress() {
-	return address;
-    }
-
-    public double getState() {
-	return input.getVoltage();
-    }
-
-    public void reset() {
-	// Has no reset state
-    }
-
-    public DeviceType getDeviceType() {
-	return DeviceType.ANALOG_INPUT;
-    }
-
-    public void tick() {
-	if(savedState != getState()) {
-	    observable.alertObservers(this);
+	public AnalogInput(Address address) {
+		this.address = address;
+		input = new AnalogChannel(address.getModule(), address.getChannel());
 	}
-    }
-    
-    //Delegated methods
-    public void addObserver(DeviceObserver observer) {
-	observable.addObserver(observer);
-    }
 
-    public Enumeration getObservers() {
-	return observable.getObservers();
-    }
+	public Address getAddress() {
+		return address;
+	}
+
+	public double getState() {
+		return input.getVoltage();
+	}
+
+	public void reset() {
+		// Has no reset state
+	}
+
+	public DeviceType getDeviceType() {
+		return DeviceType.ANALOG_INPUT;
+	}
+
+	public void tick() {
+		if (savedState != getState()) {
+			observable.alertObservers(this);
+		}
+	}
+
+	// Delegated methods
+	public void addObserver(DeviceObserver observer) {
+		observable.addObserver(observer);
+	}
+
+	public Enumeration getObservers() {
+		return observable.getObservers();
+	}
 }

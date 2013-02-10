@@ -16,247 +16,250 @@ import org.apache.thrift.transport.*;
 import org.apache.thrift.protocol.*;
 
 public class InvalidCommandException extends Exception implements TBase {
-  private static final TStruct STRUCT_DESC = new TStruct("InvalidCommandException");
+	private static final TStruct STRUCT_DESC = new TStruct("InvalidCommandException");
 
-  private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short)1);
-  private static final TField COMMAND_FIELD_DESC = new TField("command", TType.I32, (short)2);
+	private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short) 1);
+	private static final TField COMMAND_FIELD_DESC = new TField("command", TType.I32, (short) 2);
 
-  private String message;
-  private EncoderCommand command;
+	private String message;
+	private EncoderCommand command;
 
-  // isset id assignments
+	// isset id assignments
 
-  public InvalidCommandException() {
-  }
+	public InvalidCommandException() {
+	}
 
-  public InvalidCommandException(
-    String message,
-    EncoderCommand command)
-  {
-    this();
-    this.message = message;
-    this.command = command;
-  }
+	public InvalidCommandException(String message, EncoderCommand command) {
+		this();
+		this.message = message;
+		this.command = command;
+	}
 
-  /**
-   * Performs a deep copy on <i>other</i>.
-   */
-  public InvalidCommandException(InvalidCommandException other) {
-    if (other.isSetMessage()) {
-      this.message = other.message;
-    }
-    if (other.isSetCommand()) {
-      this.command = other.command;
-    }
-  }
+	/**
+	 * Performs a deep copy on <i>other</i>.
+	 */
+	public InvalidCommandException(InvalidCommandException other) {
+		if (other.isSetMessage()) {
+			this.message = other.message;
+		}
+		if (other.isSetCommand()) {
+			this.command = other.command;
+		}
+	}
 
-  public InvalidCommandException deepCopy() {
-    return new InvalidCommandException(this);
-  }
+	public InvalidCommandException deepCopy() {
+		return new InvalidCommandException(this);
+	}
 
-  public void clear() {
-    this.message = null;
-    this.command = null;
-  }
+	public void clear() {
+		this.message = null;
+		this.command = null;
+	}
 
-  public String getMessage() {
-    return this.message;
-  }
+	public String getMessage() {
+		return this.message;
+	}
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-  public void unsetMessage() {
-    this.message = null;
-  }
+	public void unsetMessage() {
+		this.message = null;
+	}
 
-  /** Returns true if field message is set (has been assigned a value) and false otherwise */
-  public boolean isSetMessage() {
-    return this.message != null;
-  }
+	/**
+	 * Returns true if field message is set (has been assigned a value) and
+	 * false otherwise
+	 */
+	public boolean isSetMessage() {
+		return this.message != null;
+	}
 
-  public void setMessageIsSet(boolean value) {
-    if (!value) {
-      this.message = null;
-    }
-  }
+	public void setMessageIsSet(boolean value) {
+		if (!value) {
+			this.message = null;
+		}
+	}
 
-  /**
-   * 
-   * @see EncoderCommand
-   */
-  public EncoderCommand getCommand() {
-    return this.command;
-  }
+	/**
+	 * 
+	 * @see EncoderCommand
+	 */
+	public EncoderCommand getCommand() {
+		return this.command;
+	}
 
-  /**
-   * 
-   * @see EncoderCommand
-   */
-  public void setCommand(EncoderCommand command) {
-    this.command = command;
-  }
+	/**
+	 * 
+	 * @see EncoderCommand
+	 */
+	public void setCommand(EncoderCommand command) {
+		this.command = command;
+	}
 
-  public void unsetCommand() {
-    this.command = null;
-  }
+	public void unsetCommand() {
+		this.command = null;
+	}
 
-  /** Returns true if field command is set (has been assigned a value) and false otherwise */
-  public boolean isSetCommand() {
-    return this.command != null;
-  }
+	/**
+	 * Returns true if field command is set (has been assigned a value) and
+	 * false otherwise
+	 */
+	public boolean isSetCommand() {
+		return this.command != null;
+	}
 
-  public void setCommandIsSet(boolean value) {
-    if (!value) {
-      this.command = null;
-    }
-  }
+	public void setCommandIsSet(boolean value) {
+		if (!value) {
+			this.command = null;
+		}
+	}
 
-  public boolean equals(Object that) {
-    if (that == null)
-      return false;
-    if (that instanceof InvalidCommandException)
-      return this.equals((InvalidCommandException)that);
-    return false;
-  }
+	public boolean equals(Object that) {
+		if (that == null)
+			return false;
+		if (that instanceof InvalidCommandException)
+			return this.equals((InvalidCommandException) that);
+		return false;
+	}
 
-  public boolean equals(InvalidCommandException that) {
-    if (that == null)
-      return false;
+	public boolean equals(InvalidCommandException that) {
+		if (that == null)
+			return false;
 
-    boolean this_present_message = true && this.isSetMessage();
-    boolean that_present_message = true && that.isSetMessage();
-    if (this_present_message || that_present_message) {
-      if (!(this_present_message && that_present_message))
-        return false;
-      if (!this.message.equals(that.message))
-        return false;
-    }
+		boolean this_present_message = true && this.isSetMessage();
+		boolean that_present_message = true && that.isSetMessage();
+		if (this_present_message || that_present_message) {
+			if (!(this_present_message && that_present_message))
+				return false;
+			if (!this.message.equals(that.message))
+				return false;
+		}
 
-    boolean this_present_command = true && this.isSetCommand();
-    boolean that_present_command = true && that.isSetCommand();
-    if (this_present_command || that_present_command) {
-      if (!(this_present_command && that_present_command))
-        return false;
-      if (!this.command.equals(that.command))
-        return false;
-    }
+		boolean this_present_command = true && this.isSetCommand();
+		boolean that_present_command = true && that.isSetCommand();
+		if (this_present_command || that_present_command) {
+			if (!(this_present_command && that_present_command))
+				return false;
+			if (!this.command.equals(that.command))
+				return false;
+		}
 
-    return true;
-  }
+		return true;
+	}
 
-  public int hashCode() {
-    return 0;
-  }
+	public int hashCode() {
+		return 0;
+	}
 
-  public int compareTo(Object otherObject) {
-    if (!getClass().equals(otherObject.getClass())) {
-      return getClass().getName().compareTo(otherObject.getClass().getName());
-    }
+	public int compareTo(Object otherObject) {
+		if (!getClass().equals(otherObject.getClass())) {
+			return getClass().getName().compareTo(otherObject.getClass().getName());
+		}
 
-    InvalidCommandException other = (InvalidCommandException)otherObject;    int lastComparison = 0;
+		InvalidCommandException other = (InvalidCommandException) otherObject;
+		int lastComparison = 0;
 
-    lastComparison = TBaseHelper.compareTo(isSetMessage(), other.isSetMessage());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetMessage()) {
-      lastComparison = TBaseHelper.compareTo(this.message, other.message);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = TBaseHelper.compareTo(isSetCommand(), other.isSetCommand());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetCommand()) {
-      lastComparison = TBaseHelper.compareTo(this.command, other.command);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    return 0;
-  }
+		lastComparison = TBaseHelper.compareTo(isSetMessage(), other.isSetMessage());
+		if (lastComparison != 0) {
+			return lastComparison;
+		}
+		if (isSetMessage()) {
+			lastComparison = TBaseHelper.compareTo(this.message, other.message);
+			if (lastComparison != 0) {
+				return lastComparison;
+			}
+		}
+		lastComparison = TBaseHelper.compareTo(isSetCommand(), other.isSetCommand());
+		if (lastComparison != 0) {
+			return lastComparison;
+		}
+		if (isSetCommand()) {
+			lastComparison = TBaseHelper.compareTo(this.command, other.command);
+			if (lastComparison != 0) {
+				return lastComparison;
+			}
+		}
+		return 0;
+	}
 
-  public void read(TProtocol iprot) throws TException {
-    TField field;
-    iprot.readStructBegin();
-    while (true)
-    {
-      field = iprot.readFieldBegin();
-      if (field.type == TType.STOP) { 
-        break;
-      }
-      switch (field.id) {
-        case 1: // MESSAGE
-          if (field.type == TType.STRING) {
-            this.message = iprot.readString();
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        case 2: // COMMAND
-          if (field.type == TType.I32) {
-            this.command = EncoderCommand.findByValue(iprot.readI32());
-          } else { 
-            TProtocolUtil.skip(iprot, field.type);
-          }
-          break;
-        default:
-          TProtocolUtil.skip(iprot, field.type);
-      }
-      iprot.readFieldEnd();
-    }
-    iprot.readStructEnd();
-    validate();
-  }
+	public void read(TProtocol iprot) throws TException {
+		TField field;
+		iprot.readStructBegin();
+		while (true) {
+			field = iprot.readFieldBegin();
+			if (field.type == TType.STOP) {
+				break;
+			}
+			switch (field.id) {
+			case 1: // MESSAGE
+				if (field.type == TType.STRING) {
+					this.message = iprot.readString();
+				} else {
+					TProtocolUtil.skip(iprot, field.type);
+				}
+				break;
+			case 2: // COMMAND
+				if (field.type == TType.I32) {
+					this.command = EncoderCommand.findByValue(iprot.readI32());
+				} else {
+					TProtocolUtil.skip(iprot, field.type);
+				}
+				break;
+			default:
+				TProtocolUtil.skip(iprot, field.type);
+			}
+			iprot.readFieldEnd();
+		}
+		iprot.readStructEnd();
+		validate();
+	}
 
-  public void write(TProtocol oprot) throws TException {
-    validate();
+	public void write(TProtocol oprot) throws TException {
+		validate();
 
-    oprot.writeStructBegin(STRUCT_DESC);
-    if (this.message != null) {
-      oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
-      oprot.writeString(this.message);
-      oprot.writeFieldEnd();
-    }
-    if (this.command != null) {
-      oprot.writeFieldBegin(COMMAND_FIELD_DESC);
-      oprot.writeI32(this.command.getValue());
-      oprot.writeFieldEnd();
-    }
-    oprot.writeFieldStop();
-    oprot.writeStructEnd();
-  }
+		oprot.writeStructBegin(STRUCT_DESC);
+		if (this.message != null) {
+			oprot.writeFieldBegin(MESSAGE_FIELD_DESC);
+			oprot.writeString(this.message);
+			oprot.writeFieldEnd();
+		}
+		if (this.command != null) {
+			oprot.writeFieldBegin(COMMAND_FIELD_DESC);
+			oprot.writeI32(this.command.getValue());
+			oprot.writeFieldEnd();
+		}
+		oprot.writeFieldStop();
+		oprot.writeStructEnd();
+	}
 
-  public String toString() {
-    StringBuffer sb = new StringBuffer("InvalidCommandException(");
-    boolean first = true;
+	public String toString() {
+		StringBuffer sb = new StringBuffer("InvalidCommandException(");
+		boolean first = true;
 
-    sb.append("message:");
-    if (this.message == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.message);
-    }
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("command:");
-    if (this.command == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.command);
-    }
-    first = false;
-    sb.append(")");
-    return sb.toString();
-  }
+		sb.append("message:");
+		if (this.message == null) {
+			sb.append("null");
+		} else {
+			sb.append(this.message);
+		}
+		first = false;
+		if (!first)
+			sb.append(", ");
+		sb.append("command:");
+		if (this.command == null) {
+			sb.append("null");
+		} else {
+			sb.append(this.command);
+		}
+		first = false;
+		sb.append(")");
+		return sb.toString();
+	}
 
-  public void validate() throws TException {
-    // check for required fields
-  }
+	public void validate() throws TException {
+		// check for required fields
+	}
 
 }
-

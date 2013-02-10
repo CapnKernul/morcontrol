@@ -6,9 +6,9 @@ import java.util.Vector;
 import com.bhrobotics.morcontrol.devices.Device;
 
 public interface Observable {
-    
-    public void addObserver(DeviceObserver observer);
 
-    public Enumeration getObservers();
-    
+	public void addObserver(DeviceObserver observer);
+
+	public Enumeration getObservers();
+
 }

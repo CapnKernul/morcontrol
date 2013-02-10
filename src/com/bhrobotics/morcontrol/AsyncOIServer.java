@@ -5,49 +5,44 @@ import java.util.Vector;
 
 public class AsyncOIServer implements OIServer {
 
-    private Vector observers = new Vector();
+	private Vector observers = new Vector();
 
-    private class UpdateThread implements Runnable {
-	
-	public void run() {
-	    
+	private static class ServiceThread implements Runnable {
+		private  Processor processor
+		
+		public ServiceThread(Processor processor)
+		
+		public void run() {
+			
+		}
+
 	}
 	
-    }
-    
-    private class DeviceThread implements Runnable {
-
-	public void run() {
-	    
+	public AsyncOIServer() {
+		
 	}
-	
-    }
-    
-    public AsyncOIServer() {
-	
-    }
 
-    public void start() {
-	
-    }
+	public void start() {
 
-    public void stop() {
-	
-    }
+	}
 
-    public boolean isRunning() {
-	return false;
-    }
+	public void stop() {
 
-    public void addObserver(OIServerObserver observer) {
-	observers.addElement(observer);
-    }
+	}
 
-    public void removeObserver(OIServerObserver observer) {
-	observers.remove(observer);
-    }
+	public boolean isRunning() {
+		return false;
+	}
 
-    public Enumeration getObservers() {
-	return observers.elements();
-    }
+	public void addObserver(OIServerObserver observer) {
+		observers.addElement(observer);
+	}
+
+	public void removeObserver(OIServerObserver observer) {
+		observers.remove(observer);
+	}
+
+	public Enumeration getObservers() {
+		return observers.elements();
+	}
 }

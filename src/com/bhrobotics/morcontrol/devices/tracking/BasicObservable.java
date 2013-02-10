@@ -7,22 +7,22 @@ import java.util.Vector;
 import com.bhrobotics.morcontrol.devices.Device;
 
 public class BasicObservable implements Observable {
-    
-    private Vector observers = new Vector();
 
-    public Enumeration getObservers() {
-	return observers.elements();
-    }
+	private Vector observers = new Vector();
 
-    public void addObserver(DeviceObserver observer) {
-	observers.add(observer);
-    }
-    
-    public void alertObservers(Device device) {
-	Enumeration e = getObservers();
-	while(e.hasMoreElements()) {
-	    DeviceObserver tockable = (DeviceObserver)e.nextElement();
-	    tockable.call(device);
+	public Enumeration getObservers() {
+		return observers.elements();
 	}
-    }
+
+	public void addObserver(DeviceObserver observer) {
+		observers.add(observer);
+	}
+
+	public void alertObservers(Device device) {
+		Enumeration e = getObservers();
+		while (e.hasMoreElements()) {
+			DeviceObserver tockable = (DeviceObserver) e.nextElement();
+			tockable.call(device);
+		}
+	}
 }

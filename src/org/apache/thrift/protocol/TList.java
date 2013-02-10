@@ -24,14 +24,14 @@ package org.apache.thrift.protocol;
  * 
  */
 public class TList {
-    public TList() {
-    }
+	public TList() {
+	}
 
-    public TList(byte t, int s) {
-	elemType = t;
-	size = s;
-    }
+	public TList(byte t, int s) {
+		elemType = t;
+		size = s;
+	}
 
-    public byte elemType = TType.STOP;
-    public int size = 0;
+	public byte elemType = TType.STOP;
+	public int size = 0;
 }
