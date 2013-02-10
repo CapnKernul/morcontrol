@@ -65,4 +65,16 @@ public class Converter {
 	public static com.bhrobotics.morcontrol.devices.InvalidAddressException convertInvalidAddressException(InvalidAddressException e) {
 		return new com.bhrobotics.morcontrol.devices.InvalidAddressException(e.getMessage(), convertAddress(e.getAddress()));
 	}
+
+	public static DeviceType convertDeviceType(com.bhrobotics.morcontrol.devices.DeviceType device) {
+		if(device == com.bhrobotics.morcontrol.devices.DeviceType.ANALOG_INPUT) {
+			return DeviceType.ANALOG_INPUT;
+		} else if(device == com.bhrobotics.morcontrol.devices.DeviceType.DIGITAL_INPUT) {
+			return DeviceType.DIGITAL_INPUT;
+		} else if(device == com.bhrobotics.morcontrol.devices.DeviceType.ENCODER) {
+			return DeviceType.ENCODER;
+		} else {
+			return DeviceType.ROBOT;
+		}
+	}
 }

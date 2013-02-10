@@ -2,9 +2,11 @@ package com.bhrobotics.morcontrol.io;
 
 import java.util.Vector;
 
+import com.bhrobotics.morcontrol.devices.Device;
+import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
 import com.bhrobotics.morcontrol.util.concurrent.ReentrantLock;
 
-public class Mailbox {
+public class Mailbox implements DeviceObserver {
 	private Vector mailbox = new Vector();
 	private ReentrantLock lock = new ReentrantLock();
 
@@ -16,7 +18,7 @@ public class Mailbox {
 
 	public Event shift() {
 		lock.lock();
-		Event event = (Event) mailbox.remove(0);
+		Event event = (Event)mailbox.remove(0);
 		lock.unlock();
 		return event;
 	}
@@ -29,5 +31,9 @@ public class Mailbox {
 
 	public boolean isEmpty() {
 		return mailbox.isEmpty();
+	}
+
+	public void call(Device device) {
+		addEvent(new Event(Converter.convertDeviceType(device.getDeviceType()), Converter.convertAddress(device.getAddress())));
 	}
 }

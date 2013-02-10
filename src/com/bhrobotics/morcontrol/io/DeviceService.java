@@ -5,6 +5,7 @@ import org.apache.thrift.TException;
 import com.bhrobotics.morcontrol.Robot;
 import com.bhrobotics.morcontrol.devices.input.Encoder;
 import com.bhrobotics.morcontrol.devices.registry.AnalogInputRegistry;
+import com.bhrobotics.morcontrol.devices.registry.DeviceRegistry;
 import com.bhrobotics.morcontrol.devices.registry.DigitalInputRegistry;
 import com.bhrobotics.morcontrol.devices.registry.EncoderRegistry;
 import com.bhrobotics.morcontrol.devices.registry.PWMRegistry;
@@ -12,6 +13,7 @@ import com.bhrobotics.morcontrol.devices.registry.RelayRegistry;
 import com.bhrobotics.morcontrol.devices.registry.SolenoidRegistry;
 
 public class DeviceService implements DeviceTransport.Iface {
+
 	private Robot robot;
 	private AnalogInputRegistry analogInputs;
 	private DigitalInputRegistry digitalInputs;
@@ -20,14 +22,14 @@ public class DeviceService implements DeviceTransport.Iface {
 	private RelayRegistry relays;
 	private SolenoidRegistry solenoids;
 
-	public DeviceService(Robot robot, AnalogInputRegistry analogInputs, DigitalInputRegistry digitalInputs, EncoderRegistry encoders, PWMRegistry pwms, RelayRegistry relays, SolenoidRegistry solenoids) {
+	public DeviceService(Robot robot, DeviceRegistry registry) {
 		this.robot = robot;
-		this.analogInputs = analogInputs;
-		this.digitalInputs = digitalInputs;
-		this.encoders = encoders;
-		this.pwms = pwms;
-		this.relays = relays;
-		this.solenoids = solenoids;
+		this.analogInputs = registry.getAnalogInputs();
+		this.digitalInputs = registry.getDigitalInputs();
+		this.encoders = registry.getEncoders();
+		this.pwms = registry.getPWMs();
+		this.relays = registry.getRelays();
+		this.solenoids = registry.getSolenoids();
 	}
 
 	public RobotMode getMode() throws TException {
