@@ -23,45 +23,28 @@ public class AsyncOIServer implements OIServer {
 
 	private Vector observers = new Vector();
 	private int port;
-	private AsyncServerThread deviceThread;
-	private AsyncServerThread updateThread;
-	private DeviceTransport.Processor deviceProcessor;
-	private UpdateTransport.Processor updateProcessor;
-	private ServerSocketConnection deviceSocket;
-	private ServerSocketConnection updateSocket;
+	private Robot robot;
+	private DeviceRegistry registry;
+	private Mailbox mailbox;
 
-	public AsyncOIServer(Robot robot, DeviceRegistry registry, Mailbox mailbox) {
-		this(1515, robot, registry, mailbox);
+	public AsyncOIServer(Robot robot, DeviceRegistry registry, TProcessor processor) {
+		this(1515, robot, registry);
 	}
 
 	public AsyncOIServer(int port, Robot robot, DeviceRegistry registry, Mailbox mailbox) {
-		this.port = port;
-		deviceProcessor = new DeviceTransport.Processor(new DeviceService(robot, registry));
-		updateProcessor = new UpdateTransport.Processor(new UpdateService(mailbox));
-	}
-
-	public void start() {
-		try {
-			deviceSocket = (ServerSocketConnection) Connector.open("socket://:" + port);
-			Logger.defaultLogger.info("Socket opened at " + port + ".");
-			updateSocket = (ServerSocketConnection) Connector.open("socket://:" + (port++));
-			Logger.defaultLogger.info("Socket opened at " + (port + 1) + ".");
-			waitForConnection();
-			
-			waitFor
-		} catch (IOException e) {
-			Logger.defaultLogger.error("Failed to open both sockets");
-		}
-	}
-
-	private void waitForConnection() {
-		deviceThread = new AsyncServerThread(deviceProcessor, deviceSocket);
-		deviceThread.start();
-		updateThread = new AsyncServerThread(updateProcessor, updateSocket);
-		updateThread.start();
-		while(deviceThread.getThreadState() == ThreadState.CONNECTING && updateThread.getThreadState() == ThreadState.CONNECTING) { 
-			Thread.yield(); 
-		}
+	this.mailbox = mailbox;
+	TProcessor deviceProcessor = new DeviceTransport.Processor(new DeviceService(robot, registry));
+	TProcessor updateProcessor = new UpdateTransport.Processor(new UpdateService(mailbox));
+	try {
+	    ServerSocketConnection deviceSocket = (ServerSocketConnection)Connector.open("socket://:" + port);
+	    ServerSocketConnection updateSocket = (ServerSocketConnection)Connector.open("socket://:" + (port++));
+	    AsyncThread deviceThread = new AsyncThread(deviceProcessor, deviceSocket);
+	    AsyncThread updateThread = new AsyncThread(updateProcessor, updateSocket);
+	    deviceThread.start();
+	    updateThread.start();
+	    
+	} catch (IOException e) {
+	    Logger.defaultLogger.error("Failed to open a socket.");
 	}
 
 	private waitForDisconnect() {

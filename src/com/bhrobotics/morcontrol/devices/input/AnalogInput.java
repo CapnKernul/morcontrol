@@ -13,6 +13,7 @@ import com.bhrobotics.morcontrol.devices.tracking.Tickable;
 import edu.wpi.first.wpilibj.AnalogChannel;
 
 public class AnalogInput implements Device, Observable, Tickable {
+
 	private Address address;
 	private AnalogChannel input;
 	private BasicObservable observable = new BasicObservable();
@@ -41,6 +42,7 @@ public class AnalogInput implements Device, Observable, Tickable {
 
 	public void tick() {
 		if (savedState != getState()) {
+			savedState = getState();
 			observable.alertObservers(this);
 		}
 	}

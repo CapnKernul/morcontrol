@@ -8,44 +8,36 @@ import com.bhrobotics.morcontrol.devices.Device;
 import com.bhrobotics.morcontrol.devices.InvalidAddressException;
 import com.bhrobotics.morcontrol.devices.input.DigitalInput;
 import com.bhrobotics.morcontrol.devices.input.Encoder;
+import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
+import com.bhrobotics.morcontrol.devices.tracking.Ticker;
+import com.bhrobotics.morcontrol.io.Mailbox;
 import com.bhrobotics.morcontrol.util.collections.HashMap;
-import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class EncoderRegistry implements Registry {
-	private DigitalInputRegistry registry;
 	private HashMap encoders = new HashMap();
 	private Vector usedDigitalInputs = new Vector();
+	private DeviceObserver mailbox;
+	private Ticker ticker;
 
-	public EncoderRegistry(DigitalInputRegistry registry, ModuleMapping mapping) {
-		this.registry = registry;
-		Logger.defaultLogger.debug("initialized " + getAllDevices().length + " encoders.");
+	public EncoderRegistry(DeviceObserver mailboxe, Ticker ticker) {
+		mailbox = mailboxe;
+		this.ticker = ticker;
 	}
 
-	public Type getType() {
-		return Registry.Type.ENCODER;
-	}
-
-	public int getChannelsPerModule() {
-		return 7;
-	}
-
-	public Encoder initializeEncoder(Address address, Address inputOne, Address inputTwo) throws InvalidAddressException {
-		DigitalInput deviceOne = (DigitalInput) registry.getDevice(inputOne);
-		DigitalInput deviceTwo = (DigitalInput) registry.getDevice(inputTwo);
-
+	public void initializeEncoder(Address address, DigitalInput inputOne, DigitalInput inputTwo) throws InvalidAddressException {
 		if (encoders.containsKey(address))
 			throw new InvalidAddressException(address);
-		if (usedDigitalInputs.contains(deviceOne))
-			throw new InvalidAddressException(inputOne);
-		if (usedDigitalInputs.contains(deviceTwo))
-			throw new InvalidAddressException(inputTwo);
+		if (usedDigitalInputs.contains(inputOne))
+			throw new InvalidAddressException(inputOne.getAddress());
+		if (usedDigitalInputs.contains(inputTwo))
+			throw new InvalidAddressException(inputTwo.getAddress());
 
-		usedDigitalInputs.addElement(deviceOne);
-		usedDigitalInputs.addElement(deviceTwo);
-		Encoder encoder = new Encoder(address, deviceOne, deviceTwo);
+		usedDigitalInputs.addElement(inputOne);
+		usedDigitalInputs.addElement(inputTwo);
+		Encoder encoder = new Encoder(address, inputOne, inputTwo);
+		encoder.addObserver(mailbox);
+		ticker.addTickable(encoder);
 		encoders.put(address, encoder);
-
-		return encoder;
 	}
 
 	public Device getDevice(Address address) throws InvalidAddressException {
@@ -55,15 +47,8 @@ public class EncoderRegistry implements Registry {
 		throw new InvalidAddressException(address);
 	}
 
-	public Device[] getAllDevices() {
-		Device[] devices = new Device[encoders.size()];
-		Enumeration e = encoders.values();
-		int count = 0;
-		while (e.hasMoreElements()) {
-			devices[count] = (Device) e.nextElement();
-			count++;
-		}
-		return devices;
+	public Enumeration getAllDevices() {
+		return encoders.keys();
 	}
 
 	public void reset() {

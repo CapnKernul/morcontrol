@@ -48,6 +48,7 @@ public class Encoder implements Device, Observable, Tickable {
 
 	public void tick() {
 		if (savedCountState != getCount()) {
+			savedCountState = getCount();
 			observable.alertObservers(this);
 		}
 	}
