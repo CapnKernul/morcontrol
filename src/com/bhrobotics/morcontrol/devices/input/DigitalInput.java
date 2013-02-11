@@ -43,6 +43,7 @@ public class DigitalInput implements Device, Observable, Tickable {
     
     public void tick() {
 	if(savedState != getState()) {
+	    savedState = getState();
 	    observable.alertObservers(this);
 	}
     }

@@ -1,16 +1,5 @@
 package com.bhrobotics.morcontrol;
 
-import java.io.IOException;
-
-import com.bhrobotics.morcontrol.devices.registry.AnalogInputRegistry;
-import com.bhrobotics.morcontrol.devices.registry.DigitalInputRegistry;
-import com.bhrobotics.morcontrol.devices.registry.EncoderRegistry;
-import com.bhrobotics.morcontrol.devices.registry.ModuleMapping;
-import com.bhrobotics.morcontrol.devices.registry.PWMRegistry;
-import com.bhrobotics.morcontrol.devices.registry.RelayRegistry;
-import com.bhrobotics.morcontrol.devices.registry.SolenoidRegistry;
-import com.bhrobotics.morcontrol.io.RuntimeIOException;
-
 import edu.wpi.first.wpilibj.SimpleRobot;
 
 public class RobotMIDlet extends SimpleRobot {
@@ -18,15 +7,6 @@ public class RobotMIDlet extends SimpleRobot {
     // private CompetitionRobot competitionRobot;
 
     public void robotInit() {
-	ModuleMapping mapping = ModuleMapping.getInstance();
-	System.out.println(mapping.getAnalogModuleCount() + " " + mapping.getDigitalModuleCount() + " " + mapping.getSolenoidModuleCount());
-	AnalogInputRegistry analogRegistry = new AnalogInputRegistry(mapping);
-	DigitalInputRegistry digitalRegistry = new DigitalInputRegistry(mapping);
-	EncoderRegistry encoderRegistry = new EncoderRegistry(digitalRegistry, mapping);
-	PWMRegistry pwmsRegistry = new PWMRegistry(mapping);
-	SolenoidRegistry solenoidRegistry = new SolenoidRegistry(mapping);
-	RelayRegistry relayRegistry = new RelayRegistry(mapping);
-
 	// try {
 	// oIServer = new SimpleOIServer(competitionRobot);
 	// } catch (IOException e) {

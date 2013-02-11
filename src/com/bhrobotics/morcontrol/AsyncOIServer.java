@@ -20,18 +20,15 @@ import com.bhrobotics.morcontrol.util.logger.Logger;
 
 
 public class AsyncOIServer implements OIServer {
-
+    
     private Vector observers = new Vector();
     private int port;
     private Robot robot;
     private DeviceRegistry registry;
     private Mailbox mailbox;
-    private AsyncThread deviceThread;
-    private AsyncThread updateThread;
-    
 
-    public AsyncOIServer(Robot robot, DeviceRegistry registry, Mailbox mailbox) {
-	this(1515, robot, registry, mailbox);
+    public AsyncOIServer(Robot robot, DeviceRegistry registry, TProcessor processor) {
+	this(1515, robot, registry);
     }
 
     public AsyncOIServer(int port, Robot robot, DeviceRegistry registry, Mailbox mailbox) {
