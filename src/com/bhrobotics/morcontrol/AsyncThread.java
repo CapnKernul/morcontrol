@@ -10,6 +10,7 @@ import javax.microedition.io.SocketConnection;
 import org.apache.thrift.TException;
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TIOStreamTransport;
 
 import com.bhrobotics.morcontrol.io.ThreadState;
@@ -17,10 +18,9 @@ import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class AsyncThread extends Thread {
 
-    private ThreadState threadState = ThreadState.RUNNING;
     private TProcessor processor;
-    private boolean connected = false;
     private ServerSocketConnection socket;
+    private ThreadStateHolder holder = new ThreadStateHolder();
 
     public AsyncThread(TProcessor processor, ServerSocketConnection socket) {
 	this.processor = processor;
@@ -29,50 +29,37 @@ public class AsyncThread extends Thread {
 
     public void run() {
 	try {
-	    SocketConnection connection = (SocketConnection)socket.acceptAndOpen();
-	    InputStream in = connection.openInputStream();
-	    OutputStream out = connection.openOutputStream();
-	    TIOStreamTransport transport = new TIOStreamTransport(in, out);
-	    TBinaryProtocol protocol = new TBinaryProtocol(transport);
-	    
-	    while (!Thread.interrupted()) {
-		if (threadState == ThreadState.RUNNING) {
-		    processor.process(protocol, protocol);
-		} else if (threadState == ThreadState.DEAD) {
-		    Thread.currentThread().interrupt();
+	    holder.setState(ThreadState.CONNECTING);
+	    TProtocol protocol = waitForConnection();
+	    holder.setState(ThreadState.READY);
+	    while(!Thread.interrupted()) {
+		ThreadState state = holder.getState();
+		if(state == ThreadState.DEAD) {
+		   Thread.currentThread().interrupt(); 
+		} else if(state == ThreadState.RUNNING) {
+		    process(protocol);
 		}
-		Thread.yield();
 	    }
-	} catch (TException e) {
-	    Logger.defaultLogger.error(e.getMessage());
-	    kill();
 	} catch (IOException e) {
-	    Logger.defaultLogger.error("ServerSocket failed");
-	    kill();
+	    Logger.defaultLogger.error("Could not open connection on a port");
+	} catch (TException e) {
+	    holder.setState(ThreadState.DEAD);
 	}
     }
 
-    public ThreadState getThreadState() {
-	return threadState;
+    public TProtocol waitForConnection() throws IOException {
+	SocketConnection connection = (SocketConnection)socket.acceptAndOpen();
+	InputStream in = connection.openInputStream();
+	OutputStream out = connection.openOutputStream();
+	TIOStreamTransport transport = new TIOStreamTransport(in, out);
+	return new TBinaryProtocol(transport);
     }
 
-    public boolean isConnected() {
-	return connected;
+    public void process(TProtocol protocol) throws TException {
+	processor.process(protocol, protocol);	
     }
 
-    public void setThreadState(ThreadState threadState) {
-	this.threadState = threadState;
-    }
-
-    public void kill() {
-	threadState = ThreadState.DEAD;
-    } 
-
-    public void pause() {
-	threadState = ThreadState.PAUSED;
-    }
-
-    public void unpause() {
-	threadState = ThreadState.RUNNING;
+    public ThreadStateHolder getThreadStateHolder() {
+	return holder;
     }
 }

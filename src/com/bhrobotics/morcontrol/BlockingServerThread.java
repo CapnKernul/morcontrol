@@ -43,7 +43,7 @@ public class BlockingServerThread extends Thread {
     }
 
     private void oiConnected() {
-	Enumeration e = oIServer.getObservers().elements();
+	Enumeration e = oIServer.getObservers();
 	while (e.hasMoreElements()) {
 	    OIServerObserver observer = (OIServerObserver) e.nextElement();
 	    observer.oiConnected();
@@ -57,7 +57,7 @@ public class BlockingServerThread extends Thread {
     }
 
     private void oiDisconnected() {
-	Enumeration e = oIServer.getObservers().elements();
+	Enumeration e = oIServer.getObservers();
 	while (e.hasMoreElements()) {
 	    OIServerObserver observer = (OIServerObserver) e.nextElement();
 	    observer.oiDisconnected();
