@@ -43,12 +43,20 @@ public class BlockingServerThread extends Thread {
 		}
 	}
 
+<<<<<<< HEAD
 	private void oiConnected() {
 		Enumeration e = oIServer.getObservers();
 		while (e.hasMoreElements()) {
 			OIServerObserver observer = (OIServerObserver) e.nextElement();
 			observer.oiConnected();
 		}
+=======
+    private void oiConnected() {
+	Enumeration e = oIServer.getObservers();
+	while (e.hasMoreElements()) {
+	    OIServerObserver observer = (OIServerObserver) e.nextElement();
+	    observer.oiConnected();
+>>>>>>> 9ef8647b57bac198da7b2631bb34a64765ebb612
 	}
 
 	private void processLoop(TProcessor processor, TProtocol protocol) throws TException {
@@ -57,11 +65,19 @@ public class BlockingServerThread extends Thread {
 		}
 	}
 
+<<<<<<< HEAD
 	private void oiDisconnected() {
 		Enumeration e = oIServer.getObservers();
 		while (e.hasMoreElements()) {
 			OIServerObserver observer = (OIServerObserver) e.nextElement();
 			observer.oiDisconnected();
 		}
+=======
+    private void oiDisconnected() {
+	Enumeration e = oIServer.getObservers();
+	while (e.hasMoreElements()) {
+	    OIServerObserver observer = (OIServerObserver) e.nextElement();
+	    observer.oiDisconnected();
+>>>>>>> 9ef8647b57bac198da7b2631bb34a64765ebb612
 	}
 }

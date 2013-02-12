@@ -9,59 +9,84 @@ import javax.microedition.io.ServerSocketConnection;
 
 import org.apache.thrift.TProcessor;
 
-import com.bhrobotics.morcontrol.devices.registry.DeviceRegistry;
-import com.bhrobotics.morcontrol.io.DeviceService;
-import com.bhrobotics.morcontrol.io.DeviceTransport;
-import com.bhrobotics.morcontrol.io.DeviceTransport.Processor;
-import com.bhrobotics.morcontrol.io.Mailbox;
 import com.bhrobotics.morcontrol.io.ThreadState;
-import com.bhrobotics.morcontrol.io.UpdateService;
-import com.bhrobotics.morcontrol.io.UpdateTransport;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class AsyncOIServer implements OIServer {
 
 	private Vector observers = new Vector();
-	private int port;
-	private Robot robot;
-	private DeviceRegistry registry;
-	private Mailbox mailbox;
+	private AsyncThread thread;
+	private TProcessor deviceProcessor;
+	private TProcessor updateProcessor;
+	private ServerSocketConnection deviceSocket;
+	private ServerSocketConnection updateSocket;
 
-	public AsyncOIServer(Robot robot, DeviceRegistry registry, TProcessor processor) {
-		this(1515, robot, registry);
+	private ThreadStateHolder deviceThreadState;
+	private ThreadStateHolder updateThreadState;
+	private MonitorThread monitorThread;
+
+	private class MonitorThread extends Thread {
+		public void run() {
+			while (!Thread.interrupted()) {
+				waitForConnection();
+				waitForDisconnect();
+			}
+		}
 	}
 
-	public AsyncOIServer(int port, Robot robot, DeviceRegistry registry, Mailbox mailbox) {
-	this.mailbox = mailbox;
-	TProcessor deviceProcessor = new DeviceTransport.Processor(new DeviceService(robot, registry));
-	TProcessor updateProcessor = new UpdateTransport.Processor(new UpdateService(mailbox));
-	try {
-	    ServerSocketConnection deviceSocket = (ServerSocketConnection)Connector.open("socket://:" + port);
-	    ServerSocketConnection updateSocket = (ServerSocketConnection)Connector.open("socket://:" + (port++));
-	    AsyncThread deviceThread = new AsyncThread(deviceProcessor, deviceSocket);
-	    AsyncThread updateThread = new AsyncThread(updateProcessor, updateSocket);
-	    deviceThread.start();
-	    updateThread.start();
-	    
-	} catch (IOException e) {
-	    Logger.defaultLogger.error("Failed to open a socket.");
+	public AsyncOIServer(TProcessor deviceProcessor, TProcessor updateProcessor, int port) {
+		this.deviceProcessor = deviceProcessor;
+		this.updateProcessor = updateProcessor;
+		try {
+			deviceSocket = (ServerSocketConnection) Connector.open("socket://:" + port);
+			updateSocket = (ServerSocketConnection) Connector.open("socket://:" + (port + 1));
+		} catch (IOException e) {
+			Logger.defaultLogger.error(e.getMessage());
+		}
 	}
 
-	private waitForDisconnect() {
-
+	public void start() {
+		if (monitorThread == null) {
+			monitorThread = new MonitorThread();
+			thread.start();
+		}
 	}
 
 	public void stop() {
-		deviceThread.kill();
-		updateThread.kill();
+		if (monitorThread == null) {
+			deviceThreadState.setState(ThreadState.DEAD);
+			deviceThreadState.setState(ThreadState.DEAD);
+			monitorThread.interrupt();
+			monitorThread = null;
+		}
 	}
 
-	public boolean isRunning() {
-		return false;
+	public void waitForConnection() {
+		AsyncThread deviceThread = new AsyncThread(deviceProcessor, deviceSocket);
+		AsyncThread updateThread = new AsyncThread(updateProcessor, updateSocket);
+		deviceThreadState = deviceThread.getThreadStateHolder();
+		updateThreadState = updateThread.getThreadStateHolder();
+		while (deviceThreadState.getState() == ThreadState.CONNECTING || updateThreadState.getState() == ThreadState.CONNECTING) {
+			Thread.yield();
+		}
+		Enumeration e = getObservers();
+		while (e.hasMoreElements()) {
+			((OIServerObserver) e.nextElement()).oiConnected();
+		}
+		deviceThreadState.setState(ThreadState.RUNNING);
+		updateThreadState.setState(ThreadState.RUNNING);
 	}
 
-	public void addObserver(OIServerObserver observer) {
-		observers.addElement(observer);
+	public void waitForDisconnect() {
+		while (deviceThreadState.getState() != ThreadState.DEAD && updateThreadState.getState() != ThreadState.DEAD) {
+			Thread.yield();
+		}
+		Enumeration e = getObservers();
+		while (e.hasMoreElements()) {
+			((OIServerObserver) e.nextElement()).oiDisconnected();
+		}
+		deviceThreadState.setState(ThreadState.DEAD);
+		updateThreadState.setState(ThreadState.DEAD);
 	}
 
 	public void removeObserver(OIServerObserver observer) {
@@ -70,6 +95,10 @@ public class AsyncOIServer implements OIServer {
 
 	public Enumeration getObservers() {
 		return observers.elements();
+	}
+
+	public void addObserver(OIServerObserver observer) {
+		observers.addElement(observer);
 	}
 
 }

@@ -1,21 +1,30 @@
 package com.bhrobotics.morcontrol;
 
+import java.io.IOException;
+
+import org.apache.thrift.TProcessor;
+
+import com.bhrobotics.morcontrol.io.DeviceService;
+import com.bhrobotics.morcontrol.io.DeviceTransport;
+import com.bhrobotics.morcontrol.io.RuntimeIOException;
+
 import edu.wpi.first.wpilibj.SimpleRobot;
 
 public class RobotMIDlet extends SimpleRobot {
 
-	// private OIServer oIServer;
-	// private CompetitionRobot competitionRobot;
+	private OIServer oIServer;
+	private CompetitionRobot competitionRobot;
 
 	public void robotInit() {
-		// try {
-		// oIServer = new SimpleOIServer(competitionRobot);
-		// } catch (IOException e) {
-		// throw new RuntimeIOException(e);
-		// }
-		//
-		// oIServer.addObserver(competitionRobot);
-		// oIServer.start();
+		try {
+			TProcessor deviceProcessor = new DeviceTransport.Processor(new DeviceService(competitionRobot, null));
+			oIServer = new AsyncOIServer(competitionRobot);
+		} catch (IOException e) {
+			throw new RuntimeIOException(e);
+		}
+
+		oIServer.addObserver(competitionRobot);
+		oIServer.start();
 	}
 
 	public void disabled() {
