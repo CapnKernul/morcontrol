@@ -25,7 +25,7 @@ public class Ticker implements Tickable {
 			}
 
 			public void run() {
-				while (!Thread.interrupted()) {
+				while (true) {
 					if (!stopped) {
 						ticker.tick();
 					}
@@ -46,7 +46,7 @@ public class Ticker implements Tickable {
 
 	public void removeTickable(Tickable tickable) {
 		lock.lock();
-		tickables.remove(tickable);
+		tickables.removeElement(tickable);
 		lock.unlock();
 	}
 

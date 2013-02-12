@@ -9,6 +9,7 @@ import com.bhrobotics.morcontrol.devices.tracking.BasicObservable;
 import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
 import com.bhrobotics.morcontrol.devices.tracking.Observable;
 import com.bhrobotics.morcontrol.devices.tracking.Tickable;
+import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class Encoder implements Device, Observable, Tickable {
 
@@ -20,6 +21,7 @@ public class Encoder implements Device, Observable, Tickable {
 	public Encoder(Address encoderAddress, DigitalInput first, DigitalInput second) {
 		encoder = new edu.wpi.first.wpilibj.Encoder(first.getRawDevice(), second.getRawDevice());
 		address = encoderAddress;
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
 
 	public Address getAddress() {

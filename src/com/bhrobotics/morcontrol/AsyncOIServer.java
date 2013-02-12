@@ -12,7 +12,7 @@ import org.apache.thrift.TProcessor;
 import com.bhrobotics.morcontrol.io.ThreadState;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
-public class AsyncOIServer implements OIServer {
+public class AsyncOIServer implements OIServer, OIServerObserver {
 
 	private Vector observers = new Vector();
 	private AsyncThread thread;
@@ -23,16 +23,7 @@ public class AsyncOIServer implements OIServer {
 
 	private ThreadStateHolder deviceThreadState;
 	private ThreadStateHolder updateThreadState;
-	private MonitorThread monitorThread;
-
-	private class MonitorThread extends Thread {
-		public void run() {
-			while (!Thread.interrupted()) {
-				waitForConnection();
-				waitForDisconnect();
-			}
-		}
-	}
+	private MonitorThread monitorThread = null;
 
 	public AsyncOIServer(TProcessor deviceProcessor, TProcessor updateProcessor, int port) {
 		this.deviceProcessor = deviceProcessor;
@@ -46,19 +37,11 @@ public class AsyncOIServer implements OIServer {
 	}
 
 	public void start() {
-		if (monitorThread == null) {
-			monitorThread = new MonitorThread();
-			thread.start();
-		}
+		
 	}
 
 	public void stop() {
-		if (monitorThread == null) {
-			deviceThreadState.setState(ThreadState.DEAD);
-			deviceThreadState.setState(ThreadState.DEAD);
-			monitorThread.interrupt();
-			monitorThread = null;
-		}
+		
 	}
 
 	public void waitForConnection() {
@@ -90,7 +73,7 @@ public class AsyncOIServer implements OIServer {
 	}
 
 	public void removeObserver(OIServerObserver observer) {
-		observers.remove(observer);
+		observers.removeElement(observer);
 	}
 
 	public Enumeration getObservers() {
@@ -99,6 +82,14 @@ public class AsyncOIServer implements OIServer {
 
 	public void addObserver(OIServerObserver observer) {
 		observers.addElement(observer);
+	}
+
+	public void oiConnected() {
+		
+	}
+
+	public void oiDisconnected() {
+		
 	}
 
 }

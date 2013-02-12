@@ -11,14 +11,12 @@ public class UpdateService implements UpdateTransport.Iface {
 	}
 
 	public Event waitForUpdate() throws TException {
-		while (!Thread.interrupted()) {
+		while (true) {
 			if (mailbox.isEmpty()) {
 				Thread.yield();
 			} else {
 				return mailbox.shift();
 			}
 		}
-		mailbox.clear();
-		return null;
 	}
 }

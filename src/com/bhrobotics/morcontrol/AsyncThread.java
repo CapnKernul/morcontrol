@@ -28,22 +28,25 @@ public class AsyncThread extends Thread {
 	}
 
 	public void run() {
-		try {
-			holder.setState(ThreadState.CONNECTING);
-			TProtocol protocol = waitForConnection();
-			holder.setState(ThreadState.READY);
-			while (!Thread.interrupted()) {
-				ThreadState state = holder.getState();
-				if (state == ThreadState.DEAD) {
-					Thread.currentThread().interrupt();
-				} else if (state == ThreadState.RUNNING) {
-					process(protocol);
+		while (true) {
+			try {
+				holder.setState(ThreadState.CONNECTING);
+				TProtocol protocol = waitForConnection();
+				holder.setState(ThreadState.READY);
+				while (true) {
+					ThreadState state = holder.getState();
+					if (state == ThreadState.DEAD) {
+						Thread.currentThread().interrupt();
+					} else if (state == ThreadState.RUNNING) {
+						process(protocol);
+					}
+					Thread.yield();
 				}
+			} catch (IOException e) {
+				Logger.defaultLogger.error("Could not open connection on a port");
+			} catch (TException e) {
+				holder.setState(ThreadState.DEAD);
 			}
-		} catch (IOException e) {
-			Logger.defaultLogger.error("Could not open connection on a port");
-		} catch (TException e) {
-			holder.setState(ThreadState.DEAD);
 		}
 	}
 

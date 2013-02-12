@@ -4,6 +4,7 @@ import com.bhrobotics.morcontrol.devices.Address;
 import com.bhrobotics.morcontrol.devices.Device;
 import com.bhrobotics.morcontrol.devices.DeviceType;
 import com.bhrobotics.morcontrol.devices.InvalidStateException;
+import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class PWM implements Device {
 	private static final int MAX_VALUE = 255;
@@ -16,6 +17,7 @@ public class PWM implements Device {
 	public PWM(Address address) {
 		this.address = address;
 		pwm = new edu.wpi.first.wpilibj.PWM(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
 
 	public void update(int state) throws InvalidStateException {

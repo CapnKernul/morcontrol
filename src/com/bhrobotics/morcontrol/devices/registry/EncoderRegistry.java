@@ -10,7 +10,6 @@ import com.bhrobotics.morcontrol.devices.input.DigitalInput;
 import com.bhrobotics.morcontrol.devices.input.Encoder;
 import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
 import com.bhrobotics.morcontrol.devices.tracking.Ticker;
-import com.bhrobotics.morcontrol.io.Mailbox;
 import com.bhrobotics.morcontrol.util.collections.HashMap;
 
 public class EncoderRegistry implements Registry {

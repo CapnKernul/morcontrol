@@ -19,7 +19,7 @@ public class DeviceRegistry implements OIServerObserver {
 	private static final int SOLENOID_COUNT = 8;
 	private static final int DIGITAL_COUNT = 14;
 	private static final int ANALOG_COUNT = 7;
-	private static final int RELAY_COUNT = 7;
+	private static final int RELAY_COUNT = 8;
 	private Mailbox mailboxe = new Mailbox();
 	private Ticker ticker = new Ticker();
 
@@ -75,7 +75,7 @@ public class DeviceRegistry implements OIServerObserver {
 		initializeDeviceIndex(relays, mapping.getDigitalModuleCount(), RELAY_COUNT);
 		initializeDeviceIndex(digitals, mapping.getDigitalModuleCount(), DIGITAL_COUNT);
 		initializeDeviceIndex(analogs, mapping.getAnalogModuleCount(), ANALOG_COUNT);
-		initializeDeviceIndex(digitals, mapping.getSolenoidModuleCount(), SOLENOID_COUNT);
+		initializeDeviceIndex(solenoids, mapping.getSolenoidModuleCount(), SOLENOID_COUNT);
 	}
 
 	public PWM getPWM(Address address) throws InvalidAddressException {

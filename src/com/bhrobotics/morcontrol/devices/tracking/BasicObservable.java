@@ -15,7 +15,7 @@ public class BasicObservable implements Observable {
 	}
 
 	public void addObserver(DeviceObserver observer) {
-		observers.add(observer);
+		observers.addElement(observer);
 	}
 
 	public void alertObservers(Device device) {

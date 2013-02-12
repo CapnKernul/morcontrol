@@ -9,6 +9,7 @@ import com.bhrobotics.morcontrol.devices.tracking.BasicObservable;
 import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
 import com.bhrobotics.morcontrol.devices.tracking.Observable;
 import com.bhrobotics.morcontrol.devices.tracking.Tickable;
+import com.bhrobotics.morcontrol.util.logger.Logger;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 
@@ -22,6 +23,7 @@ public class AnalogInput implements Device, Observable, Tickable {
 	public AnalogInput(Address address) {
 		this.address = address;
 		input = new AnalogChannel(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
 
 	public Address getAddress() {

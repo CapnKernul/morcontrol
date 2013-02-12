@@ -18,7 +18,8 @@ public class Mailbox implements DeviceObserver {
 
 	public Event shift() {
 		lock.lock();
-		Event event = (Event) mailbox.remove(0);
+		Event event = (Event) mailbox.firstElement(); 
+		mailbox.removeElementAt(0);
 		lock.unlock();
 		return event;
 	}

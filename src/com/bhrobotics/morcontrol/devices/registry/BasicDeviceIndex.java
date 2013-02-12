@@ -41,7 +41,7 @@ public class BasicDeviceIndex implements Registry {
 	}
 
 	public void makeDevice(Address address) throws InvalidAddressException {
-		if (!devices.containsKey(address)) {
+		if (devices.containsKey(address)) {
 			throw new InvalidAddressException(address);
 		}
 		devices.put(address, factory.makeDevice(address));

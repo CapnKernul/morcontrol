@@ -9,6 +9,7 @@ import com.bhrobotics.morcontrol.devices.tracking.BasicObservable;
 import com.bhrobotics.morcontrol.devices.tracking.DeviceObserver;
 import com.bhrobotics.morcontrol.devices.tracking.Observable;
 import com.bhrobotics.morcontrol.devices.tracking.Tickable;
+import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class DigitalInput implements Device, Observable, Tickable {
 
@@ -20,6 +21,7 @@ public class DigitalInput implements Device, Observable, Tickable {
 	public DigitalInput(Address address) {
 		this.address = address;
 		input = new edu.wpi.first.wpilibj.DigitalInput(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
 
 	public Address getAddress() {
