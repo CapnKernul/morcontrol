@@ -7,33 +7,33 @@ import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class Solenoid implements Device {
 
-    private static final boolean DEFAULT_STATE = false;
-    private Address address;
-    private edu.wpi.first.wpilibj.Solenoid solenoid;
+	private static final boolean DEFAULT_STATE = false;
+	private Address address;
+	private edu.wpi.first.wpilibj.Solenoid solenoid;
 
-    public Solenoid(Address address) {
-	this.address = address;
-	solenoid = new edu.wpi.first.wpilibj.Solenoid(address.getModule(), address.getChannel());
-	Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
-    }
+	public Solenoid(Address address) {
+		this.address = address;
+		solenoid = new edu.wpi.first.wpilibj.Solenoid(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
+	}
 
-    public void update(boolean state) {
-	solenoid.set(state);
-    }
+	public void update(boolean state) {
+		solenoid.set(state);
+	}
 
-    public void reset() {
-	update(DEFAULT_STATE);
-    }
+	public void reset() {
+		update(DEFAULT_STATE);
+	}
 
-    public Address getAddress() {
-	return address;
-    }
+	public Address getAddress() {
+		return address;
+	}
 
-    public boolean getState() {
-	return solenoid.get();
-    }
+	public boolean getState() {
+		return solenoid.get();
+	}
 
-    public DeviceType getDeviceType() {
-	return DeviceType.SOLENOID;
-    }
+	public DeviceType getDeviceType() {
+		return DeviceType.SOLENOID;
+	}
 }

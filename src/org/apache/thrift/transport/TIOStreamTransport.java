@@ -32,127 +32,127 @@ import java.io.OutputStream;
  */
 public class TIOStreamTransport extends TTransport {
 
-    /** Underlying inputStream */
-    protected InputStream inputStream_ = null;
+	/** Underlying inputStream */
+	protected InputStream inputStream_ = null;
 
-    /** Underlying outputStream */
-    protected OutputStream outputStream_ = null;
+	/** Underlying outputStream */
+	protected OutputStream outputStream_ = null;
 
-    /**
-     * Subclasses can invoke the default constructor and then assign the input
-     * streams in the open method.
-     */
-    protected TIOStreamTransport() {
-    }
-
-    /**
-     * Input stream constructor.
-     * 
-     * @param is
-     *            Input stream to read from
-     */
-    public TIOStreamTransport(InputStream is) {
-	inputStream_ = is;
-    }
-
-    /**
-     * Output stream constructor.
-     * 
-     * @param os
-     *            Output stream to read from
-     */
-    public TIOStreamTransport(OutputStream os) {
-	outputStream_ = os;
-    }
-
-    /**
-     * Two-way stream constructor.
-     * 
-     * @param is
-     *            Input stream to read from
-     * @param os
-     *            Output stream to read from
-     */
-    public TIOStreamTransport(InputStream is, OutputStream os) {
-	inputStream_ = is;
-	outputStream_ = os;
-    }
-
-    /**
-     * The streams must already be open at construction time, so this should
-     * always return true.
-     * 
-     * @return true
-     */
-    public boolean isOpen() {
-	return true;
-    }
-
-    /**
-     * The streams must already be open. This method does nothing.
-     */
-    public void open() throws TTransportException {
-    }
-
-    /**
-     * Closes both the input and output streams.
-     */
-    public void close() {
-	if (inputStream_ != null) {
-	    try {
-		inputStream_.close();
-	    } catch (IOException iox) {
-	    }
-	    inputStream_ = null;
+	/**
+	 * Subclasses can invoke the default constructor and then assign the input
+	 * streams in the open method.
+	 */
+	protected TIOStreamTransport() {
 	}
-	if (outputStream_ != null) {
-	    try {
-		outputStream_.close();
-	    } catch (IOException iox) {
-	    }
-	    outputStream_ = null;
-	}
-    }
 
-    /**
-     * Reads from the underlying input stream if not null.
-     */
-    public int read(byte[] buf, int off, int len) throws TTransportException {
-	if (inputStream_ == null) {
-	    throw new TTransportException(TTransportException.NOT_OPEN, "Cannot read from null inputStream");
+	/**
+	 * Input stream constructor.
+	 * 
+	 * @param is
+	 *            Input stream to read from
+	 */
+	public TIOStreamTransport(InputStream is) {
+		inputStream_ = is;
 	}
-	try {
-	    return inputStream_.read(buf, off, len);
-	} catch (IOException iox) {
-	    throw new TTransportException(TTransportException.UNKNOWN, iox);
-	}
-    }
 
-    /**
-     * Writes to the underlying output stream if not null.
-     */
-    public void write(byte[] buf, int off, int len) throws TTransportException {
-	if (outputStream_ == null) {
-	    throw new TTransportException(TTransportException.NOT_OPEN, "Cannot write to null outputStream");
+	/**
+	 * Output stream constructor.
+	 * 
+	 * @param os
+	 *            Output stream to read from
+	 */
+	public TIOStreamTransport(OutputStream os) {
+		outputStream_ = os;
 	}
-	try {
-	    outputStream_.write(buf, off, len);
-	} catch (IOException iox) {
-	    throw new TTransportException(TTransportException.UNKNOWN, iox);
-	}
-    }
 
-    /**
-     * Flushes the underlying output stream if not null.
-     */
-    public void flush() throws TTransportException {
-	if (outputStream_ == null) {
-	    throw new TTransportException(TTransportException.NOT_OPEN, "Cannot flush null outputStream");
+	/**
+	 * Two-way stream constructor.
+	 * 
+	 * @param is
+	 *            Input stream to read from
+	 * @param os
+	 *            Output stream to read from
+	 */
+	public TIOStreamTransport(InputStream is, OutputStream os) {
+		inputStream_ = is;
+		outputStream_ = os;
 	}
-	try {
-	    outputStream_.flush();
-	} catch (IOException iox) {
-	    throw new TTransportException(TTransportException.UNKNOWN, iox);
+
+	/**
+	 * The streams must already be open at construction time, so this should
+	 * always return true.
+	 * 
+	 * @return true
+	 */
+	public boolean isOpen() {
+		return true;
 	}
-    }
+
+	/**
+	 * The streams must already be open. This method does nothing.
+	 */
+	public void open() throws TTransportException {
+	}
+
+	/**
+	 * Closes both the input and output streams.
+	 */
+	public void close() {
+		if (inputStream_ != null) {
+			try {
+				inputStream_.close();
+			} catch (IOException iox) {
+			}
+			inputStream_ = null;
+		}
+		if (outputStream_ != null) {
+			try {
+				outputStream_.close();
+			} catch (IOException iox) {
+			}
+			outputStream_ = null;
+		}
+	}
+
+	/**
+	 * Reads from the underlying input stream if not null.
+	 */
+	public int read(byte[] buf, int off, int len) throws TTransportException {
+		if (inputStream_ == null) {
+			throw new TTransportException(TTransportException.NOT_OPEN, "Cannot read from null inputStream");
+		}
+		try {
+			return inputStream_.read(buf, off, len);
+		} catch (IOException iox) {
+			throw new TTransportException(TTransportException.UNKNOWN, iox);
+		}
+	}
+
+	/**
+	 * Writes to the underlying output stream if not null.
+	 */
+	public void write(byte[] buf, int off, int len) throws TTransportException {
+		if (outputStream_ == null) {
+			throw new TTransportException(TTransportException.NOT_OPEN, "Cannot write to null outputStream");
+		}
+		try {
+			outputStream_.write(buf, off, len);
+		} catch (IOException iox) {
+			throw new TTransportException(TTransportException.UNKNOWN, iox);
+		}
+	}
+
+	/**
+	 * Flushes the underlying output stream if not null.
+	 */
+	public void flush() throws TTransportException {
+		if (outputStream_ == null) {
+			throw new TTransportException(TTransportException.NOT_OPEN, "Cannot flush null outputStream");
+		}
+		try {
+			outputStream_.flush();
+		} catch (IOException iox) {
+			throw new TTransportException(TTransportException.UNKNOWN, iox);
+		}
+	}
 }

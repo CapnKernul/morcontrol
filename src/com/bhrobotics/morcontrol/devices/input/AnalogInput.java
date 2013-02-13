@@ -15,46 +15,46 @@ import edu.wpi.first.wpilibj.AnalogChannel;
 
 public class AnalogInput implements Device, Observable, Tickable {
 
-    private Address address;
-    private AnalogChannel input;
-    private BasicObservable observable = new BasicObservable();
-    private double savedState = 0.0;
+	private Address address;
+	private AnalogChannel input;
+	private BasicObservable observable = new BasicObservable();
+	private double savedState = 0.0;
 
-    public AnalogInput(Address address) {
-	this.address = address;
-	input = new AnalogChannel(address.getModule(), address.getChannel());
-	Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
-    }
-
-    public Address getAddress() {
-	return address;
-    }
-
-    public double getState() {
-	return input.getVoltage();
-    }
-
-    public void reset() {
-	// Has no reset state
-    }
-
-    public DeviceType getDeviceType() {
-	return DeviceType.ANALOG_INPUT;
-    }
-
-    public void tick() {
-	if (savedState != getState()) {
-	    savedState = getState();
-	    observable.alertObservers(this);
+	public AnalogInput(Address address) {
+		this.address = address;
+		input = new AnalogChannel(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
-    }
 
-    // Delegated methods
-    public void addObserver(DeviceObserver observer) {
-	observable.addObserver(observer);
-    }
+	public Address getAddress() {
+		return address;
+	}
 
-    public Enumeration getObservers() {
-	return observable.getObservers();
-    }
+	public double getState() {
+		return input.getVoltage();
+	}
+
+	public void reset() {
+		// Has no reset state
+	}
+
+	public DeviceType getDeviceType() {
+		return DeviceType.ANALOG_INPUT;
+	}
+
+	public void tick() {
+		if (savedState != getState()) {
+			savedState = getState();
+			observable.alertObservers(this);
+		}
+	}
+
+	// Delegated methods
+	public void addObserver(DeviceObserver observer) {
+		observable.addObserver(observer);
+	}
+
+	public Enumeration getObservers() {
+		return observable.getObservers();
+	}
 }

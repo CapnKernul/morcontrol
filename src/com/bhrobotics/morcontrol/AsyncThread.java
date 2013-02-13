@@ -17,54 +17,57 @@ import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class AsyncThread extends Thread {
 
-    private TProcessor processor;
-    private ServerSocketConnection socket;
-    private AsyncOIServer server;
-    private ThreadTag tag;
+	private TProcessor processor;
+	private ServerSocketConnection socket;
+	private AsyncOIServer server;
+	private ThreadTag tag;
 
-    public AsyncThread(AsyncOIServer server, TProcessor processor, ServerSocketConnection socket, ThreadTag id) {
-	this.processor = processor;
-	this.socket = socket;
-	this.server = server;
-	tag = id;
-    }
+	public AsyncThread(AsyncOIServer server, TProcessor processor, ServerSocketConnection socket, ThreadTag id) {
+		this.processor = processor;
+		this.socket = socket;
+		this.server = server;
+		tag = id;
+	}
 
-    public void run() {
-	while (true) {
-	    try {
-		TProtocol protocol = waitForConnection();
-		server.threadConnected(getTag());
+	public void run() {
+		while (true) {
+			try {
+				TProtocol protocol = waitForConnection();
+				server.threadConnected(getTag());
+				
+				// wait for all threads to be connected
 
-		// wait for all threads to be connected
-		while (!server.allConnected()) {
-		    Thread.yield();
+				while (!server.allConnected()) {
+					//Thread.yield();
+				}
+				
+				Logger.defaultLogger.debug("Made it here");
+				
+				processLoop(protocol);
+			} catch (IOException e) {
+				Logger.defaultLogger.error("Interrupt while waiting for connection");
+				server.threadDisconnected(getTag());
+			} catch (TException e) {
+				server.threadDisconnected(getTag());
+			}
 		}
-
-		processLoop(protocol);
-	    } catch (IOException e) {
-		Logger.defaultLogger.error("Interrupt while waiting for connection");
-		server.threadDisconnected(getTag());
-	    } catch (TException e) {
-		server.threadDisconnected(getTag());
-	    }
 	}
-    }
 
-    public TProtocol waitForConnection() throws IOException {
-	SocketConnection connection = (SocketConnection) socket.acceptAndOpen();
-	InputStream in = connection.openInputStream();
-	OutputStream out = connection.openOutputStream();
-	TIOStreamTransport transport = new TIOStreamTransport(in, out);
-	return new TBinaryProtocol(transport);
-    }
-
-    public void processLoop(TProtocol protocol) throws TException {
-	while (true) {
-	    processor.process(protocol, protocol);
+	public TProtocol waitForConnection() throws IOException {
+		SocketConnection connection = (SocketConnection) socket.acceptAndOpen();
+		InputStream in = connection.openInputStream();
+		OutputStream out = connection.openOutputStream();
+		TIOStreamTransport transport = new TIOStreamTransport(in, out);
+		return new TBinaryProtocol(transport);
 	}
-    }
 
-    public ThreadTag getTag() {
-	return tag;
-    }
+	public void processLoop(TProtocol protocol) throws TException {
+		while (true) {
+			processor.process(protocol, protocol);
+		}
+	}
+
+	public ThreadTag getTag() {
+		return tag;
+	}
 }

@@ -40,10 +40,10 @@ package org.apache.thrift.meta_data;
 import org.apache.thrift.meta_data.FieldValueMetaData;
 
 public class StructMetaData extends FieldValueMetaData {
-    public final Class structClass;
+	public final Class structClass;
 
-    public StructMetaData(byte type, Class sClass) {
-	super(type);
-	this.structClass = sClass;
-    }
+	public StructMetaData(byte type, Class sClass) {
+		super(type);
+		this.structClass = sClass;
+	}
 }
