@@ -26,17 +26,17 @@ import org.apache.thrift.protocol.TProtocol;
  * protocols and transports.
  */
 public interface TServiceClient {
-	/**
-	 * Get the TProtocol being used as the input (read) protocol.
-	 * 
-	 * @return
-	 */
-	public TProtocol getInputProtocol();
+    /**
+     * Get the TProtocol being used as the input (read) protocol.
+     * 
+     * @return
+     */
+    public TProtocol getInputProtocol();
 
-	/**
-	 * Get the TProtocol being used as the output (write) protocol.
-	 * 
-	 * @return
-	 */
-	public TProtocol getOutputProtocol();
+    /**
+     * Get the TProtocol being used as the output (write) protocol.
+     * 
+     * @return
+     */
+    public TProtocol getOutputProtocol();
 }

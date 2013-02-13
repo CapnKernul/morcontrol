@@ -7,8 +7,8 @@ import com.bhrobotics.morcontrol.devices.Device;
 
 public interface Observable {
 
-	public void addObserver(DeviceObserver observer);
+    public void addObserver(DeviceObserver observer);
 
-	public Enumeration getObservers();
+    public Enumeration getObservers();
 
 }

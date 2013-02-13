@@ -8,41 +8,41 @@ package com.bhrobotics.morcontrol.io;
 
 public class EncoderCommand implements org.apache.thrift.TEnum {
 
-	public static final EncoderCommand COUNT = new EncoderCommand(0);
-	public static final EncoderCommand RATE = new EncoderCommand(1);
-	public static final EncoderCommand DISTANCE = new EncoderCommand(2);
-	public static final EncoderCommand RESET = new EncoderCommand(3);
+    public static final EncoderCommand COUNT = new EncoderCommand(0);
+    public static final EncoderCommand RATE = new EncoderCommand(1);
+    public static final EncoderCommand DISTANCE = new EncoderCommand(2);
+    public static final EncoderCommand RESET = new EncoderCommand(3);
 
-	private final int value;
+    private final int value;
 
-	private EncoderCommand(int value) {
-		this.value = value;
+    private EncoderCommand(int value) {
+	this.value = value;
+    }
+
+    /**
+     * Get the integer value of this enum value, as defined in the Thrift IDL.
+     */
+    public int getValue() {
+	return value;
+    }
+
+    /**
+     * Find a the enum type by its integer value, as defined in the Thrift IDL.
+     * 
+     * @return null if the value is not found.
+     */
+    public static EncoderCommand findByValue(int value) {
+	switch (value) {
+	case 0:
+	    return COUNT;
+	case 1:
+	    return RATE;
+	case 2:
+	    return DISTANCE;
+	case 3:
+	    return RESET;
+	default:
+	    return null;
 	}
-
-	/**
-	 * Get the integer value of this enum value, as defined in the Thrift IDL.
-	 */
-	public int getValue() {
-		return value;
-	}
-
-	/**
-	 * Find a the enum type by its integer value, as defined in the Thrift IDL.
-	 * 
-	 * @return null if the value is not found.
-	 */
-	public static EncoderCommand findByValue(int value) {
-		switch (value) {
-		case 0:
-			return COUNT;
-		case 1:
-			return RATE;
-		case 2:
-			return DISTANCE;
-		case 3:
-			return RESET;
-		default:
-			return null;
-		}
-	}
+    }
 }

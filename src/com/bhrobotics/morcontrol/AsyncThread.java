@@ -13,56 +13,58 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TIOStreamTransport;
 
-import com.bhrobotics.morcontrol.io.ThreadState;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class AsyncThread extends Thread {
 
-	private TProcessor processor;
-	private ServerSocketConnection socket;
-	private ThreadStateHolder holder = new ThreadStateHolder();
+    private TProcessor processor;
+    private ServerSocketConnection socket;
+    private AsyncOIServer server;
+    private ThreadTag tag;
 
-	public AsyncThread(TProcessor processor, ServerSocketConnection socket) {
-		this.processor = processor;
-		this.socket = socket;
-	}
+    public AsyncThread(AsyncOIServer server, TProcessor processor, ServerSocketConnection socket, ThreadTag id) {
+	this.processor = processor;
+	this.socket = socket;
+	this.server = server;
+	tag = id;
+    }
 
-	public void run() {
-		while (true) {
-			try {
-				holder.setState(ThreadState.CONNECTING);
-				TProtocol protocol = waitForConnection();
-				holder.setState(ThreadState.READY);
-				while (true) {
-					ThreadState state = holder.getState();
-					if (state == ThreadState.DEAD) {
-						Thread.currentThread().interrupt();
-					} else if (state == ThreadState.RUNNING) {
-						process(protocol);
-					}
-					Thread.yield();
-				}
-			} catch (IOException e) {
-				Logger.defaultLogger.error("Could not open connection on a port");
-			} catch (TException e) {
-				holder.setState(ThreadState.DEAD);
-			}
+    public void run() {
+	while (true) {
+	    try {
+		TProtocol protocol = waitForConnection();
+		server.threadConnected(getTag());
+
+		// wait for all threads to be connected
+		while (!server.allConnected()) {
+		    Thread.yield();
 		}
-	}
 
-	public TProtocol waitForConnection() throws IOException {
-		SocketConnection connection = (SocketConnection) socket.acceptAndOpen();
-		InputStream in = connection.openInputStream();
-		OutputStream out = connection.openOutputStream();
-		TIOStreamTransport transport = new TIOStreamTransport(in, out);
-		return new TBinaryProtocol(transport);
+		processLoop(protocol);
+	    } catch (IOException e) {
+		Logger.defaultLogger.error("Interrupt while waiting for connection");
+		server.threadDisconnected(getTag());
+	    } catch (TException e) {
+		server.threadDisconnected(getTag());
+	    }
 	}
+    }
 
-	public void process(TProtocol protocol) throws TException {
-		processor.process(protocol, protocol);
-	}
+    public TProtocol waitForConnection() throws IOException {
+	SocketConnection connection = (SocketConnection) socket.acceptAndOpen();
+	InputStream in = connection.openInputStream();
+	OutputStream out = connection.openOutputStream();
+	TIOStreamTransport transport = new TIOStreamTransport(in, out);
+	return new TBinaryProtocol(transport);
+    }
 
-	public ThreadStateHolder getThreadStateHolder() {
-		return holder;
+    public void processLoop(TProtocol protocol) throws TException {
+	while (true) {
+	    processor.process(protocol, protocol);
 	}
+    }
+
+    public ThreadTag getTag() {
+	return tag;
+    }
 }

@@ -5,6 +5,6 @@ import com.bhrobotics.morcontrol.devices.Device;
 
 public interface DeviceFactory {
 
-	public Device makeDevice(Address address);
+    public Device makeDevice(Address address);
 
 }

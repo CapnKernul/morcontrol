@@ -8,9 +8,9 @@ import com.bhrobotics.morcontrol.devices.InvalidAddressException;
 
 public interface Registry {
 
-	public Device getDevice(Address address) throws InvalidAddressException;
+    public Device getDevice(Address address) throws InvalidAddressException;
 
-	public Enumeration getAllDevices();
+    public Enumeration getAllDevices();
 
-	public void reset();
+    public void reset();
 }

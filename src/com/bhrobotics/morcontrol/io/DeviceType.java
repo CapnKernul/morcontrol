@@ -8,41 +8,41 @@ package com.bhrobotics.morcontrol.io;
 
 public class DeviceType implements org.apache.thrift.TEnum {
 
-	public static final DeviceType ROBOT = new DeviceType(0);
-	public static final DeviceType DIGITAL_INPUT = new DeviceType(1);
-	public static final DeviceType ANALOG_INPUT = new DeviceType(2);
-	public static final DeviceType ENCODER = new DeviceType(3);
+    public static final DeviceType ROBOT = new DeviceType(0);
+    public static final DeviceType DIGITAL_INPUT = new DeviceType(1);
+    public static final DeviceType ANALOG_INPUT = new DeviceType(2);
+    public static final DeviceType ENCODER = new DeviceType(3);
 
-	private final int value;
+    private final int value;
 
-	private DeviceType(int value) {
-		this.value = value;
+    private DeviceType(int value) {
+	this.value = value;
+    }
+
+    /**
+     * Get the integer value of this enum value, as defined in the Thrift IDL.
+     */
+    public int getValue() {
+	return value;
+    }
+
+    /**
+     * Find a the enum type by its integer value, as defined in the Thrift IDL.
+     * 
+     * @return null if the value is not found.
+     */
+    public static DeviceType findByValue(int value) {
+	switch (value) {
+	case 0:
+	    return ROBOT;
+	case 1:
+	    return DIGITAL_INPUT;
+	case 2:
+	    return ANALOG_INPUT;
+	case 3:
+	    return ENCODER;
+	default:
+	    return null;
 	}
-
-	/**
-	 * Get the integer value of this enum value, as defined in the Thrift IDL.
-	 */
-	public int getValue() {
-		return value;
-	}
-
-	/**
-	 * Find a the enum type by its integer value, as defined in the Thrift IDL.
-	 * 
-	 * @return null if the value is not found.
-	 */
-	public static DeviceType findByValue(int value) {
-		switch (value) {
-		case 0:
-			return ROBOT;
-		case 1:
-			return DIGITAL_INPUT;
-		case 2:
-			return ANALOG_INPUT;
-		case 3:
-			return ENCODER;
-		default:
-			return null;
-		}
-	}
+    }
 }

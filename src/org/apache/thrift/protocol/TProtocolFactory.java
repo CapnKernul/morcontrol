@@ -26,5 +26,5 @@ import org.apache.thrift.transport.TTransport;
  * 
  */
 public interface TProtocolFactory {
-	public TProtocol getProtocol(TTransport trans);
+    public TProtocol getProtocol(TTransport trans);
 }
