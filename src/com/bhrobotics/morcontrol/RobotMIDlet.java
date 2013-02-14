@@ -1,16 +1,15 @@
 package com.bhrobotics.morcontrol;
 
-import org.apache.thrift.TProcessor;
+import java.io.IOException;
+import java.io.InputStream;
 
-import com.bhrobotics.morcontrol.devices.Address;
-import com.bhrobotics.morcontrol.devices.InvalidAddressException;
-import com.bhrobotics.morcontrol.devices.InvalidStateException;
+import javax.microedition.io.Connector;
+import javax.microedition.io.ServerSocketConnection;
+
+import org.apache.thrift.transport.TIOStreamTransport;
+import org.apache.thrift.transport.TTransportException;
+
 import com.bhrobotics.morcontrol.devices.registry.DeviceRegistry;
-import com.bhrobotics.morcontrol.io.DeviceService;
-import com.bhrobotics.morcontrol.io.DeviceTransport;
-import com.bhrobotics.morcontrol.io.RuntimeIOException;
-import com.bhrobotics.morcontrol.io.UpdateService;
-import com.bhrobotics.morcontrol.io.UpdateTransport;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -20,37 +19,49 @@ public class RobotMIDlet extends SimpleRobot {
 	private OIServer oIServer;
 	private CompetitionRobot competitionRobot;
 	private DeviceRegistry registry;
+	private ServerSocketConnection ket;
+	private ServerSocketConnection soc;
 
 	public void robotInit() {
+		Logger.defaultLogger.debug("Init was called");
 		try {
-			registry = new DeviceRegistry();
-			competitionRobot = CompetitionRobot.getInstance();
-			TProcessor deviceProcessor = new DeviceTransport.Processor(new DeviceService(competitionRobot, registry));
-			TProcessor updateProcessor = new UpdateTransport.Processor(new UpdateService(registry.getMailbox()));
-			System.out.println("Got here");
-			oIServer = new AsyncOIServer(deviceProcessor, updateProcessor, 1515);
-		} catch (InvalidAddressException e) {
-			Logger.defaultLogger.fatal("could not initialize all devices");
-			throw new RuntimeIOException(e);
+			soc = (ServerSocketConnection)Connector.open("socket://:1515");
+			ket = (ServerSocketConnection)Connector.open("socket://:3030");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		oIServer.addObserver(competitionRobot);
 	}
 
 	public void disabled() {
-		oIServer.stop();
-		registry.stop();
-		competitionRobot.switchMode(RobotMode.DISABLED);
+		Logger.defaultLogger.debug("disabled was called");
+		AsyncOIConnector connectorOne = new AsyncOIConnector(soc);
+		AsyncOIConnector connectorTwo = new AsyncOIConnector(ket);
+		connectorOne.establishConnection();
+		connectorTwo.establishConnection();
+		while(!connectorOne.isConnected() || !connectorTwo.isConnected()) {
+			Thread.yield();
+		}
+		Logger.defaultLogger.debug("connected");
+		try {
+			TIOStreamTransport streamOne = connectorOne.getConnection();
+			TIOStreamTransport streamTwo = connectorTwo.getConnection();
+			
+			while(true) {
+				byte[] bytes = {1,2};
+				streamOne.write(bytes);
+				streamTwo.write(bytes);
+			}
+		} catch (TTransportException e) {
+			Logger.defaultLogger.debug("disconnected");
+		}
 	}
 
 	public void autonomous() {
-		oIServer.stop();
-		competitionRobot.switchMode(RobotMode.AUTONOMOUS);
+		
 	}
 
 	public void operatorControl() {
-		oIServer.start();
-		registry.start();
-		competitionRobot.switchMode(RobotMode.OPERATOR_CONTROL);
+		
 	}
 }

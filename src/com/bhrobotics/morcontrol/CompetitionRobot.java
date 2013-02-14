@@ -1,11 +1,14 @@
 package com.bhrobotics.morcontrol;
 
+import com.bhrobotics.morcontrol.devices.InvalidAddressException;
+import com.bhrobotics.morcontrol.devices.registry.DeviceRegistry;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class CompetitionRobot implements Robot {
 
 	private final Logger logger = Logger.defaultLogger;
 	private RobotMode mode = RobotMode.DISABLED;
+	private DeviceRegistry registry;
 
 	private static CompetitionRobot instance;
 
@@ -18,12 +21,20 @@ public class CompetitionRobot implements Robot {
 	}
 
 	private CompetitionRobot() {
-
+		try {
+			registry = new DeviceRegistry();
+		} catch (InvalidAddressException e) {
+			Logger.defaultLogger.fatal("Could not initialize at " + e.getAddress().toString());
+		}
 		startDisabled();
 	}
 
 	public RobotMode getMode() {
 		return mode;
+	}
+	
+	public DeviceRegistry getRegistry() {
+		return registry;
 	}
 
 	public void switchMode(RobotMode mode) {
@@ -35,10 +46,12 @@ public class CompetitionRobot implements Robot {
 	}
 
 	public void oiConnected() {
+		registry.start();
 		logger.info("OI connected.");
 	}
 
 	public void oiDisconnected() {
+		registry.stop();
 		logger.info("OI disconnected.");
 	}
 
