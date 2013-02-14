@@ -1,6 +1,5 @@
 package com.bhrobotics.morcontrol.devices.registry;
 
-import com.bhrobotics.morcontrol.OIServerObserver;
 import com.bhrobotics.morcontrol.devices.Address;
 import com.bhrobotics.morcontrol.devices.Device;
 import com.bhrobotics.morcontrol.devices.DeviceType;
@@ -15,7 +14,7 @@ import com.bhrobotics.morcontrol.devices.tracking.Ticker;
 import com.bhrobotics.morcontrol.io.Mailbox;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
-public class DeviceRegistry implements OIServerObserver {
+public class DeviceRegistry {
     private static final int PWM_COUNT = 10;
     private static final int SOLENOID_COUNT = 8;
     private static final int DIGITAL_COUNT = 14;
@@ -131,12 +130,12 @@ public class DeviceRegistry implements OIServerObserver {
 	return mailboxe;
     }
 
-    public void oiConnected() {
+    public void start() {
 	ticker.start();
 	Logger.defaultLogger.debug("Ticker started");
     }
 
-    public void oiDisconnected() {
+    public void stop() {
 	analogs.reset();
 	digitals.reset();
 	encoders.reset();
