@@ -1,11 +1,15 @@
 package com.bhrobotics.morcontrol;
 
+import com.bhrobotics.morcontrol.devices.InvalidAddressException;
+import com.bhrobotics.morcontrol.devices.registry.DeviceRegistry;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class CompetitionRobot implements Robot {
 
     private final Logger logger = Logger.defaultLogger;
     private RobotMode mode = RobotMode.DISABLED;
+    private DeviceRegistry registry;
+    private AsyncOIServer server;
 
     private static CompetitionRobot instance;
 
@@ -18,12 +22,21 @@ public class CompetitionRobot implements Robot {
     }
 
     private CompetitionRobot() {
-
+	try {
+	    registry = new DeviceRegistry();
+	} catch (InvalidAddressException e) {
+	    Logger.defaultLogger.fatal("Could not initialize at " + e.getAddress().toString());
+	}
+	server = new AsyncOIServer(this, 1515);
 	startDisabled();
     }
 
     public RobotMode getMode() {
 	return mode;
+    }
+
+    public DeviceRegistry getRegistry() {
+	return registry;
     }
 
     public void switchMode(RobotMode mode) {
@@ -32,14 +45,6 @@ public class CompetitionRobot implements Robot {
 	    this.mode = mode;
 	    startCurrentMode();
 	}
-    }
-
-    public void oiConnected() {
-	logger.info("OI connected.");
-    }
-
-    public void oiDisconnected() {
-	logger.info("OI disconnected.");
     }
 
     private void startCurrentMode() {
@@ -63,6 +68,8 @@ public class CompetitionRobot implements Robot {
     }
 
     private void startDisabled() {
+	server.closeListeners();
+	server.openListeners();
 	logger.info("Entered disabled mode.");
     }
 
@@ -71,11 +78,14 @@ public class CompetitionRobot implements Robot {
     }
 
     private void startOperatorControl() {
-
+	server.startProcess();
+	registry.start();
 	logger.info("Entered operator control mode.");
     }
 
     private void stopOperatorControl() {
+	registry.stop();
+	server.endProcess();
 	logger.info("Exited operator control mode.");
     }
 

@@ -7,40 +7,40 @@ import com.bhrobotics.morcontrol.devices.InvalidStateException;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class Motor implements Device {
-    private static final int MAX_VALUE = 255;
-    private static final int MIN_VALUE = 1;
-    private static final int DEFAULT_STATE = 127;
+	private static final int MAX_VALUE = 255;
+	private static final int MIN_VALUE = 1;
+	private static final int DEFAULT_STATE = 127;
 
-    private Address address;
-    private edu.wpi.first.wpilibj.Victor motor;
+	private Address address;
+	private edu.wpi.first.wpilibj.Victor motor;
 
-    public Motor(Address address) {
-	this.address = address;
-	motor = new edu.wpi.first.wpilibj.Victor(address.getModule(), address.getChannel());
-	Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
-    }
-
-    public void update(int state) throws InvalidStateException {
-	if (state > MAX_VALUE || state < MIN_VALUE) {
-	    throw new InvalidStateException("Motor state out of range.");
-	} else {
-	    motor.setRaw(state);
+	public Motor(Address address) {
+		this.address = address;
+		motor = new edu.wpi.first.wpilibj.Victor(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
-    }
 
-    public void reset() {
-	motor.setRaw(DEFAULT_STATE);
-    }
+	public void update(int state) throws InvalidStateException {
+		if (state > MAX_VALUE || state < MIN_VALUE) {
+			throw new InvalidStateException("Motor state out of range.");
+		} else {
+			motor.setRaw(state);
+		}
+	}
 
-    public Address getAddress() {
-	return address;
-    }
+	public void reset() {
+		motor.setRaw(DEFAULT_STATE);
+	}
 
-    public int getState() {
-	return motor.getRaw();
-    }
+	public Address getAddress() {
+		return address;
+	}
 
-    public DeviceType getDeviceType() {
-	return DeviceType.PWM;
-    }
+	public int getState() {
+		return motor.getRaw();
+	}
+
+	public DeviceType getDeviceType() {
+		return DeviceType.PWM;
+	}
 }

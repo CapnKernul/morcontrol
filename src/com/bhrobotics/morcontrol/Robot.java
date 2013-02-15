@@ -1,9 +1,13 @@
 package com.bhrobotics.morcontrol;
 
-public interface Robot extends OIServerObserver {
+import com.bhrobotics.morcontrol.devices.registry.DeviceRegistry;
+
+public interface Robot {
 
     public abstract RobotMode getMode();
 
     public abstract void switchMode(RobotMode mode);
+    
+    public abstract DeviceRegistry getRegistry();
 
 }

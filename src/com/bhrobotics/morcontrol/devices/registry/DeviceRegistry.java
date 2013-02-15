@@ -15,6 +15,7 @@ import com.bhrobotics.morcontrol.io.Mailbox;
 import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class DeviceRegistry {
+
     private static final int PWM_COUNT = 10;
     private static final int SOLENOID_COUNT = 8;
     private static final int DIGITAL_COUNT = 14;
@@ -132,7 +133,7 @@ public class DeviceRegistry {
 
     public void start() {
 	ticker.start();
-	Logger.defaultLogger.debug("Ticker started");
+	Logger.defaultLogger.debug("Device registry started");
     }
 
     public void stop() {
@@ -144,6 +145,6 @@ public class DeviceRegistry {
 	relays.reset();
 	ticker.stop();
 	mailboxe.clear();
-	Logger.defaultLogger.debug("Ticker stopped");
+	Logger.defaultLogger.debug("Device registry stopped");
     }
 }

@@ -32,68 +32,68 @@ import org.apache.thrift.transport.TIOStreamTransport;
  * 
  */
 public class TDeserializer {
-    private final TProtocolFactory protocolFactory_;
+	private final TProtocolFactory protocolFactory_;
 
-    /**
-     * Create a new TDeserializer that uses the TBinaryProtocol by default.
-     */
-    public TDeserializer() {
-	this(new TBinaryProtocol.Factory());
-    }
-
-    /**
-     * Create a new TDeserializer. It will use the TProtocol specified by the
-     * factory that is passed in.
-     * 
-     * @param protocolFactory
-     *            Factory to create a protocol
-     */
-    public TDeserializer(TProtocolFactory protocolFactory) {
-	protocolFactory_ = protocolFactory;
-    }
-
-    /**
-     * Deserialize the Thrift object from a byte array.
-     * 
-     * @param base
-     *            The object to read into
-     * @param bytes
-     *            The array to read from
-     */
-    public void deserialize(TBase base, byte[] bytes) throws TException {
-	base.read(protocolFactory_.getProtocol(new TIOStreamTransport(new ByteArrayInputStream(bytes))));
-    }
-
-    /**
-     * Deserialize the Thrift object from a Java string, using a specified
-     * character set for decoding.
-     * 
-     * @param base
-     *            The object to read into
-     * @param data
-     *            The string to read from
-     * @param charset
-     *            Valid JVM charset
-     */
-    public void deserialize(TBase base, String data, String charset) throws TException {
-	try {
-	    deserialize(base, data.getBytes(charset));
-	} catch (UnsupportedEncodingException uex) {
-	    throw new TException("JVM DOES NOT SUPPORT ENCODING: " + charset);
+	/**
+	 * Create a new TDeserializer that uses the TBinaryProtocol by default.
+	 */
+	public TDeserializer() {
+		this(new TBinaryProtocol.Factory());
 	}
-    }
 
-    /**
-     * Deerialize the Thrift object from a Java string, using the default JVM
-     * charset encoding.
-     * 
-     * @param base
-     *            The object to read into
-     * @param data
-     *            The string to read from
-     * @return Serialized object as a String
-     */
-    public void toString(TBase base, String data) throws TException {
-	deserialize(base, data.getBytes());
-    }
+	/**
+	 * Create a new TDeserializer. It will use the TProtocol specified by the
+	 * factory that is passed in.
+	 * 
+	 * @param protocolFactory
+	 *            Factory to create a protocol
+	 */
+	public TDeserializer(TProtocolFactory protocolFactory) {
+		protocolFactory_ = protocolFactory;
+	}
+
+	/**
+	 * Deserialize the Thrift object from a byte array.
+	 * 
+	 * @param base
+	 *            The object to read into
+	 * @param bytes
+	 *            The array to read from
+	 */
+	public void deserialize(TBase base, byte[] bytes) throws TException {
+		base.read(protocolFactory_.getProtocol(new TIOStreamTransport(new ByteArrayInputStream(bytes))));
+	}
+
+	/**
+	 * Deserialize the Thrift object from a Java string, using a specified
+	 * character set for decoding.
+	 * 
+	 * @param base
+	 *            The object to read into
+	 * @param data
+	 *            The string to read from
+	 * @param charset
+	 *            Valid JVM charset
+	 */
+	public void deserialize(TBase base, String data, String charset) throws TException {
+		try {
+			deserialize(base, data.getBytes(charset));
+		} catch (UnsupportedEncodingException uex) {
+			throw new TException("JVM DOES NOT SUPPORT ENCODING: " + charset);
+		}
+	}
+
+	/**
+	 * Deerialize the Thrift object from a Java string, using the default JVM
+	 * charset encoding.
+	 * 
+	 * @param base
+	 *            The object to read into
+	 * @param data
+	 *            The string to read from
+	 * @return Serialized object as a String
+	 */
+	public void toString(TBase base, String data) throws TException {
+		deserialize(base, data.getBytes());
+	}
 }

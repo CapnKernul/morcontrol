@@ -28,15 +28,15 @@ package org.apache.thrift.transport;
  */
 public class TTransportFactory {
 
-    /**
-     * Return a wrapped instance of the base Transport.
-     * 
-     * @param in
-     *            The base transport
-     * @returns Wrapped Transport
-     */
-    public TTransport getTransport(TTransport trans) {
-	return trans;
-    }
+	/**
+	 * Return a wrapped instance of the base Transport.
+	 * 
+	 * @param in
+	 *            The base transport
+	 * @returns Wrapped Transport
+	 */
+	public TTransport getTransport(TTransport trans) {
+		return trans;
+	}
 
 }

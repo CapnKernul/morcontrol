@@ -13,50 +13,50 @@ import com.bhrobotics.morcontrol.util.logger.Logger;
 
 public class DigitalInput implements Device, Observable, Tickable {
 
-    private Address address;
-    private edu.wpi.first.wpilibj.DigitalInput input;
-    private BasicObservable observable = new BasicObservable();
-    private boolean savedState = false;
+	private Address address;
+	private edu.wpi.first.wpilibj.DigitalInput input;
+	private BasicObservable observable = new BasicObservable();
+	private boolean savedState = false;
 
-    public DigitalInput(Address address) {
-	this.address = address;
-	input = new edu.wpi.first.wpilibj.DigitalInput(address.getModule(), address.getChannel());
-	Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
-    }
-
-    public Address getAddress() {
-	return address;
-    }
-
-    public boolean getState() {
-	return input.get();
-    }
-
-    public edu.wpi.first.wpilibj.DigitalInput getRawDevice() {
-	return input;
-    }
-
-    public void reset() {
-	// Has no reseted state
-    }
-
-    public DeviceType getDeviceType() {
-	return DeviceType.DIGITAL_INPUT;
-    }
-
-    public void tick() {
-	if (savedState != getState()) {
-	    savedState = getState();
-	    observable.alertObservers(this);
+	public DigitalInput(Address address) {
+		this.address = address;
+		input = new edu.wpi.first.wpilibj.DigitalInput(address.getModule(), address.getChannel());
+		Logger.defaultLogger.info(this.getClass().toString() + " initialized at " + address.toString());
 	}
-    }
 
-    // Delegated Methods
-    public void addObserver(DeviceObserver observer) {
-	observable.addObserver(observer);
-    }
+	public Address getAddress() {
+		return address;
+	}
 
-    public Enumeration getObservers() {
-	return observable.getObservers();
-    }
+	public boolean getState() {
+		return input.get();
+	}
+
+	public edu.wpi.first.wpilibj.DigitalInput getRawDevice() {
+		return input;
+	}
+
+	public void reset() {
+		// Has no reseted state
+	}
+
+	public DeviceType getDeviceType() {
+		return DeviceType.DIGITAL_INPUT;
+	}
+
+	public void tick() {
+		if (savedState != getState()) {
+			savedState = getState();
+			observable.alertObservers(this);
+		}
+	}
+
+	// Delegated Methods
+	public void addObserver(DeviceObserver observer) {
+		observable.addObserver(observer);
+	}
+
+	public Enumeration getObservers() {
+		return observable.getObservers();
+	}
 }
